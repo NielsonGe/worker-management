@@ -1,0 +1,115 @@
+{
+  "global": {
+    "project-type-unknown": "Project Type unknown",
+    "project-type-0": "Project Type 0",
+    "project-type-1": "Project Type 1",
+    "project-type-2": "Project Type 2",
+    "project-type-3": "Project Type 3",
+    "project-type-4": "Project Type 4",
+    "career-type-unknown": "Career Type unknown",
+    "career-type-0": "Career Type 0",
+    "career-type-1": "Career Type 1",
+    "career-type-2": "Career Type 2",
+    "career-type-3": "Career Type 3",
+    "worker-status-unknown": "Worker Status Unknown",
+    "worker-status-0": "Worker Status 0",
+    "worker-status-1": "Worker Status 1",
+    "sort-name-0": "Name Ascending",
+    "sort-name-1": "Name Descending",
+    "sort-name-2": "Age Ascending",
+    "sort-name-3": "Age Descending",
+    "career-type-name": "Career Type",
+    "gender-type-name": "Gender",
+    "gender-type-0": "Male",
+    "gender-type-1": "Female",
+    "gender-type-unknown": "Gender Unknown",
+    "unknown": "Unknown",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "submit": "Submit",
+    "take-photo-error": "Take photo error.",
+    "photo-data-empty": "Photo data is empty.",
+    "photo-data-format-error": "Photo data format error.",
+    "photo-data-identify-error": "Photo data identify error."
+  },
+  "views": {
+    "login": {
+      "username": "Username",
+      "password": "Password",
+      "login": "LOGIN",
+      "username-placeholder": "Please enter username",
+      "password-placeholder": "Please enter password",
+      "title": "Worker Management System",
+      "error1": "Username, password or verify code is empty.",
+      "error2": "Username, password or verify code is wrong.",
+      "verify-code": "Verify Code",
+      "verify-code-placeholder": "Please enter verify code"
+    },
+    "project-list": {
+      "title": "Project List",
+      "on-site-worker-count-title": "Attendance: ",
+      "manager-name-title": "Manager: ",
+      "project-type-title": "Type: "
+    },
+    "main": {
+      "home-tab": "Home",
+      "register-tab": "Register",
+      "activity-tab": "Activity"
+    },
+    "worker-leave": {
+      "title": "Worker Leave",
+      "name": "Name",
+      "leave-time": "Leave Time",
+      "leave": "Leave"
+    },
+    "home": {
+      "manage-worker": "Worker",
+      "manage-attendance": "Attendance",
+      "crop-member": "Crop Member",
+      "worker-count": "Member Count",
+      "total-worker-count": "Worker Count",
+      "attendance-worker-count": "Attendance Count",
+      "on-site-worker-count": "On Site Count",
+      "latest-news": "Latest News"
+    },
+    "worker-list": {
+      "title": "Worker Management",
+      "search-placeholder": "Search",
+      "sort": "sort"
+    },
+    "register": {
+      "title": "Register Worker",
+      "submit": "Submit",
+      "upload-id-card-back": "Update Id Card Back",
+      "upload-id-card-font": "Update Id Card Font",
+      "name": "Name",
+      "id-card": "Id Card",
+      "gender": "Gender",
+      "birthday": "Birth Day",
+      "address": "Address",
+      "photo": "Photo",
+      "company": "Company",
+      "career": "Career",
+      "telephone": "Telephone",
+      "input-placeholder": "Please Input"
+    },
+    "worker-info": {
+      "title": "Worker Info",
+      "submit": "Submit",
+      "upload-id-card-back": "Update Id Card Back",
+      "upload-id-card-font": "Update Id Card Font",
+      "name": "Name",
+      "id-card": "Id Card",
+      "gender": "Gender",
+      "birthday": "Birth Day",
+      "address": "Address",
+      "photo": "Photo",
+      "company": "Company",
+      "career": "Career",
+      "telephone": "Telephone",
+      "leave": "Leave",
+      "datetime-placeholder": "Select Date",
+      "telephone-placeholder": "Please Input"
+    }
+  }
+}

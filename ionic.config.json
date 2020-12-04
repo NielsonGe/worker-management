@@ -1,0 +1,7 @@
+{
+  "name": "worker-management",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
