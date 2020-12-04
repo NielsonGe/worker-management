@@ -133,46 +133,47 @@ export default defineComponent({
         return;
       }
 
-      // const jsEncrypt = new JSEncrypt({});
-      // jsEncrypt.setPublicKey(this.rsaPublicKey);
-      // const encryptPassword = jsEncrypt.encrypt(this.password);
+      const jsEncrypt = new JSEncrypt({});
+      jsEncrypt.setPublicKey(this.rsaPublicKey);
+      const encryptPassword = jsEncrypt.encrypt(this.password);
 
-      // const param = {
-      //   'userName': this.username,
-      //   'password': encryptPassword,
-      //   'codeKey': this.verifyCodeKey,
-      //   'code': this.verifyCode
-      // }
-
-      // ScgApi().loginSystem(param).then(response => {
-      //   this.store.dispatch('setToken', response.data.access_token);
-
-      //   ScgApi().getCurrentUserInfo(response.data.access_token).then(response => {
-      //     console.log(response);
-
-      //     const account = new Account(response.data.userId, response.data.realName);
-      //     this.store.dispatch('setAccount', account);
-
-      //     this.$router.replace("/project-list");
-      //   }).catch(error => {
-      //     console.log(error);
-      //   })
-      // }).catch(error => {
-      //   console.log(error);
-      // })
-
-      const loginAccount = findAccount(this.username, this.password);
-
-      if (loginAccount == null || loginAccount == undefined) {
-        const errorMsg = this.$t('views.login.error2');
-        ToastUtils().showError('danger', 2000, errorMsg);
-        return;
+      const param = {
+        'userName': this.username,
+        'password': encryptPassword,
+        'codeKey': this.verifyCodeKey,
+        'code': this.verifyCode
       }
 
-      this.store.dispatch('setAccount', loginAccount.account);
-      this.store.dispatch('setToken', loginAccount.token);
+      ScgApi().loginSystem(param).then(response => {
+        this.store.dispatch('setToken', response.data.access_token);
+
+        ScgApi().getCurrentUserInfo(response.data.access_token).then(response => {
+          console.log(response);
+
+          const account = new Account(response.data.userId, response.data.realName);
+          this.store.dispatch('setAccount', account);
+
+          this.$router.replace("/project-list");
+        }).catch(error => {
+          console.log(error);
+        })
+      }).catch(error => {
+        console.log(error);
+      })
+
+      // -- FOR DEBUG ONLY --
+      // const loginAccount = findAccount(this.username, this.password);
+
+      // if (loginAccount == null || loginAccount == undefined) {
+      //   const errorMsg = this.$t('views.login.error2');
+      //   ToastUtils().showError('danger', 2000, errorMsg);
+      //   return;
+      // }
+
+      // this.store.dispatch('setAccount', loginAccount.account);
+      // this.store.dispatch('setToken', loginAccount.token);
       
-      this.$router.replace("/project-list");
+      // this.$router.replace("/project-list");
     }
   }
 });
