@@ -77,7 +77,7 @@
               {{ $t('views.home.total-worker-count') }}
             </div>
             <div class="count-number count-color1">
-              {{ statistic.getTotalWorkerCount() }}
+              {{ statistic.regCount }}
             </div>
           </ion-col>
           <ion-col class="ion-text-center count-cell" size="4">
@@ -85,7 +85,7 @@
               {{ $t('views.home.attendance-worker-count') }}
             </div>
             <div class="count-number count-color2">
-              {{ statistic.getAttendanceWorkerCount() }}
+              {{ statistic.attendanceCount }}
             </div>
           </ion-col>
           <ion-col class="ion-text-center count-cell" size="4">
@@ -93,7 +93,7 @@
               {{ $t('views.home.on-site-worker-count') }}
             </div>
             <div class="count-number count-color3">
-              {{ statistic.getOnSiteWorkerCount() }}
+              {{ statistic.onsiteCount }}
             </div>
           </ion-col>
         </ion-row>
@@ -140,6 +140,7 @@ import { getProjectStatistic, getProjectBannerList, getProjectAnnouncementList, 
 import { useRoute, useRouter } from 'vue-router';
 import { chevronForwardOutline, arrowBackOutline } from 'ionicons/icons';
 import { useStore } from 'vuex';
+import { ScgApi } from '@/api/ScgApi';
 
 export default defineComponent({
   name: 'HomeView',
@@ -167,20 +168,24 @@ export default defineComponent({
     return {
       info: new ProjectInfo('', ''),
       bannerList: new Array<ProjectBanner>(),
-      statistic: new ProjectStatistic('', 0, 0, 0),
-      announcementList: new Array<ProjectAnnouncement>()
+      statistic: {},
+      announcementList: new Array<ProjectAnnouncement>(),
+      projectId: ""
     }
   },
   mounted() {
     const s = useStore();
     const id = s.getters.getProjectId;
-
-    console.log('Project Id: ' + id);
-
-    this.info = getProjectInfo(id);
-    this.bannerList = getProjectBannerList(id);
-    this.statistic = getProjectStatistic(id);
-    this.announcementList = getProjectAnnouncementList(id);
+    this.projectId = s.getters.getProjectId;
+    ScgApi().getBasicStatistics({projectId:this.projectId}).then(res=>{
+      this.statistic = res.data;
+    });
+    ScgApi().queryFile({subject:'project_carousel_picture',relationId:id}).then(res=>{
+      console.log(res);
+    });
+    this.info = getProjectInfo(this.projectId);
+    this.bannerList = getProjectBannerList(this.projectId);
+    this.announcementList = getProjectAnnouncementList(this.projectId);
   },
   setup() {
     const sliderOptions = {
@@ -201,7 +206,7 @@ export default defineComponent({
       this.$router.replace("/project-list");
     },
     onManageWorkerClicked(id: number) {
-      this.$router.replace({path: "/worker-list", query: { id: id}})
+      this.$router.replace({path: "/worker-list", query: { id: this.projectId}})
     }
   }
 });

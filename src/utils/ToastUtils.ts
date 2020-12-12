@@ -10,9 +10,17 @@ function ToastUtils() {
   
     await toast.present();
   }
-
+  const showSuccess = async(message: string) => {
+    const toast = await toastController.create({
+      color: "success",
+      duration: 1500,
+      message
+    });
+    await toast.present();
+  }
   return {
-    showError
+    showError,
+    showSuccess
   }
 }
 

@@ -115,7 +115,7 @@ export default defineComponent({
         console.log(error);
       })
     },
-    async login() {
+    login() {
       // FOR DEBUG
       // console.log("Username: " + this.username);
       // console.log("Password: " + this.password);
@@ -146,11 +146,11 @@ export default defineComponent({
 
       ScgApi().loginSystem(param).then(response => {
         this.store.dispatch('setToken', response.data.access_token);
-
-        ScgApi().getCurrentUserInfo(response.data.access_token).then(response => {
+        localStorage.setItem('token',response.data.access_token);
+        ScgApi().getCurrentUserInfo().then(response => {
           console.log(response);
 
-          const account = new Account(response.data.userId, response.data.realName);
+          const account = response.data;
           this.store.dispatch('setAccount', account);
 
           this.$router.replace("/project-list");

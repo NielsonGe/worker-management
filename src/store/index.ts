@@ -1,9 +1,9 @@
 import { createStore } from 'vuex'
-import Account from '@/models/Account';
-
+import createPersistedState from "vuex-persistedstate";
 export default createStore({
+  plugins: [createPersistedState()],
   state: {
-    account: Account,
+    account: Object,
     token: String,
     projectId: String,
   },

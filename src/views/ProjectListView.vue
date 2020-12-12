@@ -7,15 +7,15 @@
     </ion-header>
     <ion-content :fullscreen="true">
       <ion-list>
-        <ion-item lines="full" v-for="item in projectBriefList" :key="item.getId()" @click="onProjectCellClicked(item.getId())">
+        <ion-item lines="full" v-for="item in projectBriefList" :key="item.projectId" @click="onProjectCellClicked(item.projectId)">
           <ion-thumbnail class="thumbnail" slot="start">
-            <ion-img :src="item.getIconData()"></ion-img>
+            <ion-img src="assets/ch1.jpg"></ion-img>
           </ion-thumbnail>
           <ion-label>
-            <h2><b>{{ item.getName() }}</b></h2>
-            <p class="sub-project-info">{{ $t('views.project-list.on-site-worker-count-title') }}{{ item.getOnSiteWorkerCount() }}</p>
-            <p class="sub-project-info">{{ $t('views.project-list.manager-name-title') }}{{ item.getManagerName() }}</p>
-            <p class="sub-project-info">{{ $t('views.project-list.project-type-title') }}{{ getProjectTypeName(item.getType()) }}</p>
+            <h2><b>{{ item.projectName }}</b></h2>
+            <p class="sub-project-info">{{ $t('views.project-list.buildCorpName') }}{{item.buildCorpName}}</p>
+            <p class="sub-project-info">{{ $t('views.project-list.contractorCorpName') }}{{item.contractorCorpName}}</p>
+            <p class="sub-project-info">{{ $t('views.project-list.manager-name-title') }}{{item.linkManName}}</p>
           </ion-label>
         </ion-item>
       </ion-list>
@@ -29,6 +29,7 @@ import { IonPage, IonContent, IonHeader, IonToolbar, IonTitle, IonList, IonItem,
 import ProjectBriefInfo from '@/models/ProjectBriefInfo';
 import { getProjectBriefList } from '@/data/ProjectFakeData';
 import { useStore } from 'vuex';
+import { ScgApi } from '@/api/ScgApi';
 
 export default defineComponent({
   name: 'ProjectListView',
@@ -47,13 +48,15 @@ export default defineComponent({
   data() {
     return {
       store: useStore(),
-      projectBriefList: new Array<ProjectBriefInfo>()
+      projectBriefList: []
     }
   },
   mounted() {
     const account = this.store.getters.getAccount;
-    
-    this.projectBriefList = getProjectBriefList(account.getId());
+    const token = this.store.getters.getToken;
+    ScgApi().queryCurrentUserProjectPaging({pageIndex:1,pageSize:100}).then((res: any)=>{
+      this.projectBriefList = res.data.rows;
+    })
   },
   methods: {
     getProjectTypeName(type: number): string {

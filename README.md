@@ -3,3 +3,5 @@
 
 2. npm install后适用jsencrypt的库会提示错误参考这个帖子https://github.com/travist/jsencrypt/issues/94
 下载github上的release最新版本“jsencrypt-3.0.0-rc.1”，把lib目录复制到node_module/jsencrypt下，然后把declarations里面的src下index.d.ts, JSEncryptRSAKey.d.ts, JSEncrypt.d.ts复制到node_module/jsencrypt下
+
+ecloud@fushan33

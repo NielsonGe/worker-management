@@ -30,18 +30,18 @@
           <ion-grid>
             <ion-row>
               <ion-col size="3">
-                {{ item.getName() }}
+                {{ item.workerName }}
               </ion-col>
               <ion-col size="9" class="right">
-                {{ item.getIdNumber() }}
+                {{ item.teamName }}
               </ion-col>
             </ion-row>
             <ion-row>
               <ion-col size="8">
-                <span :style="{'color': getStatusColor(item.getStatus())}">{{ getWorkerStatusName(item.getStatus()) }}</span>
+                <span :style="{'color': getStatusColor(item.status)}">{{ getWorkerStatusName(item.status) }}</span>
               </ion-col>
               <ion-col size="4" class="right">
-                {{ getCareerTypeName(item.getCareerType()) }}
+                {{ item.workTypeName }}
               </ion-col>
             </ion-row>
           </ion-grid>
@@ -60,6 +60,7 @@ import { getWorkerList } from '@/data/WorkerFakeData';
 import { useRoute, useRouter } from 'vue-router';
 import NameFilterPopoverView from '@/views/NameFilterPopoverView.vue'
 import CareerTypeAndGenderFilterPopoverView from '@/views/CareerTypeAndGenderFilterPopoverView.vue'
+import { ScgApi } from '@/api/ScgApi';
 
 export default defineComponent({
   name: 'WorkerListView',
@@ -82,7 +83,7 @@ export default defineComponent({
   data() {
     return {
       searchText: null,
-      workerList: new Array<WorkerInfo>(),
+      workerList: [],
       sort: 0,
       career: 0,
       gender: 0
@@ -92,8 +93,10 @@ export default defineComponent({
     const query = this.$route.query;
     const tmp = query.id as unknown;
     const id = tmp as string;
+    ScgApi().queryProjectWorkerPaging({projectWorkerId:query.id,pageIndex:1,pageSize:500}).then(res=>{
+      this.workerList = res.data.rows;
+    })
     
-    this.workerList = getWorkerList(id);
   },
   setup() {
     const route = useRoute();
@@ -118,8 +121,8 @@ export default defineComponent({
     },
     getStatusColor(status: number) {
       switch(status) {
-        case 0: return 'black';
-        case 1: return 'red';
+        case 0: return 'red';
+        case 1: return 'black';
         default: return 'black';
       }
     },

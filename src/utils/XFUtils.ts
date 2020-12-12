@@ -37,7 +37,7 @@ function XFUtils() {
 
     const config = {
       method: 'post' as const,
-      url: 'https://webapi.xfyun.cn/v1/service/v1/ocr/idcard',
+      url: '/v1/service/v1/ocr/idcard',
       headers: { 
         'X-Appid': APP_ID, 
         'X-CurTime': curTime + '',

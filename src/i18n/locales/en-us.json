@@ -1,5 +1,8 @@
 {
   "global": {
+    "placehoder-select":"请选择",
+    "placehoder-input":"请输入",
+    "success":"操作成功",
     "project-type-unknown": "Project Type unknown",
     "project-type-0": "Project Type 0",
     "project-type-1": "Project Type 1",
@@ -20,7 +23,8 @@
     "sort-name-3": "Age Descending",
     "career-type-name": "Career Type",
     "gender-type-name": "Gender",
-    "gender-type-0": "Male",
+    "gender-type-0": "None",
+    "gender-type-1": "Male",
     "gender-type-1": "Female",
     "gender-type-unknown": "Gender Unknown",
     "unknown": "Unknown",
@@ -49,7 +53,9 @@
       "title": "Project List",
       "on-site-worker-count-title": "Attendance: ",
       "manager-name-title": "Manager: ",
-      "project-type-title": "Type: "
+      "project-type-title": "Type: ",
+      "buildCorpName": "建设单位: ",
+      "contractorCorpName": "总承包: "
     },
     "main": {
       "home-tab": "Home",
@@ -80,6 +86,12 @@
     "register": {
       "title": "Register Worker",
       "submit": "Submit",
+      "idType":"证件类型",
+      "grantOrg":	"发证机关",
+	    "startDate":"有效期开始日期",
+      "endDate":"有效期结束日期",
+      "teamId":"所属班组",
+	    "isTeamLeader":"是否班组长",
       "upload-id-card-back": "Update Id Card Back",
       "upload-id-card-font": "Update Id Card Font",
       "name": "Name",
@@ -96,6 +108,7 @@
     "worker-info": {
       "title": "Worker Info",
       "submit": "Submit",
+      "upload-id-card": "身份证照片",
       "upload-id-card-back": "Update Id Card Back",
       "upload-id-card-font": "Update Id Card Font",
       "name": "Name",
