@@ -192,7 +192,8 @@
             </div>
 
             <div class="section-margin" style="margin-bottom: 10px;">
-                <ion-button expand="block" color="danger" @click="onLeaveClicked">{{ $t("views.worker-info.leave") }}</ion-button>
+                <ion-button v-if="worker.status == 1" expand="block" color="danger" @click="onLeaveClicked">{{ $t("views.worker-info.leave") }}</ion-button>
+                <ion-button v-if="worker.status == 0" expand="block" color="primary" @click="onLeaveClicked">{{ $t("views.worker-info.enter") }}</ion-button>
                 <ion-button expand="block" color="success" @click="onModifyClicked">{{ $t("views.worker-info.submit") }}</ion-button>
             </div>
         </ion-content>
@@ -293,6 +294,7 @@ export default defineComponent({
                 endDate: "",
                 nationCode: "H",
                 nationName: "汉",
+                status:0
             },
             workerData: {},
         };
@@ -323,6 +325,7 @@ export default defineComponent({
                     endDate,
                     nationCode,
                     nationName,
+                    status
                 } = res.data;
                 this.worker = {
                     id,
@@ -344,6 +347,7 @@ export default defineComponent({
                     endDate,
                     nationCode,
                     nationName,
+                    status
                 };
             });
     },

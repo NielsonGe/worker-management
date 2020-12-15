@@ -81,7 +81,7 @@
                             {{ $t("views.register.name") }}
                         </ion-col>
                         <ion-col class="right-align" size="8">
-                            <ion-input class="input-cell" v-model="formData.name" :placeholder="$t('views.register.input-placeholder')" clearInput />
+                            <ion-input class="input-cell" v-model="formData.workerName" :placeholder="$t('views.register.input-placeholder')" clearInput />
                         </ion-col>
                     </ion-row>
                 </ion-grid>
@@ -182,7 +182,7 @@
                             {{ $t("views.register.company") }}
                         </ion-col>
                         <ion-col class="right-align" size="7">
-                            {{ getNameByCode(corpParentId, companyParent,{code:"corpId",name:"corpName"}) }}
+                            {{ getNameByCode(corpParentId, companyParent, { code: "id", name: "corpName" }) }}
                         </ion-col>
                         <ion-col class="right-align" size="1">
                             <ion-icon class="cell-icon" :icon="caretDownOutline"></ion-icon>
@@ -190,13 +190,12 @@
                     </ion-row>
                 </ion-grid>
             </div>
-            <div class="field-col-item" v-if="companyList && companyList.length>0">
+            <div class="field-col-item" v-if="companyList && companyList.length > 0">
                 <ion-grid>
                     <ion-row @click="onCompanyCellClicked">
-                        <ion-col class="left-align" size="4">
-                        </ion-col>
+                        <ion-col class="left-align" size="4"> </ion-col>
                         <ion-col class="right-align" size="7">
-                            {{ getNameByCode(formData.corpId, companyList,{code:"corpId",name:"corpName"}) }}
+                            {{ getNameByCode(formData.projectCorpId, companyList, { code: "id", name: "corpName" }) }}
                         </ion-col>
                         <ion-col class="right-align" size="1">
                             <ion-icon class="cell-icon" :icon="caretDownOutline"></ion-icon>
@@ -204,14 +203,15 @@
                     </ion-row>
                 </ion-grid>
             </div>
-            <div class="field-col-item section-margin">
+
+            <div class="field-col-item">
                 <ion-grid>
                     <ion-row @click="onTeamIdCellClicked">
                         <ion-col class="left-align" size="4">
                             {{ $t("views.register.teamId") }}
                         </ion-col>
                         <ion-col class="right-align" size="7">
-                            {{ getNameByCode(formData.teamId, teamList,{code:"id",name:"name"}) }}
+                            {{ getNameByCode(formData.teamId, teamList, { code: "id", name: "name" }) }}
                         </ion-col>
                         <ion-col class="right-align" size="1">
                             <ion-icon class="cell-icon" :icon="caretDownOutline"></ion-icon>
@@ -235,6 +235,61 @@
                 </ion-grid>
             </div>
             <div class="field-col-item">
+                <ion-grid>
+                    <ion-row>
+                        <ion-col class="left-align" size="4">
+                            {{ $t("views.register.area") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="8">
+                            <div style="display: flex;flex-wrap: wrap;">
+                                <div
+                                    style="display: flex;justify-content: flex-start;align-items: center;margin-right:5px;margin-bottom:5px;"
+                                    v-for="(entry, key) in areaList"
+                                    :key="key"
+                                >
+                                    <ion-checkbox
+                                        style="margin-right:5px;"
+                                        @update:modelValue="entry.isChecked = $event"
+                                        :modelValue="entry.isChecked"
+                                    ></ion-checkbox
+                                    ><ion-label>{{ entry.name }}</ion-label>
+                                </div>
+                            </div>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </div>
+            <div class="field-col-item section-margin">
+                <ion-grid>
+                    <ion-row @click="onRoleCellClicked">
+                        <ion-col class="left-align" size="4">
+                            {{ $t("views.register.role") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="7">
+                            {{ getNameByCode(formData.role, roleList) }}
+                        </ion-col>
+                        <ion-col class="right-align" size="1">
+                            <ion-icon class="cell-icon" :icon="caretDownOutline"></ion-icon>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </div>
+            <div class="field-col-item" v-if="formData.role == 2">
+                <ion-grid>
+                    <ion-row @click="onJobTypeCellClicked">
+                        <ion-col class="left-align" size="4">
+                            {{ $t("views.register.job") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="7">
+                            {{ getNameByCode(formData.jobTypeCode, jobTypeList) }}
+                        </ion-col>
+                        <ion-col class="right-align" size="1">
+                            <ion-icon class="cell-icon" :icon="caretDownOutline"></ion-icon>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </div>
+            <div class="field-col-item" v-if="formData.role == 1">
                 <ion-grid>
                     <ion-row @click="onWorkTypeCellClicked">
                         <ion-col class="left-align" size="4">
@@ -285,6 +340,8 @@ import {
     IonRow,
     IonGrid,
     IonCol,
+    IonCheckbox,
+    IonLabel,
     pickerController,
 } from "@ionic/vue";
 import { arrowBackOutline, checkmarkCircleOutline, person, caretDownOutline, camera } from "ionicons/icons";
@@ -308,6 +365,8 @@ export default defineComponent({
         IonRow,
         IonGrid,
         IonCol,
+        IonCheckbox,
+        IonLabel,
     },
     data() {
         return {
@@ -316,10 +375,11 @@ export default defineComponent({
             idCardData2: "",
             corpParentId: "",
             formData: {
-                corpId: "",
+                projectId: "",
+                projectCorpId: "",
                 teamId: "",
                 isTeamLeader: "",
-                name: "",
+                workerName: "",
                 phone: "",
                 workTypeCode: "",
                 workTypeName: "",
@@ -332,14 +392,38 @@ export default defineComponent({
                 grantOrg: "",
                 startDate: "",
                 endDate: "",
-                nationCode:"H",
-                nationName:"汉",
+                nationCode: "H",
+                nationName: "汉",
+                role: "",
+                jobTypeCode: "",
+                jobTypeName: "",
+                areaCodes: "",
             },
             companyParent: [],
             companyList: [],
             teamList: [],
             workTypeList: [],
             idTypeList: [],
+            areaList: [],
+            jobTypeList: [],
+            roleList: [
+                {
+                    name: this.$t("global.role-type-0"),
+                    code: 0,
+                },
+                {
+                    name: this.$t("global.role-type-1"),
+                    code: 1,
+                },
+                {
+                    name: this.$t("global.role-type-2"),
+                    code: 2,
+                },
+                {
+                    name: this.$t("global.role-type-3"),
+                    code: 3,
+                },
+            ],
             genderList: [
                 {
                     name: this.$t("global.gender-type-0"),
@@ -368,6 +452,7 @@ export default defineComponent({
     },
     mounted() {
         const s = useStore();
+        this.formData.projectId = s.getters.getProjectId;
         ScgApi()
             .queryDictionaryTrees({ dictCode: "work_type" })
             .then((res) => {
@@ -379,9 +464,19 @@ export default defineComponent({
                 this.idTypeList = res.data;
             });
         ScgApi()
-            .queryProjectCorpSelect({ projectId: "fc674d8e-2365-11eb-be30-0242ac110000" })
+            .queryDictionaryTrees({ dictCode: "job_type" })
+            .then((res) => {
+                this.jobTypeList = res.data;
+            });
+        ScgApi()
+            .queryProjectCorpSelect({ projectId: s.getters.getProjectId })
             .then((res) => {
                 this.companyParent = res.data;
+            });
+        ScgApi()
+            .queryArea({ projectId: s.getters.getProjectId })
+            .then((res) => {
+                this.areaList = res.data;
             });
     },
     setup() {
@@ -403,13 +498,27 @@ export default defineComponent({
             return obj[value] || null;
         },
         onSubmitClicked(ev: Event) {
-            console.log(this.formData);
-            ScgApi().saveWorker(this.formData).then((res: any)=>{
-              if(res.code == '00000'){
-                ToastUtils().showSuccess(this.$t("global.success"));
-                this.$router.replace("/main/home");
-              }
-            })
+            this.formData.areaCodes = this.areaList
+                .filter((e: any) => e.isChecked)
+                .map((e: any) => e.code)
+                .join(",");
+            const data: any = { ...this.formData };
+            // if (data.role == 1) {
+            //     delete data.jobTypeCode;
+            //     delete data.jobTypeName;
+            // } else if (data.role == 2) {
+            //     delete data.workTypeCode;
+            //     delete data.workTypeName;
+            // }
+            console.log(data);
+            ScgApi()
+                .saveWorkerAndProjectWorker(data)
+                .then((res: any) => {
+                    if (res.code == "00000") {
+                        ToastUtils().showSuccess(this.$t("global.success"));
+                        this.$router.replace("/main/home");
+                    }
+                });
         },
         onBackClicked(ev: Event) {
             this.$router.replace("/main/home");
@@ -429,9 +538,15 @@ export default defineComponent({
                                 const cardData = res.data.data;
                                 if (cardData.error_code == "0") {
                                     this.formData.idNumber = cardData.id_number;
-                                    this.formData.name = cardData.name;
+                                    this.formData.workerName = cardData.name;
                                     this.formData.address = cardData.address;
-                                    this.formData.birthday = cardData.birthday.replace(/[^\\u0000-\\u00FF]/g, "-").replace(/(-*$)/g, "");
+                                    const datetime = cardData.birthday
+                                        .replace(/[^\\u0000-\\u00FF]/g, "-")
+                                        .replace(/(-*$)/g, "")
+                                        .split("-");
+                                    datetime[1] = datetime[1].length > 1 ? datetime[1] : "0" + datetime[1];
+                                    datetime[2] = datetime[2].length > 1 ? datetime[2] : "0" + datetime[1];
+                                    this.formData.birthday = datetime.join("-");
                                     this.formData.gender = cardData.sex === "男" ? 1 : cardData.sex === "女" ? 2 : 0;
                                 }
                             }
@@ -478,6 +593,7 @@ export default defineComponent({
 
             photoData.then(
                 (value) => {
+                    console.log(value);
                     const fileType = value.split(";base64")[0].split(":image/")[1];
                     let type;
                     switch (fileType) {
@@ -495,9 +611,9 @@ export default defineComponent({
                     }
                     ScgApi()
                         .postFileBase64String({
-                            bucketName: "RecentPhoto",
+                            type: "RecentPhoto",
                             fileName: new Date().getTime() + "A" + Math.ceil(Math.random() * 10000) + "." + type,
-                            contentBase64String: value.split('data:image/jpeg;base64,')[1],
+                            contentBase64String: value.split(";base64,")[1],
                         })
                         .then((res) => {
                             this.formData.recentPhotoFileId = res.data.id;
@@ -538,6 +654,65 @@ export default defineComponent({
             picker.present();
         },
 
+        async onRoleCellClicked(ev: Event) {
+            const options = this.roleList.map((e: any) => {
+                return { text: e.name, value: e.code };
+            });
+            const columns = [
+                {
+                    name: "role",
+                    options: options,
+                },
+            ];
+            const picker = await pickerController.create({
+                columns: columns,
+                buttons: [
+                    {
+                        text: this.$t("global.cancel"),
+                        role: "cancel",
+                    },
+                    {
+                        text: this.$t("global.confirm"),
+                        handler: (value) => {
+                            this.formData.role = value.role.value;
+                            this.formData.workTypeCode = "";
+                            this.formData.workTypeName = "";
+                            this.formData.jobTypeCode = "";
+                            this.formData.jobTypeName = "";
+                        },
+                    },
+                ],
+            });
+            picker.present();
+        },
+        async onJobTypeCellClicked(ev: Event) {
+            const options = this.jobTypeList.map((e: any) => {
+                return { text: e.name, value: e.code };
+            });
+            const columns = [
+                {
+                    name: "jobType",
+                    options: options,
+                },
+            ];
+            const picker = await pickerController.create({
+                columns: columns,
+                buttons: [
+                    {
+                        text: this.$t("global.cancel"),
+                        role: "cancel",
+                    },
+                    {
+                        text: this.$t("global.confirm"),
+                        handler: (value) => {
+                            this.formData.jobTypeCode = value.jobType.value;
+                            this.formData.jobTypeName = this.getNameByCode(value.jobType.value, this.jobTypeList);
+                        },
+                    },
+                ],
+            });
+            picker.present();
+        },
         async onWorkTypeCellClicked(ev: Event) {
             const options = this.workTypeList.map((e: any) => {
                 return { text: e.name, value: e.code };
@@ -559,7 +734,7 @@ export default defineComponent({
                         text: this.$t("global.confirm"),
                         handler: (value) => {
                             this.formData.workTypeCode = value.workType.value;
-                            this.formData.workTypeName = this.getNameByCode(value.workType.value,this.workTypeList);
+                            this.formData.workTypeName = this.getNameByCode(value.workType.value, this.workTypeList);
                         },
                     },
                 ],
@@ -654,7 +829,7 @@ export default defineComponent({
         },
         async onCompanyCellClicked(ev: Event) {
             const options = this.companyList.map((e: any) => {
-                return { text: e.corpName, value: e.corpId };
+                return { text: e.corpName, value: e.id };
             });
 
             const columns = [
@@ -674,11 +849,13 @@ export default defineComponent({
                     {
                         text: this.$t("global.confirm"),
                         handler: (value) => {
-                            this.formData.corpId = value.corp.value;
-                            ScgApi().queryProjectCorpTeamSelect({ projectId: "fc674d8e-2365-11eb-be30-0242ac110000",corpId: this.formData.corpId })
-                            .then((res) => {
-                                this.teamList = res.data;
-                            });
+                            this.formData.projectCorpId = value.corp.value;
+                            const data: any = this.companyList.filter((e: any) => e.id === this.formData.projectCorpId)[0];
+                            ScgApi()
+                                .queryProjectCorpTeamSelect({ projectId: this.formData.projectId, corpId: data.corpId })
+                                .then((res) => {
+                                    this.teamList = res.data;
+                                });
                         },
                     },
                 ],
@@ -688,9 +865,9 @@ export default defineComponent({
         },
         async onCompanyParentCellClicked(ev: Event) {
             const options = this.companyParent.map((e: any) => {
-                return { text: e.corpName, value: e.corpId };
+                return { text: e.corpName, value: e.id };
             });
-            console.log("corpParent",options);
+            console.log("corpParent", options);
             const columns = [
                 {
                     name: "corpParent",
@@ -709,6 +886,7 @@ export default defineComponent({
                         text: this.$t("global.confirm"),
                         handler: (value) => {
                             this.corpParentId = value.corpParent.value;
+
                             this.corpParentChange(value.corpParent.value);
                         },
                     },
@@ -718,24 +896,26 @@ export default defineComponent({
             picker.present();
         },
         corpParentChange(value: any) {
-            const s = useStore();
             if (value) {
+                const data: any = this.companyParent.filter((e: any) => e.id === value)[0];
                 ScgApi()
-                    .queryProjectCorpSelect({ projectId: "fc674d8e-2365-11eb-be30-0242ac110000", corpId: value })
+                    .queryProjectCorpSelect({ projectId: this.formData.projectId, corpId: data.corpId })
                     .then((res) => {
-                      if(res.data && res.data.length>0){
-                        this.formData.corpId = '';
-                        this.companyList = res.data;
-                      }else{
-                        this.formData.corpId = this.corpParentId;
-                        ScgApi().queryProjectCorpTeamSelect({ projectId: "fc674d8e-2365-11eb-be30-0242ac110000",corpId: this.formData.corpId })
-                        .then((res) => {
-                            this.teamList = res.data;
-                        });
-                      }
+                        if (res.data && res.data.length > 0) {
+                            this.formData.projectCorpId = "";
+                            this.companyList = res.data;
+                        } else {
+                            this.formData.projectCorpId = value;
+                            this.companyList = [];
+                            ScgApi()
+                                .queryProjectCorpTeamSelect({ projectId: this.formData.projectId, corpId: data.corpId })
+                                .then((res) => {
+                                    this.teamList = res.data;
+                                });
+                        }
                     });
             }
-            this.formData.corpId = "";
+            this.formData.projectCorpId = "";
         },
     },
 });

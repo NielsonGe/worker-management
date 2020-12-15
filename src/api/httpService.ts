@@ -56,10 +56,12 @@ export default class HttpService {
         queryProjectCorpSelect: "/api/v1.0/project/queryProjectCorpSelect",
         queryProjectCorpTeamSelect: "/api/v1.0/project/queryProjectCorpTeamSelect",
         saveWorker: "/api/v1.0/worker/save",
+        saveWorkerAndProjectWorker: "/api/v1.0/project/saveWorkerAndProjectWorker",
         saveProjectWorkerEntryExit: "/api/v1.0/project/saveProjectWorkerEntryExit",
 
         queryFile: "/api/v1.0/file/queryFile",
         queryDictionaryTrees: "/api/v1.0/dictionary/queryDictionaryTree",
         postFileBase64String: "/api/v1.0/file/postFileBase64String",
+        queryArea: "/api/v1.0/area/queryArea",
     };
 }

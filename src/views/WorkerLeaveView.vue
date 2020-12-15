@@ -35,7 +35,7 @@
                 <ion-grid>
                     <ion-row>
                         <ion-col class="left-align center-vertical" size="4">
-                            {{ $t("views.worker-leave.leave-time") }}
+                            {{  workerData.status == 1 ? $t("views.worker-leave.leave-time") : $t("views.worker-leave.enter-time")}}
                         </ion-col>
                         <ion-col class="right-align" size="7">
                             <ion-datetime v-model="workerData.leaveTime" display-format="YYYY-MM-DD"></ion-datetime>
@@ -48,7 +48,7 @@
             </div>
 
             <div class="section-margin" style="margin-bottom: 10px;">
-                <ion-button expand="block" @click="onLeaveClicked">{{ $t("views.worker-leave.leave") }}</ion-button>
+                <ion-button expand="block" @click="onLeaveClicked">{{ workerData.status == 1 ? $t("views.worker-leave.leave") : $t("views.worker-leave.enter") }}</ion-button>
             </div>
         </ion-content>
     </ion-page>

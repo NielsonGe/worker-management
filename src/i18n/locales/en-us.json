@@ -34,7 +34,12 @@
     "take-photo-error": "Take photo error.",
     "photo-data-empty": "Photo data is empty.",
     "photo-data-format-error": "Photo data format error.",
-    "photo-data-identify-error": "Photo data identify error."
+    "photo-data-identify-error": "Photo data identify error.",
+    "role-type-0":"未知",
+    "role-type-1":"建筑工人",
+    "role-type-2":"企业职员",
+    "role-type-3":"访客",
+    "home-message":"功能内测中，即将开放..."
   },
   "views": {
     "login": {
@@ -66,7 +71,9 @@
       "title": "Worker Leave",
       "name": "Name",
       "leave-time": "Leave Time",
-      "leave": "Leave"
+      "enter-time": "Enter Time",
+      "leave": "Leave",
+      "enter": "Enter"
     },
     "home": {
       "manage-worker": "Worker",
@@ -103,7 +110,8 @@
       "company": "Company",
       "career": "Career",
       "telephone": "Telephone",
-      "input-placeholder": "Please Input"
+      "input-placeholder": "Please Input",
+      "area":"分区权限"
     },
     "worker-info": {
       "title": "Worker Info",
@@ -121,6 +129,7 @@
       "career": "Career",
       "telephone": "Telephone",
       "leave": "Leave",
+      "enter": "Enter",
       "datetime-placeholder": "Select Date",
       "telephone-placeholder": "Please Input"
     }

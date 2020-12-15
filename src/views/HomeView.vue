@@ -30,7 +30,7 @@
               <div class="section-name">{{ $t('views.home.manage-worker') }}</div>
             </div>
           </ion-col>
-          <ion-col class="ion-text-center" size="3">
+          <ion-col class="ion-text-center" size="3" @click="waiting()">
             <div>
               <center>
                 <ion-img class="section-icon" src="/assets/icon_nav_kc.png" />
@@ -40,7 +40,7 @@
               <div class="section-name">{{ $t('views.home.manage-attendance') }}</div>
             </div>
           </ion-col>
-          <ion-col class="ion-text-center" size="3">
+          <ion-col class="ion-text-center" size="3" @click="waiting()">
             <div>
               <center>
                 <ion-img class="section-icon" src="/assets/icon_nav_sp.png" />
@@ -50,7 +50,7 @@
               <div class="section-name">{{ $t('views.home.manage-team') }}</div>
             </div>
           </ion-col>
-          <ion-col class="ion-text-center" size="3">
+          <ion-col class="ion-text-center" size="3" @click="waiting()">
             <div>
               <center>
                 <ion-img class="section-icon" src="/assets/icon_nav_hd.png" />
@@ -141,6 +141,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { chevronForwardOutline, arrowBackOutline } from 'ionicons/icons';
 import { useStore } from 'vuex';
 import { ScgApi } from '@/api/ScgApi';
+import { ToastUtils } from '@/utils/ToastUtils';
 
 export default defineComponent({
   name: 'HomeView',
@@ -180,7 +181,7 @@ export default defineComponent({
     ScgApi().getBasicStatistics({projectId:this.projectId}).then(res=>{
       this.statistic = res.data;
     });
-    ScgApi().queryFile({subject:'project_carousel_picture',relationId:id}).then(res=>{
+    ScgApi().queryFile({type:'project_carousel_picture',relationId:id}).then(res=>{
       console.log(res);
     });
     this.info = getProjectInfo(this.projectId);
@@ -207,6 +208,9 @@ export default defineComponent({
     },
     onManageWorkerClicked(id: number) {
       this.$router.replace({path: "/worker-list", query: { id: this.projectId}})
+    },
+    waiting(){
+      ToastUtils().showError('warning',2000,this.$t('global.home-message'))
     }
   }
 });

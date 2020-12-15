@@ -65,12 +65,16 @@ function ScgApi() {
       return httpService.uploadFileByBase64(data);
     };
 
-    const saveWorker = (data: any) => {
-        return httpService.post(httpService.api.saveWorker,data);
+    const saveWorkerAndProjectWorker = (data: any) => {
+        return httpService.post(httpService.api.saveWorkerAndProjectWorker,data);
     };
 
     const saveProjectWorkerEntryExit = (data: any) => {
         return httpService.post(httpService.api.saveProjectWorkerEntryExit,data);
+    };
+
+    const queryArea = (data: any) => {
+        return httpService.get(httpService.api.queryArea,data);
     };
 
     return {
@@ -87,8 +91,9 @@ function ScgApi() {
         queryProjectCorpSelect,
         queryProjectCorpTeamSelect,
         postFileBase64String,
-        saveWorker,
-        saveProjectWorkerEntryExit
+        saveWorkerAndProjectWorker,
+        saveProjectWorkerEntryExit,
+        queryArea
     };
 }
 

@@ -1,6 +1,6 @@
 const config = {
   'development': {
-    'BASE_API': '' //'https://116.236.82.28:28028'
+    'BASE_API': 'https://ics.scgecloud.com:28028'
   },
   'production': {
     'BASE_API': 'https://ics.scg.cn'
