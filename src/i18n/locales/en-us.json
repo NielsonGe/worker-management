@@ -69,6 +69,7 @@
     },
     "worker-leave": {
       "title": "Worker Leave",
+      "enter-title": "Worker Enter",
       "name": "Name",
       "leave-time": "Leave Time",
       "enter-time": "Enter Time",

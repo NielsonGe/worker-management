@@ -4,7 +4,7 @@ import { ToastUtils } from '@/utils/ToastUtils';
 
 const service = axios.create({
   baseURL: getBaseApi(),
-  timeout: 5000
+  timeout: 120000
 });
 
 service.interceptors.request.use(

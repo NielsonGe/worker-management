@@ -7,7 +7,7 @@
                         <ion-icon slot="icon-only" :icon="arrowBackOutline"></ion-icon>
                     </ion-button>
                 </ion-buttons>
-                <ion-title>{{ $t("views.worker-leave.title") }}</ion-title>
+                <ion-title>{{ workerData.status == 1 ? $t("views.worker-leave.title") : $t("views.worker-leave.enter-title") }}</ion-title>
             </ion-toolbar>
         </ion-header>
 
@@ -123,7 +123,7 @@ export default defineComponent({
                 .then((res: any) => {
                     if (res.code == "00000") {
                         ToastUtils().showSuccess(this.$t("global.success"));
-                        this.$router.replace({ path: "/worker-list", query: { id: this.workerData.projectId } });
+                        this.$router.push({ path: "/worker-list", query: { id: this.workerData.projectId } }) 
                     }
                 });
             console.log(this.workerData.leaveTime);

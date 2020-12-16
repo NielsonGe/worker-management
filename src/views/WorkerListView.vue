@@ -93,7 +93,8 @@ export default defineComponent({
     const query = this.$route.query;
     const tmp = query.id as unknown;
     const id = tmp as string;
-    ScgApi().queryProjectWorkerPaging({projectWorkerId:query.id,pageIndex:1,pageSize:500}).then(res=>{
+    console.log('workerview!!!!!!!!!');
+    ScgApi().queryProjectWorkerPaging({projectId:query.id,pageIndex:1,pageSize:500}).then(res=>{
       this.workerList = res.data.rows;
     })
     

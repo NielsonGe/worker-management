@@ -9,27 +9,42 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import("@/views/LoginView.vue")
+    component: () => import("@/views/LoginView.vue"),
+    meta: {
+      title: '登录'
+    }
   },
   {
     path: '/project-list',
     name: 'ProjectList',
-    component: () => import("@/views/ProjectListView.vue")
+    component: () => import("@/views/ProjectListView.vue"),
+    meta: {
+      title: '项目列表'
+    }
   },
   {
     path: '/worker-list',
     name: 'WorkerList',
-    component: () => import("@/views/WorkerListView.vue")
+    component: () => import("@/views/WorkerListView.vue"),
+    meta: {
+      title: '工人管理'
+    }
   },
   {
     path: '/worker-info',
     name: 'WorkerInfo',
-    component: () => import("@/views/WorkerInfoView.vue")
+    component: () => import("@/views/WorkerInfoView.vue"),
+    meta: {
+      title: '人员信息'
+    }
   },
   {
     path: '/worker-leave',
     name: 'WorkerLeave',
-    component: () => import("@/views/WorkerLeaveView.vue")
+    component: () => import("@/views/WorkerLeaveView.vue"),
+    meta: {
+      title: '人员信息'
+    }
   },
   {
     path: '/main/',
@@ -39,17 +54,26 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: 'home',
         name: 'Home',
-        component: () => import("@/views/HomeView.vue")
+        component: () => import("@/views/HomeView.vue"),
+        meta: {
+          title: '项目首页'
+        }
       },
       {
         path: 'register',
         name: 'Register',
-        component: () => import("@/views/RegisterWorkerView.vue")
+        component: () => import("@/views/RegisterWorkerView.vue"),
+        meta: {
+          title: '人员登记'
+        }
       },
       {
         path: 'activity',
         name: 'Activity',
-        component: () => import("@/views/ActivityView.vue")
+        component: () => import("@/views/ActivityView.vue"),
+        meta: {
+          title: 'Activity View'
+        }
       }
     ]
   },

@@ -77,6 +77,10 @@ function ScgApi() {
         return httpService.get(httpService.api.queryArea,data);
     };
 
+    const ocrIdCard = (data: any) => {
+        return httpService.post(httpService.api.ocrIdCard,data);
+    };
+
     return {
         getVerifyCode,
         getRsaPublicKey,
@@ -93,7 +97,8 @@ function ScgApi() {
         postFileBase64String,
         saveWorkerAndProjectWorker,
         saveProjectWorkerEntryExit,
-        queryArea
+        queryArea,
+        ocrIdCard
     };
 }
 

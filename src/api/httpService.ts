@@ -63,5 +63,7 @@ export default class HttpService {
         queryDictionaryTrees: "/api/v1.0/dictionary/queryDictionaryTree",
         postFileBase64String: "/api/v1.0/file/postFileBase64String",
         queryArea: "/api/v1.0/area/queryArea",
+        ocrIdCard: "/api/v1.0/file/ocrIdCard",
+        
     };
 }

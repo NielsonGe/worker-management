@@ -1,5 +1,6 @@
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production' ? '.' : '.',
+  filenameHashing:true,
   devServer: {
     port: 9528,
     proxy: {
