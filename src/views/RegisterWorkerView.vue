@@ -384,7 +384,7 @@ export default defineComponent({
                 workTypeCode: "",
                 workTypeName: "",
                 recentPhotoFileId: "",
-                gender: 0,
+                gender: 1,
                 idType: "",
                 idNumber: "",
                 birthday: "",
@@ -425,10 +425,6 @@ export default defineComponent({
                 },
             ],
             genderList: [
-                {
-                    name: this.$t("global.gender-type-0"),
-                    code: 0,
-                },
                 {
                     name: this.$t("global.gender-type-1"),
                     code: 1,
@@ -597,7 +593,7 @@ export default defineComponent({
                     }
                     ScgApi()
                         .postFileBase64String({
-                            type: "RecentPhoto",
+                            type: "worker_recent_photo",
                             fileName: new Date().getTime() + "A" + Math.ceil(Math.random() * 10000) + "." + type,
                             contentBase64String: value.split(";base64,")[1],
                         })
