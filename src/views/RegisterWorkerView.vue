@@ -24,8 +24,8 @@
                         <ion-col class="left-align" size="4">
                             {{ $t("views.register.idType") }}
                         </ion-col>
-                        <ion-col class="right-align" size="7">
-                            {{ getNameByCode(formData.idType, idTypeList) }}
+                        <ion-col class="right-align" size="7" >
+                            {{ getNameByCode(formData.idType, idTypeList) ? getNameByCode(formData.idType, idTypeList) : "身份证" }}
                         </ion-col>
                         <ion-col class="right-align" size="1">
                             <ion-icon class="cell-icon" :icon="caretDownOutline"></ion-icon>
@@ -385,7 +385,7 @@ export default defineComponent({
                 workTypeName: "",
                 recentPhotoFileId: "",
                 gender: 1,
-                idType: "",
+                idType: "1",
                 idNumber: "",
                 birthday: "",
                 address: "",
@@ -517,7 +517,7 @@ export default defineComponent({
                 });
         },
         onBackClicked(ev: Event) {
-            this.$router.push("/main/home");
+            this.$router.replace("/main/home");
         },
         async onTakeIdCardPhotoFontClicked(ev: Event) {
             const errorMsg = this.$t("global.take-photo-error");
@@ -527,16 +527,26 @@ export default defineComponent({
 
             photoData.then(
                 (value) => {
-                    ScgApi().ocrIdCard({contentBase64String:value.split("base64,")[1]}).then((res: any)=>{
-                        if (res.code == "00000") {
-                                const cardData = res.data;
-                                this.formData.idNumber = cardData.idNumber;
-                                this.formData.workerName = cardData.name;
-                                this.formData.address = cardData.address;
-                                this.formData.birthday = cardData.birthday;
-                                this.formData.gender = cardData.gender;
+                    XFUtils()
+                        .identifyIdCard(value)
+                        .then((res: any) => {
+                            if (res.status == 200 && res.data.code == 0) {
+                                const cardData = res.data.data;
+                                if (cardData.error_code == "0") {
+                                    this.formData.idNumber = cardData.id_number;
+                                    this.formData.workerName = cardData.name;
+                                    this.formData.address = cardData.address;
+                                    const datetime = cardData.birthday
+                                        .replace(/[^\\u0000-\\u00FF]/g, "-")
+                                        .replace(/(-*$)/g, "")
+                                        .split("-");
+                                    datetime[1] = datetime[1].length > 1 ? datetime[1] : "0" + datetime[1];
+                                    datetime[2] = datetime[2].length > 1 ? datetime[2] : "0" + datetime[2];
+                                    this.formData.birthday = datetime.join("-");
+                                    this.formData.gender = cardData.sex === "男" ? 1 : cardData.sex === "女" ? 2 : 0;
+                                }
                             }
-                    })
+                        });
                 },
                 (error) => {
                     console.log(error);
@@ -552,14 +562,18 @@ export default defineComponent({
 
             photoData.then(
                 (value) => {
-                    ScgApi().ocrIdCard({contentBase64String:value.split("base64,")[1]}).then((res: any)=>{
-                        if (res.code == "00000") {
-                            const cardData = res.data;
-                            this.formData.startDate = cardData.startDate;
-                            this.formData.endDate = cardData.endDate;
-                            this.formData.grantOrg = cardData.grantOrg;
-                        }
-                    })
+                    XFUtils()
+                        .identifyIdCard(value)
+                        .then((res: any) => {
+                            if (res.status == 200 && res.data.code == 0) {
+                                const cardData = res.data.data;
+                                if (cardData.error_code == "0") {
+                                    this.formData.startDate = cardData.validity ? cardData.validity.split("-")[0].replace(/\./g, "-") : "";
+                                    this.formData.endDate = cardData.validity ? cardData.validity.split("-")[1].replace(/\./g, "-") : "";
+                                    this.formData.grantOrg = cardData.issue_authority;
+                                }
+                            }
+                        });
                 },
                 (error) => {
                     console.log(error);
