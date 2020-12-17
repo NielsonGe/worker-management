@@ -1,5 +1,8 @@
 <template>
     <ion-page>
+        <ion-refresher slot="fixed" pull-factor="0.5" pull-min="100" pull-max="200">
+            <ion-refresher-content></ion-refresher-content>
+        </ion-refresher>
         <ion-header>
             <ion-toolbar>
                 <ion-buttons slot="start">
@@ -19,6 +22,7 @@
                 </div>
             </div>
             <div class="field-col-item">
+                
                 <ion-grid>
                     <ion-row @click="onIdTypeCellClicked">
                         <ion-col class="left-align" size="4">
@@ -343,6 +347,7 @@ import {
     IonCheckbox,
     IonLabel,
     pickerController,
+    IonProgressBar
 } from "@ionic/vue";
 import { arrowBackOutline, checkmarkCircleOutline, person, caretDownOutline, camera } from "ionicons/icons";
 import { PhotoPlugin } from "@/composables/UsePhotoPlugin";
@@ -367,6 +372,7 @@ export default defineComponent({
         IonCol,
         IonCheckbox,
         IonLabel,
+        IonProgressBar
     },
     data() {
         return {
