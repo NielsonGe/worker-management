@@ -421,7 +421,7 @@ export default defineComponent({
                 this.worker.projectCorpId = res0.data.secondProjectCorpId ? res0.data.secondProjectCorpId : res0.data.projectCorpId;
                 this.companyParent = res[1].data;
                 const corpData: any = this.companyParent.filter((e: any) => e.id === res0.data.projectCorpId)[0];
-                ScgApi().queryFile({relationId:res0.data.workerId,type:"RecentPhoto"}).then((res: any)=>{
+                ScgApi().queryFile({relationId:res0.data.workerId,type:"worker_recent_photo"}).then((res: any)=>{
                     this.worker.recentPhotoFileId = res.data[0].fileId;
                     this.headerUrl = res.data[0].fileUrl;
                 });
