@@ -1,8 +1,8 @@
 <template>
     <ion-page>
-        <ion-refresher slot="fixed" pull-factor="0.5" pull-min="100" pull-max="200">
-            <ion-refresher-content></ion-refresher-content>
-        </ion-refresher>
+        <div class="fixed-loading" v-show="showLoading">
+            <ion-icon class="icon-loading" v-show="showLoading" :icon="syncOutline"></ion-icon>
+        </div>
         <ion-header>
             <ion-toolbar>
                 <ion-buttons slot="start">
@@ -17,18 +17,17 @@
         <ion-content :fullscreen="true">
             <div class="photo-panel">
                 <div class="photo-box">
-                    <img v-if="photoData != ''" :src="photoData" />
-                    <ion-icon class="photo-icon" v-if="photoData == ''" color="dark" :icon="person" />
+                    <img v-if="photoData" :src="photoData" />
+                    <ion-icon class="photo-icon" v-if="!photoData" color="dark" :icon="person" />
                 </div>
             </div>
             <div class="field-col-item">
-                
                 <ion-grid>
                     <ion-row @click="onIdTypeCellClicked">
                         <ion-col class="left-align" size="4">
                             {{ $t("views.register.idType") }}
                         </ion-col>
-                        <ion-col class="right-align" size="7" >
+                        <ion-col class="right-align" size="7">
                             {{ getNameByCode(formData.idType, idTypeList) ? getNameByCode(formData.idType, idTypeList) : "身份证" }}
                         </ion-col>
                         <ion-col class="right-align" size="1">
@@ -44,8 +43,8 @@
                             {{ $t("views.register.upload-id-card-font") }}
                         </ion-col>
                         <ion-col size="1">
-                            <ion-icon v-if="idCardData1 != ''" class="cell-icon" color="success" :icon="checkmarkCircleOutline"></ion-icon>
-                            <ion-icon v-if="idCardData1 == ''" class="cell-icon" color="dark" :icon="camera" />
+                            <ion-icon v-if="idCardData1" class="cell-icon" color="success" :icon="checkmarkCircleOutline"></ion-icon>
+                            <ion-icon v-if="!idCardData1" class="cell-icon" color="dark" :icon="camera" />
                         </ion-col>
                     </ion-row>
                 </ion-grid>
@@ -58,8 +57,8 @@
                             {{ $t("views.register.upload-id-card-back") }}
                         </ion-col>
                         <ion-col size="1">
-                            <ion-icon v-if="idCardData2 != ''" class="cell-icon" color="success" :icon="checkmarkCircleOutline"></ion-icon>
-                            <ion-icon v-if="idCardData2 == ''" class="cell-icon" color="dark" :icon="camera" />
+                            <ion-icon v-if="idCardData2" class="cell-icon" color="success" :icon="checkmarkCircleOutline"></ion-icon>
+                            <ion-icon v-if="!idCardData2" class="cell-icon" color="dark" :icon="camera" />
                         </ion-col>
                     </ion-row>
                 </ion-grid>
@@ -172,8 +171,8 @@
                             {{ $t("views.register.photo") }}
                         </ion-col>
                         <ion-col class="right-align blue-text" size="8">
-                            <ion-icon v-if="photoData != ''" class="cell-icon" color="success" :icon="checkmarkCircleOutline"></ion-icon>
-                            <ion-icon v-if="photoData == ''" class="cell-icon" color="dark" :icon="camera" />
+                            <ion-icon v-if="photoData" class="cell-icon" color="success" :icon="checkmarkCircleOutline"></ion-icon>
+                            <ion-icon v-if="!photoData" class="cell-icon" color="dark" :icon="camera" />
                         </ion-col>
                     </ion-row>
                 </ion-grid>
@@ -225,15 +224,23 @@
             </div>
             <div class="field-col-item">
                 <ion-grid>
-                    <ion-row @click="onIsTeamLeaderCellClicked">
+                    <ion-row>
                         <ion-col class="left-align" size="4">
                             {{ $t("views.register.isTeamLeader") }}
                         </ion-col>
-                        <ion-col class="right-align" size="7">
-                            {{ getNameByCode(formData.isTeamLeader, isLeader) }}
-                        </ion-col>
-                        <ion-col class="right-align" size="1">
-                            <ion-icon class="cell-icon" :icon="caretDownOutline"></ion-icon>
+                        <ion-col class="right-align" size="8">
+                            <ion-radio-group :value="formData.isTeamLeader">
+                                <div style="display: flex;flex-wrap: wrap;">
+                                    <div
+                                        style="display: flex;justify-content: flex-start;align-items: center;margin-right:15px;margin-bottom:5px;"
+                                        v-for="(entry, key) in isLeader"
+                                        :key="key"
+                                    >
+                                        <ion-radio slot="start" mode="md" :value="entry.code" style="margin-right:5px;"></ion-radio>
+                                        <ion-label>{{ entry.name }}</ion-label>
+                                    </div>
+                                </div>
+                            </ion-radio-group>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
@@ -254,7 +261,7 @@
                                     <ion-checkbox
                                         style="margin-right:5px;"
                                         @update:modelValue="entry.isChecked = $event"
-                                        :modelValue="entry.isChecked"
+                                        :checked="entry.isChecked"
                                     ></ion-checkbox
                                     ><ion-label>{{ entry.name }}</ion-label>
                                 </div>
@@ -345,11 +352,12 @@ import {
     IonGrid,
     IonCol,
     IonCheckbox,
+    IonRadioGroup,
+    IonRadio,
     IonLabel,
     pickerController,
-    IonProgressBar
 } from "@ionic/vue";
-import { arrowBackOutline, checkmarkCircleOutline, person, caretDownOutline, camera } from "ionicons/icons";
+import { arrowBackOutline, checkmarkCircleOutline, person, caretDownOutline, camera, syncOutline } from "ionicons/icons";
 import { PhotoPlugin } from "@/composables/UsePhotoPlugin";
 import { ToastUtils } from "@/utils/ToastUtils";
 import { ScgApi } from "@/api/ScgApi";
@@ -371,8 +379,9 @@ export default defineComponent({
         IonGrid,
         IonCol,
         IonCheckbox,
+        IonRadioGroup,
+        IonRadio,
         IonLabel,
-        IonProgressBar
     },
     data() {
         return {
@@ -380,11 +389,12 @@ export default defineComponent({
             idCardData1: "",
             idCardData2: "",
             corpParentId: "",
+            showLoading: false,
             formData: {
                 projectId: "",
                 projectCorpId: "",
                 teamId: "",
-                isTeamLeader: "",
+                isTeamLeader: 0,
                 workerName: "",
                 phone: "",
                 workTypeCode: "",
@@ -488,6 +498,7 @@ export default defineComponent({
             person,
             caretDownOutline,
             camera,
+            syncOutline,
         };
     },
     methods: {
@@ -533,16 +544,23 @@ export default defineComponent({
 
             photoData.then(
                 (value) => {
-                    ScgApi().ocrIdCard({contentBase64String:value.split("base64,")[1]}).then((res: any)=>{
-                        if (res.code == "00000") {
+                    this.showLoading = true;
+                    ScgApi()
+                        .ocrIdCard({ contentBase64String: value.split("base64,")[1] })
+                        .then((res: any) => {
+                            if (res.code == "00000") {
                                 const cardData = res.data;
                                 this.formData.idNumber = cardData.idNumber;
                                 this.formData.workerName = cardData.name;
                                 this.formData.address = cardData.address;
                                 this.formData.birthday = cardData.birthday;
                                 this.formData.gender = cardData.gender;
+                                this.idCardData1 = "1";
                             }
-                    })
+                        })
+                        .finally(() => {
+                            this.showLoading = false;
+                        });
                 },
                 (error) => {
                     console.log(error);
@@ -558,14 +576,21 @@ export default defineComponent({
 
             photoData.then(
                 (value) => {
-                    ScgApi().ocrIdCard({contentBase64String:value.split("base64,")[1]}).then((res: any)=>{
-                        if (res.code == "00000") {
-                            const cardData = res.data;
-                            this.formData.startDate = cardData.startDate;
-                            this.formData.endDate = cardData.endDate;
-                            this.formData.grantOrg = cardData.grantOrg;
-                        }
-                    })
+                    this.showLoading = true;
+                    ScgApi()
+                        .ocrIdCard({ contentBase64String: value.split("base64,")[1] })
+                        .then((res: any) => {
+                            if (res.code == "00000") {
+                                const cardData = res.data;
+                                this.formData.startDate = cardData.startDate;
+                                this.formData.endDate = cardData.endDate;
+                                this.formData.grantOrg = cardData.grantOrg;
+                                this.idCardData2 = "1";
+                            }
+                        })
+                        .finally(() => {
+                            this.showLoading = false;
+                        });
                 },
                 (error) => {
                     console.log(error);
@@ -605,6 +630,7 @@ export default defineComponent({
                         })
                         .then((res) => {
                             this.formData.recentPhotoFileId = res.data.id;
+                            this.photoData = value;
                         });
                 },
                 (error) => {
@@ -910,10 +936,41 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.fixed-loading {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.2);
+    transition: all 1s;
+}
+
+.fixed-loading .icon-loading {
+    font-size: 80px;
+    color: #00aaff;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    padding: 3px;
+    animation: turn 4s linear infinite;
+    transition: all 1s;
+}
+@keyframes turn {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
 ion-content {
     --background: #f3f4f6;
 }
-
 .photo-panel {
     margin-top: 10px;
     height: 140px;
