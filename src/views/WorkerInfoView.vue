@@ -155,11 +155,19 @@
                         <ion-col class="left-align" size="4">
                             {{ $t("views.register.isTeamLeader") }}
                         </ion-col>
-                        <ion-col class="right-align" size="7">
-                            {{ getNameByCode(worker.isTeamLeader, isLeader) }}
-                        </ion-col>
-                        <ion-col class="right-align" size="1">
-                            <ion-icon class="cell-icon" :icon="caretDownOutline"></ion-icon>
+                        <ion-col class="right-align" size="8">
+                            <ion-radio-group v-model="worker.isTeamLeader">
+                                <div style="display: flex;flex-wrap: wrap;">
+                                    <div
+                                        style="display: flex;justify-content: flex-start;align-items: center;margin-right:15px;margin-bottom:5px;"
+                                        v-for="(entry, key) in isLeader"
+                                        :key="key"
+                                    >
+                                        <ion-radio slot="start" mode="md" :value="entry.code" style="margin-right:5px;"></ion-radio>
+                                        <ion-label>{{ entry.name }}</ion-label>
+                                    </div>
+                                </div>
+                            </ion-radio-group>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
@@ -286,6 +294,9 @@ import {
     IonRow,
     IonGrid,
     IonCol,
+    IonCheckbox,
+    IonRadioGroup,
+    IonRadio,
     pickerController,
 } from "@ionic/vue";
 import { arrowBackOutline, checkmarkCircleOutline, person, caretDownOutline } from "ionicons/icons";
@@ -312,6 +323,9 @@ export default defineComponent({
         IonRow,
         IonGrid,
         IonCol,
+        IonCheckbox,
+        IonRadioGroup,
+        IonRadio,
     },
     data() {
         return {
@@ -558,7 +572,7 @@ export default defineComponent({
         },
         async onCompanyCellClicked(ev: Event) {
             const options = this.companyList.map((e: any) => {
-                return { text: e.corpName, value: e.corpId };
+                return { text: e.corpName, value: e.id };
             });
 
             const columns = [
@@ -579,8 +593,9 @@ export default defineComponent({
                         text: this.$t("global.confirm"),
                         handler: (value) => {
                             this.worker.projectCorpId = value.corp.value;
+                            const data: any = this.companyList.filter((e: any) => e.id === this.worker.projectCorpId)[0];
                             ScgApi()
-                                .queryProjectCorpTeamSelect({ projectId: "fc674d8e-2365-11eb-be30-0242ac110000", corpId: this.worker.projectCorpId })
+                                .queryProjectCorpTeamSelect({ projectId: this.worker.projectId, corpId: data.corpId })
                                 .then((res) => {
                                     this.teamList = res.data;
                                 });
@@ -591,9 +606,36 @@ export default defineComponent({
 
             picker.present();
         },
+        async onTeamIdCellClicked(ev: Event) {
+            const options = this.teamList.map((e: any) => {
+                return { text: e.name, value: e.id };
+            });
+            const columns = [
+                {
+                    name: "team",
+                    options: options,
+                },
+            ];
+            const picker = await pickerController.create({
+                columns: columns,
+                buttons: [
+                    {
+                        text: this.$t("global.cancel"),
+                        role: "cancel",
+                    },
+                    {
+                        text: this.$t("global.confirm"),
+                        handler: (value) => {
+                            this.worker.teamId = value.team.value;
+                        },
+                    },
+                ],
+            });
+            picker.present();
+        },
         async onCompanyParentCellClicked(ev: Event) {
             const options = this.companyParent.map((e: any) => {
-                return { text: e.corpName, value: e.corpId };
+                return { text: e.corpName, value: e.id };
             });
             console.log("corpParent", options);
             const columns = [
@@ -623,18 +665,19 @@ export default defineComponent({
             picker.present();
         },
         corpParentChange(value: any) {
-            const s = useStore();
             if (value) {
+                const data: any = this.companyParent.filter((e: any) => e.id === value)[0];
                 ScgApi()
-                    .queryProjectCorpSelect({ projectId: "fc674d8e-2365-11eb-be30-0242ac110000", corpId: value })
+                    .queryProjectCorpSelect({ projectId: this.worker.projectId, corpId:  data.corpId })
                     .then((res) => {
                         if (res.data && res.data.length > 0) {
                             this.worker.projectCorpId = "";
                             this.companyList = res.data;
                         } else {
-                            this.worker.projectCorpId = this.corpParentId;
+                            this.worker.projectCorpId = value;
+                            this.companyList = [];
                             ScgApi()
-                                .queryProjectCorpTeamSelect({ projectId: "fc674d8e-2365-11eb-be30-0242ac110000", corpId: this.worker.projectCorpId })
+                                .queryProjectCorpTeamSelect({ projectId: this.worker.projectId, corpId:  data.corpId })
                                 .then((res) => {
                                     this.teamList = res.data;
                                 });
