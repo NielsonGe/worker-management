@@ -180,10 +180,10 @@
                                     <ion-checkbox
                                         style="margin-right:5px;"
                                         slot="end"
-                                        @update:modelValue="entry.isChecked"
-                                        :checked="entry.isChecked"
+                                        @update:modelValue="entry.isChecked = $event"
+                                        :modelValue="entry.isChecked"
                                     ></ion-checkbox
-                                    ><ion-label>{{ entry.name }}</ion-label>
+                                    ><ion-label>{{ entry.isChecked.toString() }}</ion-label>
                                 </div>
                             </div>
                         </ion-col>
