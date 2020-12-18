@@ -24,8 +24,8 @@
                         <ion-col class="left-align" size="4">
                             {{ $t("views.register.idType") }}
                         </ion-col>
-                        <ion-col class="right-align" size="7">
-                            {{ getNameByCode(formData.idType, idTypeList) }}
+                        <ion-col class="right-align" size="7" >
+                            {{ getNameByCode(formData.idType, idTypeList) ? getNameByCode(formData.idType, idTypeList) : "身份证" }}
                         </ion-col>
                         <ion-col class="right-align" size="1">
                             <ion-icon class="cell-icon" :icon="caretDownOutline"></ion-icon>
@@ -384,8 +384,8 @@ export default defineComponent({
                 workTypeCode: "",
                 workTypeName: "",
                 recentPhotoFileId: "",
-                gender: 0,
-                idType: "",
+                gender: 1,
+                idType: "1",
                 idNumber: "",
                 birthday: "",
                 address: "",
@@ -425,10 +425,6 @@ export default defineComponent({
                 },
             ],
             genderList: [
-                {
-                    name: this.$t("global.gender-type-0"),
-                    code: 0,
-                },
                 {
                     name: this.$t("global.gender-type-1"),
                     code: 1,
@@ -521,7 +517,7 @@ export default defineComponent({
                 });
         },
         onBackClicked(ev: Event) {
-            this.$router.push("/main/home");
+            this.$router.replace("/main/home");
         },
         async onTakeIdCardPhotoFontClicked(ev: Event) {
             const errorMsg = this.$t("global.take-photo-error");
@@ -597,7 +593,7 @@ export default defineComponent({
                     }
                     ScgApi()
                         .postFileBase64String({
-                            type: "RecentPhoto",
+                            type: "worker_recent_photo",
                             fileName: new Date().getTime() + "A" + Math.ceil(Math.random() * 10000) + "." + type,
                             contentBase64String: value.split(";base64,")[1],
                         })

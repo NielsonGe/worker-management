@@ -14,8 +14,8 @@
         <ion-content :fullscreen="true">
             <div class="photo-panel">
                 <div class="photo-box">
-                    <img v-if="photoData != ''" :src="photoData" />
-                    <ion-icon class="photo-icon" v-if="photoData == ''" color="dark" :icon="person" />
+                    <img v-if="headerUrl" :src="headerUrl" />
+                    <ion-icon class="photo-icon" v-if="!headerUrl" color="dark" :icon="person" />
                 </div>
             </div>
 
@@ -50,7 +50,7 @@
                             {{ $t("views.worker-info.name") }}
                         </ion-col>
                         <ion-col class="right-align" size="8">
-                            {{ worker.name }}
+                            {{ worker.workerName }}
                         </ion-col>
                     </ion-row>
                 </ion-grid>
@@ -112,7 +112,7 @@
                             {{ $t("views.register.company") }}
                         </ion-col>
                         <ion-col class="right-align" size="7">
-                            {{ getNameByCode(corpParentId, companyParent, { code: "corpId", name: "corpName" }) }}
+                            {{ getNameByCode(corpParentId, companyParent, { code: "id", name: "corpName" }) }}
                         </ion-col>
                         <ion-col class="right-align" size="1">
                             <ion-icon class="cell-icon" :icon="caretDownOutline"></ion-icon>
@@ -125,7 +125,7 @@
                     <ion-row @click="onCompanyCellClicked">
                         <ion-col class="left-align" size="4"> </ion-col>
                         <ion-col class="right-align" size="7">
-                            {{ getNameByCode(worker.projectCorpId, companyList, { code: "corpId", name: "corpName" }) }}
+                            {{ getNameByCode(worker.projectCorpId, companyList, { code: "id", name: "corpName" }) }}
                         </ion-col>
                         <ion-col class="right-align" size="1">
                             <ion-icon class="cell-icon" :icon="caretDownOutline"></ion-icon>
@@ -133,14 +133,15 @@
                     </ion-row>
                 </ion-grid>
             </div>
-            <div class="field-col-item section-margin">
+
+            <div class="field-col-item">
                 <ion-grid>
                     <ion-row @click="onTeamIdCellClicked">
                         <ion-col class="left-align" size="4">
                             {{ $t("views.register.teamId") }}
                         </ion-col>
                         <ion-col class="right-align" size="7">
-                            {{ getNameByCode(worker.teamId, teamList,{code:"id",name:"name"}) }}
+                            {{ getNameByCode(worker.teamId, teamList, { code: "id", name: "name" }) }}
                         </ion-col>
                         <ion-col class="right-align" size="1">
                             <ion-icon class="cell-icon" :icon="caretDownOutline"></ion-icon>
@@ -164,6 +165,62 @@
                 </ion-grid>
             </div>
             <div class="field-col-item">
+                <ion-grid>
+                    <ion-row>
+                        <ion-col class="left-align" size="4">
+                            {{ $t("views.register.area") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="8">
+                            <div style="display: flex;flex-wrap: wrap;">
+                                <div
+                                    style="display: flex;justify-content: flex-start;align-items: center;margin-right:5px;margin-bottom:5px;"
+                                    v-for="(entry, key) in areaList"
+                                    :key="key"
+                                >
+                                    <ion-checkbox
+                                        style="margin-right:5px;"
+                                        slot="end"
+                                        @update:modelValue="entry.isChecked = $event"
+                                        :modelValue="entry.isChecked"
+                                    ></ion-checkbox
+                                    ><ion-label>{{ entry.name }}</ion-label>
+                                </div>
+                            </div>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </div>
+            <div class="field-col-item section-margin">
+                <ion-grid>
+                    <ion-row @click="onRoleCellClicked">
+                        <ion-col class="left-align" size="4">
+                            {{ $t("views.register.role") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="7">
+                            {{ getNameByCode(worker.role, roleList) }}
+                        </ion-col>
+                        <ion-col class="right-align" size="1">
+                            <ion-icon class="cell-icon" :icon="caretDownOutline"></ion-icon>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </div>
+            <div class="field-col-item" v-if="worker.role == 2">
+                <ion-grid>
+                    <ion-row @click="onJobTypeCellClicked">
+                        <ion-col class="left-align" size="4">
+                            {{ $t("views.register.job") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="7">
+                            {{ getNameByCode(worker.jobTypeCode, jobTypeList) }}
+                        </ion-col>
+                        <ion-col class="right-align" size="1">
+                            <ion-icon class="cell-icon" :icon="caretDownOutline"></ion-icon>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </div>
+            <div class="field-col-item" v-if="worker.role == 1">
                 <ion-grid>
                     <ion-row @click="onWorkTypeCellClicked">
                         <ion-col class="left-align" size="4">
@@ -225,6 +282,7 @@ import { getWorkerInfo } from "@/data/WorkerFakeData";
 import { getCompanyList, getCompanyInfo } from "@/data/CompanyFakeData";
 import { ScgApi } from "@/api/ScgApi";
 import { useStore } from "vuex";
+import { ToastUtils } from "@/utils/ToastUtils";
 
 export default defineComponent({
     name: "WorkerInfo",
@@ -246,15 +304,14 @@ export default defineComponent({
         return {
             photoData: "",
             corpParentId: "",
+            headerUrl:"",
             companyParent: [],
             companyList: [],
             teamList: [],
             workTypeList: [],
+            areaList: [],
+            jobTypeList: [],
             genderList: [
-                {
-                    name: this.$t("global.gender-type-0"),
-                    code: 0,
-                },
                 {
                     name: this.$t("global.gender-type-1"),
                     code: 1,
@@ -274,17 +331,36 @@ export default defineComponent({
                     code: 1,
                 },
             ],
+            roleList: [
+                {
+                    name: this.$t("global.role-type-0"),
+                    code: 0,
+                },
+                {
+                    name: this.$t("global.role-type-1"),
+                    code: 1,
+                },
+                {
+                    name: this.$t("global.role-type-2"),
+                    code: 2,
+                },
+                {
+                    name: this.$t("global.role-type-3"),
+                    code: 3,
+                },
+            ],
             worker: {
                 id: "",
-                corpId: "",
+                projectId: "",
+                projectCorpId: "",
                 teamId: "",
                 isTeamLeader: "",
-                name: "",
+                workerName: "",
                 phone: "",
                 workTypeCode: "",
                 workTypeName: "",
                 recentPhotoFileId: "",
-                gender: 0,
+                gender: 1,
                 idType: "",
                 idNumber: "",
                 birthday: "",
@@ -294,63 +370,89 @@ export default defineComponent({
                 endDate: "",
                 nationCode: "H",
                 nationName: "汉",
-                status:0
+                role: "",
+                jobTypeCode: "",
+                jobTypeName: "",
+                areaCodes: "",
+                status: 0,
             },
             workerData: {},
         };
     },
     mounted() {
         const query = this.$route.query;
+        const s = useStore();
+        this.worker.projectId = s.getters.getProjectId;
         ScgApi()
-            .getProjectWorker({id:query.id})
-            .then((res: any) => {
-                this.workerData = res.data;
-                const {
-                    id,
-                    projectCorpId: corpId,
-                    teamId,
-                    isTeamLeader,
-                    workerName:name,
-                    phone,
-                    workTypeCode,
-                    workTypeName,
-                    recentPhotoFileId,
-                    gender,
-                    idType,
-                    idNumber,
-                    birthday,
-                    address,
-                    grantOrg,
-                    startDate,
-                    endDate,
-                    nationCode,
-                    nationName,
-                    status
-                } = res.data;
-                this.worker = {
-                    id,
-                    corpId,
-                    teamId,
-                    isTeamLeader,
-                    name,
-                    phone,
-                    workTypeCode,
-                    workTypeName,
-                    recentPhotoFileId,
-                    gender,
-                    idType,
-                    idNumber,
-                    birthday,
-                    address,
-                    grantOrg,
-                    startDate,
-                    endDate,
-                    nationCode,
-                    nationName,
-                    status
-                };
+            .queryDictionaryTrees({ dictCode: "job_type" })
+            .then((res) => {
+                this.jobTypeList = res.data;
+            });
+        ScgApi()
+            .queryDictionaryTrees({ dictCode: "work_type" })
+            .then((res) => {
+                this.workTypeList = res.data;
+            });
+        
+            Promise.all([ScgApi().getProjectWorker({ id: query.id }),ScgApi().queryProjectCorpSelect({ projectId: s.getters.getProjectId })]).then((res: any)=>{
+                const res0 = res[0];
+                this.workerData = { ...res0.data };
+                this.worker.id = res0.data.id;
+                this.worker.teamId = res0.data.teamId;
+                this.worker.isTeamLeader = res0.data.isTeamLeader;
+                this.worker.workerName = res0.data.workerName;
+                this.worker.phone = res0.data.phone;
+                this.worker.workTypeCode = res0.data.workTypeCode;
+                this.worker.workTypeName = res0.data.workTypeName;
+                this.worker.recentPhotoFileId = res0.data.recentPhotoFileId;
+                this.worker.gender = res0.data.gender;
+                this.worker.idType = res0.data.idType;
+                this.worker.idNumber = res0.data.idNumber;
+                this.worker.birthday = res0.data.birthday;
+                this.worker.address = res0.data.address;
+                this.worker.grantOrg = res0.data.grantOrg;
+                this.worker.startDate = res0.data.startDate;
+                this.worker.endDate = res0.data.endDate;
+                this.corpParentId = res0.data.projectCorpId;
+                this.worker.role = res0.data.role;
+                this.worker.jobTypeCode = res0.data.jobTypeCode;
+                this.worker.jobTypeName = res0.data.jobTypeName;
+                this.worker.areaCodes = res0.data.areaCodes;
+                this.worker.projectCorpId = res0.data.secondProjectCorpId ? res0.data.secondProjectCorpId : res0.data.projectCorpId;
+                this.companyParent = res[1].data;
+                const corpData: any = this.companyParent.filter((e: any) => e.id === res0.data.projectCorpId)[0];
+                ScgApi().queryFile({relationId:res0.data.workerId,type:"worker_recent_photo"}).then((res: any)=>{
+                    this.worker.recentPhotoFileId = res.data[0].fileId;
+                    this.headerUrl = res.data[0].fileUrl;
+                });
+                ScgApi()
+                .queryArea({ projectId: s.getters.getProjectId })
+                .then((res) => {
+                    res.data.forEach((e: any)=>{
+                        if(this.worker.areaCodes.split(',').indexOf(e.code) !== -1){
+                            e.isChecked = true;
+                        }else{
+                            e.isChecked = false;
+                        }
+                    })
+                    this.areaList = res.data;
+                    console.log("areaList",this.areaList);
+                });
+                ScgApi()
+                .queryProjectCorpSelect({ projectId: this.worker.projectId, corpId: corpData.corpId })
+                .then((res) => {
+                    this.companyList = res.data;
+                    const tempId = res0.data.secondProjectCorpId ? this.companyList.filter((e: any) => e.id === res0.data.secondProjectCorpId)[0]['corpId'] : corpData.corpId;
+                    ScgApi()
+                    .queryProjectCorpTeamSelect({ projectId: this.worker.projectId, corpId: tempId })
+                    .then((res) => {
+                        this.teamList = res.data;
+                    });
+                });
             });
     },
+
+
     setup() {
         const route = useRoute();
 
@@ -361,7 +463,6 @@ export default defineComponent({
             router.replace("/main/home");
             return;
         }
-
         return {
             arrowBackOutline,
             checkmarkCircleOutline,
@@ -380,10 +481,30 @@ export default defineComponent({
         },
         onLeaveClicked(ev: Event) {
             const query = this.$route.query;
-            this.$router.push({ path: "/worker-leave", query: {id:query.id} });
+            this.$router.push({ path: "/worker-leave", query: { id: query.id } });
         },
         onModifyClicked(ev: Event) {
-            return;
+            this.worker.areaCodes = this.areaList
+                .filter((e: any) => e.isChecked)
+                .map((e: any) => e.code)
+                .join(",");
+            console.log("check",this.areaList);
+            const data: any = { ...this.worker };
+            // if (data.role == 1) {
+            //     delete data.jobTypeCode;
+            //     delete data.jobTypeName;
+            // } else if (data.role == 2) {
+            //     delete data.workTypeCode;
+            //     delete data.workTypeName;
+            // }
+            ScgApi()
+                .saveWorkerAndProjectWorker(data)
+                .then((res: any) => {
+                    if (res.code == "00000") {
+                        ToastUtils().showSuccess(this.$t("global.success"));
+                        this.$router.replace("/main/home");
+                    }
+                });
         },
         onBackClicked(ev: Event) {
             this.$router.replace("/main/home");
@@ -392,6 +513,7 @@ export default defineComponent({
             const options = this.workTypeList.map((e: any) => {
                 return { text: e.name, value: e.code };
             });
+            console.log("workTypeList",options);
             const columns = [
                 {
                     name: "workType",
@@ -438,9 +560,9 @@ export default defineComponent({
                     {
                         text: this.$t("global.confirm"),
                         handler: (value) => {
-                            this.worker.corpId = value.corp.value;
+                            this.worker.projectCorpId = value.corp.value;
                             ScgApi()
-                                .queryProjectCorpTeamSelect({ projectId: "fc674d8e-2365-11eb-be30-0242ac110000", corpId: this.worker.corpId })
+                                .queryProjectCorpTeamSelect({ projectId: "fc674d8e-2365-11eb-be30-0242ac110000", corpId: this.worker.projectCorpId })
                                 .then((res) => {
                                     this.teamList = res.data;
                                 });
@@ -489,19 +611,78 @@ export default defineComponent({
                     .queryProjectCorpSelect({ projectId: "fc674d8e-2365-11eb-be30-0242ac110000", corpId: value })
                     .then((res) => {
                         if (res.data && res.data.length > 0) {
-                            this.worker.corpId = "";
+                            this.worker.projectCorpId = "";
                             this.companyList = res.data;
                         } else {
-                            this.worker.corpId = this.corpParentId;
+                            this.worker.projectCorpId = this.corpParentId;
                             ScgApi()
-                                .queryProjectCorpTeamSelect({ projectId: "fc674d8e-2365-11eb-be30-0242ac110000", corpId: this.worker.corpId })
+                                .queryProjectCorpTeamSelect({ projectId: "fc674d8e-2365-11eb-be30-0242ac110000", corpId: this.worker.projectCorpId })
                                 .then((res) => {
                                     this.teamList = res.data;
                                 });
                         }
                     });
             }
-            this.worker.corpId = "";
+            this.worker.projectCorpId = "";
+        },
+        async onRoleCellClicked(ev: Event) {
+            const options = this.roleList.map((e: any) => {
+                return { text: e.name, value: e.code };
+            });
+            const columns = [
+                {
+                    name: "role",
+                    options: options,
+                },
+            ];
+            const picker = await pickerController.create({
+                columns: columns,
+                buttons: [
+                    {
+                        text: this.$t("global.cancel"),
+                        role: "cancel",
+                    },
+                    {
+                        text: this.$t("global.confirm"),
+                        handler: (value) => {
+                            this.worker.role = value.role.value;
+                            this.worker.workTypeCode = "";
+                            this.worker.workTypeName = "";
+                            this.worker.jobTypeCode = "";
+                            this.worker.jobTypeName = "";
+                        },
+                    },
+                ],
+            });
+            picker.present();
+        },
+        async onJobTypeCellClicked(ev: Event) {
+            const options = this.jobTypeList.map((e: any) => {
+                return { text: e.name, value: e.code };
+            });
+            const columns = [
+                {
+                    name: "jobType",
+                    options: options,
+                },
+            ];
+            const picker = await pickerController.create({
+                columns: columns,
+                buttons: [
+                    {
+                        text: this.$t("global.cancel"),
+                        role: "cancel",
+                    },
+                    {
+                        text: this.$t("global.confirm"),
+                        handler: (value) => {
+                            this.worker.jobTypeCode = value.jobType.value;
+                            this.worker.jobTypeName = this.getNameByCode(value.jobType.value, this.jobTypeList);
+                        },
+                    },
+                ],
+            });
+            picker.present();
         },
     },
 });
