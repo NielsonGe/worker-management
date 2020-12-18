@@ -527,26 +527,16 @@ export default defineComponent({
 
             photoData.then(
                 (value) => {
-                    XFUtils()
-                        .identifyIdCard(value)
-                        .then((res: any) => {
-                            if (res.status == 200 && res.data.code == 0) {
-                                const cardData = res.data.data;
-                                if (cardData.error_code == "0") {
-                                    this.formData.idNumber = cardData.id_number;
-                                    this.formData.workerName = cardData.name;
-                                    this.formData.address = cardData.address;
-                                    const datetime = cardData.birthday
-                                        .replace(/[^\\u0000-\\u00FF]/g, "-")
-                                        .replace(/(-*$)/g, "")
-                                        .split("-");
-                                    datetime[1] = datetime[1].length > 1 ? datetime[1] : "0" + datetime[1];
-                                    datetime[2] = datetime[2].length > 1 ? datetime[2] : "0" + datetime[2];
-                                    this.formData.birthday = datetime.join("-");
-                                    this.formData.gender = cardData.sex === "男" ? 1 : cardData.sex === "女" ? 2 : 0;
-                                }
+                    ScgApi().ocrIdCard({contentBase64String:value.split("base64,")[1]}).then((res: any)=>{
+                        if (res.code == "00000") {
+                                const cardData = res.data;
+                                this.formData.idNumber = cardData.idNumber;
+                                this.formData.workerName = cardData.name;
+                                this.formData.address = cardData.address;
+                                this.formData.birthday = cardData.birthday;
+                                this.formData.gender = cardData.gender;
                             }
-                        });
+                    })
                 },
                 (error) => {
                     console.log(error);
@@ -562,18 +552,14 @@ export default defineComponent({
 
             photoData.then(
                 (value) => {
-                    XFUtils()
-                        .identifyIdCard(value)
-                        .then((res: any) => {
-                            if (res.status == 200 && res.data.code == 0) {
-                                const cardData = res.data.data;
-                                if (cardData.error_code == "0") {
-                                    this.formData.startDate = cardData.validity ? cardData.validity.split("-")[0].replace(/\./g, "-") : "";
-                                    this.formData.endDate = cardData.validity ? cardData.validity.split("-")[1].replace(/\./g, "-") : "";
-                                    this.formData.grantOrg = cardData.issue_authority;
-                                }
-                            }
-                        });
+                    ScgApi().ocrIdCard({contentBase64String:value.split("base64,")[1]}).then((res: any)=>{
+                        if (res.code == "00000") {
+                            const cardData = res.data;
+                            this.formData.startDate = cardData.startDate;
+                            this.formData.endDate = cardData.endDate;
+                            this.formData.grantOrg = cardData.grantOrg;
+                        }
+                    })
                 },
                 (error) => {
                     console.log(error);
