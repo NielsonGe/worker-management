@@ -248,6 +248,19 @@
                 </ion-grid>
             </div>
 
+            <div class="field-col-item">
+                <ion-grid>
+                    <ion-row>
+                        <ion-col class="left-align center-vertical" size="4">
+                            {{ worker.exitDate == "0001-01-01" ? (worker.entryDate == "0001-01-01" ? $t("views.worker-leave.no-time")  : $t("views.worker-leave.enter-time") ) : $t("views.worker-leave.leave-time") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="8">
+                            {{ worker.exitDate == "0001-01-01" ? (worker.entryDate == "0001-01-01" ? $t("views.worker-leave.registerOnly") : worker.entryDate ) : worker.exitDate }}
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </div>
+
             <div class="section-margin" style="margin-bottom: 10px;">
                 <ion-button v-if="worker.status == 1" expand="block" color="danger" @click="onLeaveClicked">{{ $t("views.worker-info.leave") }}</ion-button>
                 <ion-button v-if="worker.status == 0" expand="block" color="primary" @click="onLeaveClicked">{{ $t("views.worker-info.enter") }}</ion-button>
@@ -375,6 +388,8 @@ export default defineComponent({
                 jobTypeName: "",
                 areaCodes: "",
                 status: 0,
+                entryDate: "",
+                exitDate: "",
             },
             workerData: {},
         };
@@ -419,6 +434,9 @@ export default defineComponent({
                 this.worker.jobTypeName = res0.data.jobTypeName;
                 this.worker.areaCodes = res0.data.areaCodes;
                 this.worker.projectCorpId = res0.data.secondProjectCorpId ? res0.data.secondProjectCorpId : res0.data.projectCorpId;
+                this.worker.entryDate = res0.data.entryDate;
+                this.worker.exitDate = res0.data.exitDate;
+                this.worker.status = res0.data.status;
                 this.companyParent = res[1].data;
                 const corpData: any = this.companyParent.filter((e: any) => e.id === res0.data.projectCorpId)[0];
                 ScgApi().queryFile({relationId:res0.data.workerId,type:"worker_recent_photo"}).then((res: any)=>{
