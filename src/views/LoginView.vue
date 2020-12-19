@@ -35,10 +35,10 @@
             <ion-col class="left-align center-vertical left-padding" size="3">
               {{ $t('views.login.verify-code') }}
             </ion-col>
-            <ion-col class="right-align" size="7">
+            <ion-col class="right-align" size="5">
               <ion-input class="input-cell" :placeholder="$t('views.login.verify-code-placeholder')" v-model="verifyCode" clearInput></ion-input>
             </ion-col>
-            <ion-col class="left-align center-vertical right-padding" size="2" @click="refreshVerifyCode">
+            <ion-col class="left-align center-vertical right-padding" size="4" @click="refreshVerifyCode">
               <img style="width:100%, height:100%" :src="verifyCodeData" />
             </ion-col>
           </ion-row>

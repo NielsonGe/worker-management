@@ -38,7 +38,7 @@
             </ion-row>
             <ion-row>
               <ion-col size="8">
-                <span :style="{'color': getStatusColor(item.status)}">{{ getWorkerStatusName(item.status) }}</span>
+                <span :style="{'color': (item.entryDate == item.exitDate && item.entryDate == '0001-01-01 00:00:00') ? '' : getStatusColor(item.status)  }">{{ ((item.entryDate == item.exitDate) && (item.entryDate == "0001-01-01 00:00:00")) ? $t('views.worker-list.register-only') : getWorkerStatusName(item.status) }}</span>
               </ion-col>
               <ion-col size="4" class="right">
                 {{ item.workTypeName }}
