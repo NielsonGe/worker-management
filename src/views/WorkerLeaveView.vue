@@ -14,8 +14,8 @@
         <ion-content :fullscreen="true">
             <div class="photo-panel">
                 <div class="photo-box">
-                    <img v-if="photoData != ''" :src="photoData" />
-                    <ion-icon class="photo-icon" v-if="photoData == ''" color="dark" :icon="person" />
+                    <img v-if="photoData" :src="photoData" />
+                    <ion-icon class="photo-icon" v-if="!photoData" color="dark" :icon="person" />
                 </div>
             </div>
 
@@ -85,8 +85,10 @@ export default defineComponent({
                 projectId: "",
                 workerId: "",
                 status: null,
-                leaveTime:""
+                leaveTime:"",
+                recentPhotoFileId:""
             },
+            photoData:""
         };
     },
     setup() {
@@ -106,6 +108,9 @@ export default defineComponent({
                 this.workerData.projectId = res.data.projectId;
                 this.workerData.workerId = res.data.workerId;
                 this.workerData.status = res.data.status;
+                ScgApi().queryFile({relationId:res.data.workerId,type:"worker_recent_photo"}).then((res: any)=>{
+                    this.photoData = res.data[0].fileUrl;
+                });
             });
     },
     methods: {

@@ -7,20 +7,20 @@
             <ion-icon slot="icon-only" :icon="arrowBackOutline"></ion-icon>
           </ion-button>
         </ion-buttons>
-        <ion-title>{{ info.getName() }}</ion-title>
+        <ion-title>{{ info.projectName }}</ion-title>
       </ion-toolbar>
     </ion-header>
     
     <ion-content :fullscreen="true">
       <ion-slides pager="true" :options="sliderOptions">
-        <ion-slide v-for="item in bannerList" :key="item.getId()">
-          <img :src="item.getImageData()" width="100%" />
+        <ion-slide v-for="item in bannerList" :key="item.id">
+          <img :src="item.fileUrl" width="100%" />
         </ion-slide>
       </ion-slides>
 
       <ion-grid class="white-background">
         <ion-row>
-          <ion-col class="ion-text-center" size="3" @click="onManageWorkerClicked(info.getId())">
+          <ion-col class="ion-text-center" size="3" @click="onManageWorkerClicked(info.projectId)">
             <div>
               <center>
                 <ion-img class="section-icon" src="/assets/icon_nav_sz.png" />
@@ -167,8 +167,8 @@ export default defineComponent({
   },
   data() {
     return {
-      info: new ProjectInfo('', ''),
-      bannerList: new Array<ProjectBanner>(),
+      info: {},
+      bannerList: new Array<any>(),
       statistic: {},
       announcementList: new Array<ProjectAnnouncement>(),
       projectId: "",
@@ -176,16 +176,15 @@ export default defineComponent({
     }
   },
   ionViewWillEnter() {
-    const id = this.store.getters.getProjectId;
     this.projectId = this.store.getters.getProjectId;
+    this.info = this.store.getters.getProject;
     ScgApi().getBasicStatistics({projectId:this.projectId}).then(res=>{
       this.statistic = res.data;
     });
-    ScgApi().queryFile({type:'project_carousel_picture',relationId:id}).then(res=>{
+    ScgApi().queryFile({type:'project_carousel_picture',relationId:this.projectId}).then(res=>{
       console.log(res);
       this.bannerList = res.data;
     });
-    this.info = getProjectInfo(this.projectId);
     this.announcementList = getProjectAnnouncementList(this.projectId);
   },
   setup() {

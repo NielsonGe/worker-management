@@ -542,12 +542,12 @@ export default defineComponent({
                 .then((res: any) => {
                     if (res.code == "00000") {
                         ToastUtils().showSuccess(this.$t("global.success"));
-                        this.$router.replace("/main/home");
+                        this.$router.replace("/worker-list");
                     }
                 });
         },
         onBackClicked(ev: Event) {
-            this.$router.replace("/main/home");
+            this.$router.replace({path: "/worker-list", query: { id: this.worker.projectId}})
         },
         async onWorkTypeCellClicked(ev: Event) {
             const options = this.workTypeList.map((e: any) => {

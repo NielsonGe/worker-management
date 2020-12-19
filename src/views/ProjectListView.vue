@@ -7,7 +7,7 @@
     </ion-header>
     <ion-content :fullscreen="true">
       <ion-list>
-        <ion-item lines="full" v-for="item in projectBriefList" :key="item.projectId" @click="onProjectCellClicked(item.projectId)">
+        <ion-item lines="full" v-for="item in projectBriefList" :key="item.projectId" @click="onProjectCellClicked(item)">
           <ion-thumbnail class="thumbnail" slot="start">
             <ion-img src="assets/ch1.jpg"></ion-img>
           </ion-thumbnail>
@@ -69,8 +69,9 @@ export default defineComponent({
         default: return this.$t('global.project-type-unknown');
       }
     },
-    onProjectCellClicked(id: number) {
-      this.store.dispatch('setProjectId', id);
+    onProjectCellClicked(item: any) {
+      this.store.dispatch('setProjectId', item.projectId);
+      this.store.dispatch('setProject', item);
       this.$router.replace('/main/home');
     }
   }
