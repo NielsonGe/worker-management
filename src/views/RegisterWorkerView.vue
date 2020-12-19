@@ -95,8 +95,11 @@
                         <ion-col class="left-align" size="4">
                             {{ $t("views.register.gender") }}
                         </ion-col>
-                        <ion-col class="right-align" size="8">
+                        <ion-col class="right-align" size="7">
                             {{ getNameByCode(formData.gender, genderList) }}
+                        </ion-col>
+                        <ion-col class="right-align" size="1">
+                            <ion-icon class="cell-icon" :icon="caretDownOutline"></ion-icon>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
@@ -460,11 +463,12 @@ export default defineComponent({
                     code: 1,
                 },
             ],
+            store: useStore()
         };
     },
-    mounted() {
-        const s = useStore();
-        this.formData.projectId = s.getters.getProjectId;
+    
+    ionViewWillEnter() {
+        this.formData.projectId = this.store.getters.getProjectId;
         ScgApi()
             .queryDictionaryTrees({ dictCode: "work_type" })
             .then((res) => {
@@ -481,16 +485,17 @@ export default defineComponent({
                 this.jobTypeList = res.data;
             });
         ScgApi()
-            .queryProjectCorpSelect({ projectId: s.getters.getProjectId })
+            .queryProjectCorpSelect({ projectId: this.store.getters.getProjectId })
             .then((res) => {
                 this.companyParent = res.data;
             });
         ScgApi()
-            .queryArea({ projectId: s.getters.getProjectId })
+            .queryArea({ projectId: this.store.getters.getProjectId })
             .then((res) => {
                 this.areaList = res.data;
             });
     },
+    
     setup() {
         return {
             arrowBackOutline,
@@ -511,7 +516,7 @@ export default defineComponent({
             return obj[value] || null;
         },
         onSubmitClicked(ev: Event) {
-            this.formData.areaCodes = this.areaList
+        this.formData.areaCodes = this.areaList
                 .filter((e: any) => e.isChecked)
                 .map((e: any) => e.code)
                 .join(",");

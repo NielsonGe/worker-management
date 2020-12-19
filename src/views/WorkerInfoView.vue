@@ -270,9 +270,19 @@
             </div>
 
             <div class="section-margin" style="margin-bottom: 10px;">
-                <ion-button v-if="worker.status == 1" expand="block" color="danger" @click="onLeaveClicked">{{ $t("views.worker-info.leave") }}</ion-button>
-                <ion-button v-if="worker.status == 0" expand="block" color="primary" @click="onLeaveClicked">{{ $t("views.worker-info.enter") }}</ion-button>
-                <ion-button expand="block" color="success" @click="onModifyClicked">{{ $t("views.worker-info.submit") }}</ion-button>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col class="left-align" size="6">
+                            <ion-button v-if="worker.status == 1" expand="block" color="danger" @click="onLeaveClicked">{{ $t("views.worker-info.leave") }}</ion-button>
+                            <ion-button v-if="worker.status == 0" expand="block" color="primary" @click="onLeaveClicked">{{ $t("views.worker-info.enter") }}</ion-button>
+                        </ion-col>
+                        <ion-col class="right-align" size="6">
+                            <ion-button expand="block" color="success" @click="onModifyClicked">{{ $t("views.worker-info.submit") }}</ion-button>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+                
+                
             </div>
         </ion-content>
     </ion-page>
@@ -406,12 +416,12 @@ export default defineComponent({
                 exitDate: "",
             },
             workerData: {},
+            store: useStore()
         };
     },
-    mounted() {
+    ionViewWillEnter() {
         const query = this.$route.query;
-        const s = useStore();
-        this.worker.projectId = s.getters.getProjectId;
+        this.worker.projectId = this.store.getters.getProjectId;
         ScgApi()
             .queryDictionaryTrees({ dictCode: "job_type" })
             .then((res) => {
@@ -423,7 +433,7 @@ export default defineComponent({
                 this.workTypeList = res.data;
             });
         
-            Promise.all([ScgApi().getProjectWorker({ id: query.id }),ScgApi().queryProjectCorpSelect({ projectId: s.getters.getProjectId })]).then((res: any)=>{
+            Promise.all([ScgApi().getProjectWorker({ id: query.id }),ScgApi().queryProjectCorpSelect({ projectId: this.store.getters.getProjectId })]).then((res: any)=>{
                 const res0 = res[0];
                 this.workerData = { ...res0.data };
                 this.worker.id = res0.data.id;
@@ -458,7 +468,7 @@ export default defineComponent({
                     this.headerUrl = res.data[0].fileUrl;
                 });
                 ScgApi()
-                .queryArea({ projectId: s.getters.getProjectId })
+                .queryArea({ projectId: this.store.getters.getProjectId })
                 .then((res) => {
                     res.data.forEach((e: any)=>{
                         if(this.worker.areaCodes.split(',').indexOf(e.code) !== -1){
@@ -483,8 +493,6 @@ export default defineComponent({
                 });
             });
     },
-
-
     setup() {
         const route = useRoute();
 

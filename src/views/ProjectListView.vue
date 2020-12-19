@@ -51,7 +51,7 @@ export default defineComponent({
       projectBriefList: []
     }
   },
-  mounted() {
+  ionViewWillEnter() {
     const account = this.store.getters.getAccount;
     const token = this.store.getters.getToken;
     ScgApi().queryCurrentUserProjectPaging({pageIndex:1,pageSize:100}).then((res: any)=>{

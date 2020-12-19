@@ -171,21 +171,21 @@ export default defineComponent({
       bannerList: new Array<ProjectBanner>(),
       statistic: {},
       announcementList: new Array<ProjectAnnouncement>(),
-      projectId: ""
+      projectId: "",
+      store:useStore()
     }
   },
-  mounted() {
-    const s = useStore();
-    const id = s.getters.getProjectId;
-    this.projectId = s.getters.getProjectId;
+  ionViewWillEnter() {
+    const id = this.store.getters.getProjectId;
+    this.projectId = this.store.getters.getProjectId;
     ScgApi().getBasicStatistics({projectId:this.projectId}).then(res=>{
       this.statistic = res.data;
     });
     ScgApi().queryFile({type:'project_carousel_picture',relationId:id}).then(res=>{
       console.log(res);
+      this.bannerList = res.data;
     });
     this.info = getProjectInfo(this.projectId);
-    this.bannerList = getProjectBannerList(this.projectId);
     this.announcementList = getProjectAnnouncementList(this.projectId);
   },
   setup() {

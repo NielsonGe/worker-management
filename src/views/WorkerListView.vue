@@ -61,6 +61,7 @@ import { useRoute, useRouter } from 'vue-router';
 import NameFilterPopoverView from '@/views/NameFilterPopoverView.vue'
 import CareerTypeAndGenderFilterPopoverView from '@/views/CareerTypeAndGenderFilterPopoverView.vue'
 import { ScgApi } from '@/api/ScgApi';
+import { useStore } from 'vuex';
 
 export default defineComponent({
   name: 'WorkerListView',
@@ -86,18 +87,15 @@ export default defineComponent({
       workerList: [],
       sort: 0,
       career: 0,
-      gender: 0
+      gender: 0,
+      store:useStore()
     }
   },
-  mounted() {
+  ionViewWillEnter() {
     const query = this.$route.query;
-    const tmp = query.id as unknown;
-    const id = tmp as string;
-    console.log('workerview!!!!!!!!!');
     ScgApi().queryProjectWorkerPaging({projectId:query.id,pageIndex:1,pageSize:50}).then(res=>{
       this.workerList = res.data.rows;
     })
-    
   },
   setup() {
     const route = useRoute();

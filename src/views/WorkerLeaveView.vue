@@ -96,7 +96,7 @@ export default defineComponent({
             timeOutline,
         };
     },
-    mounted() {
+    ionViewWillEnter() {
         const query = this.$route.query;
         ScgApi()
             .getProjectWorker({ id: query.id })
