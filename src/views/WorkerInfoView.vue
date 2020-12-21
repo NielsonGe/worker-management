@@ -260,14 +260,28 @@
                 <ion-grid>
                     <ion-row>
                         <ion-col class="left-align center-vertical" size="4">
-                            {{ worker.exitDate == "0001-01-01" ? (worker.entryDate == "0001-01-01" ? $t("views.worker-leave.no-time")  : $t("views.worker-leave.enter-time") ) : $t("views.worker-leave.leave-time") }}
+                            {{ $t("views.worker-leave.enter-time") }}
                         </ion-col>
                         <ion-col class="right-align" size="8">
-                            {{ worker.exitDate == "0001-01-01" ? (worker.entryDate == "0001-01-01" ? $t("views.worker-leave.registerOnly") : worker.entryDate ) : worker.exitDate }}
+                            {{ worker.entryDate == "0001-01-01" ? "" : worker.entryDate }}
                         </ion-col>
                     </ion-row>
                 </ion-grid>
             </div>
+
+             <div class="field-col-item">
+                <ion-grid>
+                    <ion-row>
+                        <ion-col class="left-align center-vertical" size="4">
+                            {{ $t("views.worker-leave.leave-time") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="8">
+                            {{ worker.exitDate == "0001-01-01" ? "" : worker.exitDate }}
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </div>
+
 
             <div class="section-margin" style="margin-bottom: 10px;">
                 <ion-grid>
