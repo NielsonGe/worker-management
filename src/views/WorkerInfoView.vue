@@ -263,7 +263,7 @@
                             {{ $t("views.worker-leave.enter-time") }}
                         </ion-col>
                         <ion-col class="right-align" size="8">
-                            {{ worker.entryDate == "0001-01-01" ? "" : worker.entryDate }}
+                            {{ worker.entryDate == "0001-01-01" ? " - " : worker.entryDate }}
                         </ion-col>
                     </ion-row>
                 </ion-grid>
@@ -276,7 +276,7 @@
                             {{ $t("views.worker-leave.leave-time") }}
                         </ion-col>
                         <ion-col class="right-align" size="8">
-                            {{ worker.exitDate == "0001-01-01" ? "" : worker.exitDate }}
+                            {{ worker.exitDate == "0001-01-01" ? " - " : worker.exitDate }}
                         </ion-col>
                     </ion-row>
                 </ion-grid>
