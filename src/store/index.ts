@@ -6,6 +6,7 @@ export default createStore({
     account: Object,
     token: String,
     projectId: String,
+    project:Object
   },
   mutations: {
     setAccountMutations(state, payload) {
@@ -16,6 +17,9 @@ export default createStore({
     },
     setProjectIdMutations(state, payload) {
       state.projectId = payload;
+    },
+    setProjectMutations(state, payload) {
+      state.project = payload;
     }
   },
   actions: {
@@ -27,6 +31,9 @@ export default createStore({
     },
     setProjectId({commit}, payload) {
       commit('setProjectIdMutations', payload);
+    },
+    setProject({commit}, payload) {
+      commit('setProjectMutations', payload);
     }
   },
   getters: {
@@ -38,6 +45,9 @@ export default createStore({
     },
     getProjectId(state) {
       return state.projectId;
+    },
+    getProject(state){
+      return state.project;
     }
   },
   modules: {

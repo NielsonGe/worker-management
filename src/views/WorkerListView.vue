@@ -14,14 +14,14 @@
     <ion-content :fullscreen="true">
       <ion-grid>
         <ion-row>
-          <ion-col size="8">
-            <ion-searchbar class="searchbar" :placeholder="$t('views.worker-list.search-placeholder')" v-model="searchText" @ionChange="onSearchChanged()"></ion-searchbar>
+          <ion-col size="11">
+            <ion-input class="input-cell search-bar" @ionChange="changeValue($event)" v-model="searchText.workerName" :placeholder="$t('views.worker-list.search-placeholder')" clearInput />
           </ion-col>
-          <ion-col style="text-align:center;" size="3">
+          <!-- <ion-col style="text-align:center;" size="3">
             <div class="sort-text" @click="onSortClicked">{{ $t('views.worker-list.sort') }}<span><ion-icon class="sort-icon" :icon="codeOutline"></ion-icon></span></div>
-          </ion-col>
+          </ion-col> -->
           <ion-col size="1">
-            <div class="sort-career-icon" @click="onFilterClicked"><ion-icon :icon="funnel"></ion-icon></div>
+            <div class="sort-career-icon" @click="onSearchChanged()"><ion-icon :icon="search"></ion-icon></div>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -38,7 +38,7 @@
             </ion-row>
             <ion-row>
               <ion-col size="8">
-                <span :style="{'color': getStatusColor(item.status)}">{{ getWorkerStatusName(item.status) }}</span>
+                <span :style="{'color': (item.entryDate == item.exitDate && item.entryDate == '0001-01-01 00:00:00') ? '' : getStatusColor(item.status)  }">{{ ((item.entryDate == item.exitDate) && (item.entryDate == "0001-01-01 00:00:00")) ? $t('views.worker-list.register-only') : getWorkerStatusName(item.status) }}</span>
               </ion-col>
               <ion-col size="4" class="right">
                 {{ item.workTypeName }}
@@ -55,12 +55,13 @@
 import { defineComponent } from 'vue';
 import { IonPage, IonGrid, IonRow, IonCol, IonHeader, IonToolbar, IonButtons, IonButton, IonTitle, IonContent, IonList, IonItem, IonSearchbar, IonIcon, popoverController } from '@ionic/vue';
 import WorkerInfo from '@/models/WorkerInfo';
-import { arrowBackOutline, codeOutline, funnel } from 'ionicons/icons';
+import { arrowBackOutline, codeOutline, funnel, search } from 'ionicons/icons';
 import { getWorkerList } from '@/data/WorkerFakeData';
 import { useRoute, useRouter } from 'vue-router';
 import NameFilterPopoverView from '@/views/NameFilterPopoverView.vue'
 import CareerTypeAndGenderFilterPopoverView from '@/views/CareerTypeAndGenderFilterPopoverView.vue'
 import { ScgApi } from '@/api/ScgApi';
+import { useStore } from 'vuex';
 
 export default defineComponent({
   name: 'WorkerListView',
@@ -77,48 +78,46 @@ export default defineComponent({
     IonContent,
     IonList,
     IonItem,
-    IonSearchbar,
     IonIcon
   },
   data() {
     return {
-      searchText: null,
+      searchText: {
+        workerName:""
+      },
       workerList: [],
       sort: 0,
       career: 0,
-      gender: 0
+      gender: 0,
+      store:useStore(),
+      
     }
   },
-  mounted() {
-    const query = this.$route.query;
-    const tmp = query.id as unknown;
-    const id = tmp as string;
-    console.log('workerview!!!!!!!!!');
-    ScgApi().queryProjectWorkerPaging({projectId:query.id,pageIndex:1,pageSize:50}).then(res=>{
+  ionViewWillEnter() {
+    ScgApi().queryProjectWorkerPaging({projectId:this.store.getters.getProjectId,pageIndex:1,pageSize:50}).then(res=>{
       this.workerList = res.data.rows;
     })
-    
   },
   setup() {
     const route = useRoute();
 
     const query = route.query;
 
-    if (query.id == null || query.id == undefined) {
-      const router = useRouter();
-      router.replace('/main/home');
-      return;
-    }
-
     return {
       arrowBackOutline,
       codeOutline,
-      funnel
+      funnel,
+      search
     }
   },
   methods: {
+    changeValue(event: any){
+      this.searchText.workerName = event.detail.value;
+    },
     onSearchChanged() {
-      console.log(this.searchText);
+      ScgApi().queryProjectWorkerPaging({projectId:this.store.getters.getProjectId,pageIndex:1,pageSize:50,workerName:this.searchText.workerName}).then(res=>{
+        this.workerList = res.data.rows;
+      })
     },
     getStatusColor(status: number) {
       switch(status) {
@@ -224,8 +223,10 @@ ion-item {
 }
 
 .search-bar {
-  border-bottom: 1px solid #f3f4f6;
-  background-color: #f3f4f6;
+  background-color: rgba(0,0,0,0.07);
+  border-radius: 5px;
+  padding-left: 10px !important;
+  height: 30px !important; 
 }
 
 .cell {
@@ -236,11 +237,6 @@ ion-item {
   text-align: right;
 }
 
-.searchbar {
-  height: 30px !important; 
-  padding-top: 0px !important; 
-  padding-bottom: 0px !important;
-}
 
 .sort-icon {
   transform:rotate(90deg);
@@ -253,5 +249,6 @@ ion-item {
 
 .sort-career-icon {
   padding-top: 5px;
+  font-size: 20px;
 }
 </style>
