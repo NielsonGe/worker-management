@@ -260,19 +260,43 @@
                 <ion-grid>
                     <ion-row>
                         <ion-col class="left-align center-vertical" size="4">
-                            {{ worker.exitDate == "0001-01-01" ? (worker.entryDate == "0001-01-01" ? $t("views.worker-leave.no-time")  : $t("views.worker-leave.enter-time") ) : $t("views.worker-leave.leave-time") }}
+                            {{ $t("views.worker-leave.enter-time") }}
                         </ion-col>
                         <ion-col class="right-align" size="8">
-                            {{ worker.exitDate == "0001-01-01" ? (worker.entryDate == "0001-01-01" ? $t("views.worker-leave.registerOnly") : worker.entryDate ) : worker.exitDate }}
+                            {{ worker.entryDate == "0001-01-01" ? " - " : worker.entryDate }}
                         </ion-col>
                     </ion-row>
                 </ion-grid>
             </div>
 
+             <div class="field-col-item">
+                <ion-grid>
+                    <ion-row>
+                        <ion-col class="left-align center-vertical" size="4">
+                            {{ $t("views.worker-leave.leave-time") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="8">
+                            {{ worker.exitDate == "0001-01-01" ? " - " : worker.exitDate }}
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </div>
+
+
             <div class="section-margin" style="margin-bottom: 10px;">
-                <ion-button v-if="worker.status == 1" expand="block" color="danger" @click="onLeaveClicked">{{ $t("views.worker-info.leave") }}</ion-button>
-                <ion-button v-if="worker.status == 0" expand="block" color="primary" @click="onLeaveClicked">{{ $t("views.worker-info.enter") }}</ion-button>
-                <ion-button expand="block" color="success" @click="onModifyClicked">{{ $t("views.worker-info.submit") }}</ion-button>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col class="left-align" size="6">
+                            <ion-button v-if="worker.status == 1" expand="block" color="danger" @click="onLeaveClicked">{{ $t("views.worker-info.leave") }}</ion-button>
+                            <ion-button v-if="worker.status == 0" expand="block" color="primary" @click="onLeaveClicked">{{ $t("views.worker-info.enter") }}</ion-button>
+                        </ion-col>
+                        <ion-col class="right-align" size="6">
+                            <ion-button expand="block" color="success" @click="onModifyClicked">{{ $t("views.worker-info.submit") }}</ion-button>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+                
+                
             </div>
         </ion-content>
     </ion-page>
@@ -406,12 +430,12 @@ export default defineComponent({
                 exitDate: "",
             },
             workerData: {},
+            store: useStore()
         };
     },
-    mounted() {
+    ionViewWillEnter() {
         const query = this.$route.query;
-        const s = useStore();
-        this.worker.projectId = s.getters.getProjectId;
+        this.worker.projectId = this.store.getters.getProjectId;
         ScgApi()
             .queryDictionaryTrees({ dictCode: "job_type" })
             .then((res) => {
@@ -423,7 +447,7 @@ export default defineComponent({
                 this.workTypeList = res.data;
             });
         
-            Promise.all([ScgApi().getProjectWorker({ id: query.id }),ScgApi().queryProjectCorpSelect({ projectId: s.getters.getProjectId })]).then((res: any)=>{
+            Promise.all([ScgApi().getProjectWorker({ id: query.id }),ScgApi().queryProjectCorpSelect({ projectId: this.store.getters.getProjectId })]).then((res: any)=>{
                 const res0 = res[0];
                 this.workerData = { ...res0.data };
                 this.worker.id = res0.data.id;
@@ -458,7 +482,7 @@ export default defineComponent({
                     this.headerUrl = res.data[0].fileUrl;
                 });
                 ScgApi()
-                .queryArea({ projectId: s.getters.getProjectId })
+                .queryArea({ projectId: this.store.getters.getProjectId })
                 .then((res) => {
                     res.data.forEach((e: any)=>{
                         if(this.worker.areaCodes.split(',').indexOf(e.code) !== -1){
@@ -483,8 +507,6 @@ export default defineComponent({
                 });
             });
     },
-
-
     setup() {
         const route = useRoute();
 
@@ -534,12 +556,12 @@ export default defineComponent({
                 .then((res: any) => {
                     if (res.code == "00000") {
                         ToastUtils().showSuccess(this.$t("global.success"));
-                        this.$router.replace("/main/home");
+                        this.$router.replace("/worker-list");
                     }
                 });
         },
         onBackClicked(ev: Event) {
-            this.$router.replace("/main/home");
+            this.$router.replace({path: "/worker-list", query: { id: this.worker.projectId}})
         },
         async onWorkTypeCellClicked(ev: Event) {
             const options = this.workTypeList.map((e: any) => {
