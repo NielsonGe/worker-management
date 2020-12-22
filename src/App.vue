@@ -1,6 +1,6 @@
 <template>
   <ion-app>
-    <ion-router-outlet />
+    <ion-router-outlet :animated="false" @animation="()=>{console.log(1234);return false;}" />
   </ion-app>
 </template>
 

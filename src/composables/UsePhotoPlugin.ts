@@ -1,4 +1,4 @@
-import { Plugins, CameraResultType, CameraSource } from "@capacitor/core";
+import { Plugins, CameraResultType, CameraSource ,CameraDirection} from "@capacitor/core";
 
 const convertBlobToBase64 = (blob: Blob) => new Promise((resolve, reject) => {
   const reader = new FileReader;
@@ -16,7 +16,8 @@ function PhotoPlugin() {
     const cameraPhoto = await Camera.getPhoto({
       resultType: CameraResultType.Uri,
       source: CameraSource.Camera,
-      quality: 100
+      quality: 100,
+      direction:CameraDirection.Rear
     });
 
     const response = await fetch(cameraPhoto.webPath!);
