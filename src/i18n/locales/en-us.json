@@ -75,7 +75,9 @@
       "enter-time": "Enter Time",
       "leave": "Leave",
       "enter": "Enter",
-      "registerOnly": "Register Only"
+      "registerOnly": "Register Only",
+      "leave-message":"请选择退场时间",
+      "enter-message":"请选择进场时间"
     },
     "home": {
       "manage-worker": "Worker",
