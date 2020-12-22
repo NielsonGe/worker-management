@@ -74,7 +74,8 @@
       "leave-time": "Leave Time",
       "enter-time": "Enter Time",
       "leave": "Leave",
-      "enter": "Enter"
+      "enter": "Enter",
+      "registerOnly": "Register Only"
     },
     "home": {
       "manage-worker": "Worker",
@@ -89,7 +90,8 @@
     "worker-list": {
       "title": "Worker Management",
       "search-placeholder": "Search",
-      "sort": "sort"
+      "sort": "sort",
+      "register-only": "-"
     },
     "register": {
       "title": "Register Worker",

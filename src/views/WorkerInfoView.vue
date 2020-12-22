@@ -256,7 +256,7 @@
                 </ion-grid>
             </div>
 
-            <div class="field-col-item">
+            <div class="field-col-item section-margin">
                 <ion-grid>
                     <ion-row>
                         <ion-col class="left-align center-vertical" size="4">
