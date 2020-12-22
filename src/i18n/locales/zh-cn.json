@@ -94,7 +94,8 @@
     "worker-list": {
       "title": "工人管理",
       "search-placeholder": "搜索人员...",
-      "sort": "排序"
+      "sort": "排序",
+      "register-only": "-"
     },
     "register": {
       "title": "登记信息",
