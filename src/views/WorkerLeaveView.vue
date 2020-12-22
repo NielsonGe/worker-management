@@ -118,6 +118,9 @@ export default defineComponent({
             this.$router.replace({path: '/worker-info', query: {id: this.$route.query.id}});
         },
         onLeaveClicked(ev: Event) {
+            if(!this.workerData.leaveTime){
+                ToastUtils().showError('warning',1500,this.workerData.status === 1 ? this.$t('view.worker-leave.leave-message'):this.$t('view.worker-leave.enter-message'))
+            }
             ScgApi()
                 .saveProjectWorkerEntryExit({
                     projectId: this.workerData.projectId,

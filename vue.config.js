@@ -1,7 +1,6 @@
 module.exports = {
     publicPath: process.env.NODE_ENV === "production" ? "." : ".",
     filenameHashing: false,
-    
     configureWebpack: {
         //重点
         output: {
@@ -35,4 +34,5 @@ module.exports = {
         },
     },
     transpileDependencies: ["vue-router", "@ionic/vue", "cache-loader", "vue-i18n"],
+    productionSourceMap: false
 };

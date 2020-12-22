@@ -417,7 +417,7 @@ export default defineComponent({
                 jobTypeCode: "",
                 jobTypeName: "",
                 areaCodes: "",
-            },
+            } as any,
             companyParent: [],
             companyList: [],
             teamList: [],
@@ -521,14 +521,6 @@ export default defineComponent({
                 .map((e: any) => e.code)
                 .join(",");
             const data: any = { ...this.formData };
-            // if (data.role == 1) {
-            //     delete data.jobTypeCode;
-            //     delete data.jobTypeName;
-            // } else if (data.role == 2) {
-            //     delete data.workTypeCode;
-            //     delete data.workTypeName;
-            // }
-            console.log(data);
             ScgApi()
                 .saveWorkerAndProjectWorker(data)
                 .then((res: any) => {
