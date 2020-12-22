@@ -75,7 +75,6 @@
       "name": "姓名",
       "leave-time": "退场时间",
       "enter-time": "进场时间",
-      "no-time": "进场状态",
       "leave": "退场",
       "enter": "进场",
       "registerOnly": "登记"
