@@ -255,4 +255,8 @@ ion-item {
   padding-top: 5px;
   font-size: 20px;
 }
+
+.list-md-lines-full .item.cell, .list-md .cell.item-lines-full.md{
+  --border-width: 0 0 3px 0 !important;
+}
 </style>
