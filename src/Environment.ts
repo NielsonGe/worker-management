@@ -3,7 +3,7 @@ const config = {
     'BASE_API': '' //'https://ics.scgecloud.com:28028'
   },
   'production': {
-    'BASE_API': 'https://ics.scg.cn'
+    'BASE_API': 'https://ics.scgecloud.com:28028'
   }
 }
 
