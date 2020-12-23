@@ -13,7 +13,7 @@
                 <ion-title>{{ $t("views.register.title") }}</ion-title>
             </ion-toolbar>
         </ion-header>
-
+        <right-menu />
         <ion-content :fullscreen="true">
             <div class="photo-panel">
                 <div class="photo-box">
@@ -361,10 +361,11 @@ import {
     pickerController,
 } from "@ionic/vue";
 import { arrowBackOutline, checkmarkCircleOutline, person, caretDownOutline, camera, syncOutline } from "ionicons/icons";
-import { PhotoPlugin } from "@/composables/UsePhotoPlugin";
+import { PhotoPlugin, PhotoPluginFace } from "@/composables/UsePhotoPlugin";
 import { ToastUtils } from "@/utils/ToastUtils";
 import { ScgApi } from "@/api/ScgApi";
 import { XFUtils } from "@/utils/XFUtils";
+import RightMenu from '@/components/RightMenu.vue';
 
 export default defineComponent({
     name: "WorkerInfo",
@@ -385,6 +386,7 @@ export default defineComponent({
         IonRadioGroup,
         IonRadio,
         IonLabel,
+        RightMenu
     },
     data() {
         return {
@@ -488,7 +490,9 @@ export default defineComponent({
             .queryProjectCorpSelect({ projectId: this.store.getters.getProjectId })
             .then((res) => {
                 this.companyParent = res.data;
-            });
+            }).catch((err) => {
+      this.$router.replace('/login');
+    });
         ScgApi()
             .queryArea({ projectId: this.store.getters.getProjectId })
             .then((res) => {
@@ -606,7 +610,7 @@ export default defineComponent({
         async onTakePhotoClicked(ev: Event) {
             const errorMsg = this.$t("global.take-photo-error");
 
-            const { takePhoto } = PhotoPlugin();
+            const { takePhoto } = PhotoPluginFace();
             const photoData = takePhoto();
 
             photoData.then(

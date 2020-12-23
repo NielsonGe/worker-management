@@ -10,7 +10,7 @@
                 <ion-title>{{ $t("views.worker-info.title") }}</ion-title>
             </ion-toolbar>
         </ion-header>
-
+        <right-menu />
         <ion-content :fullscreen="true">
             <div class="photo-panel">
                 <div class="photo-box">
@@ -331,6 +331,7 @@ import { getCompanyList, getCompanyInfo } from "@/data/CompanyFakeData";
 import { ScgApi } from "@/api/ScgApi";
 import { useStore } from "vuex";
 import { ToastUtils } from "@/utils/ToastUtils";
+import RightMenu from '@/components/RightMenu.vue';
 
 export default defineComponent({
     name: "WorkerInfo",
@@ -350,6 +351,7 @@ export default defineComponent({
         IonCheckbox,
         IonRadioGroup,
         IonRadio,
+        RightMenu
     },
     data() {
         return {
@@ -440,7 +442,9 @@ export default defineComponent({
             .queryDictionaryTrees({ dictCode: "job_type" })
             .then((res) => {
                 this.jobTypeList = res.data;
-            });
+            }).catch((err) => {
+      this.$router.replace('/login');
+    });
         ScgApi()
             .queryDictionaryTrees({ dictCode: "work_type" })
             .then((res) => {

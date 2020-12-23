@@ -140,6 +140,10 @@
       "enter": "人员进场",
       "datetime-placeholder": "请选择日期",
       "telephone-placeholder": "请输入"
+    },
+    "menu": {
+      "changepwd": "修改密码",
+      "logout": "退出登录"
     }
   }
 }

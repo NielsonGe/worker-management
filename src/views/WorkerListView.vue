@@ -10,7 +10,7 @@
         <ion-title>{{ $t('views.worker-list.title') }}</ion-title>
       </ion-toolbar>
     </ion-header>
-
+    <right-menu />
     <ion-content :fullscreen="true">
       <ion-grid>
         <ion-row>
@@ -62,6 +62,7 @@ import NameFilterPopoverView from '@/views/NameFilterPopoverView.vue'
 import CareerTypeAndGenderFilterPopoverView from '@/views/CareerTypeAndGenderFilterPopoverView.vue'
 import { ScgApi } from '@/api/ScgApi';
 import { useStore } from 'vuex';
+import RightMenu from '@/components/RightMenu.vue';
 
 export default defineComponent({
   name: 'WorkerListView',
@@ -78,7 +79,8 @@ export default defineComponent({
     IonContent,
     IonList,
     IonItem,
-    IonIcon
+    IonIcon,
+    RightMenu
   },
   data() {
     return {
@@ -96,6 +98,8 @@ export default defineComponent({
   ionViewWillEnter() {
     ScgApi().queryProjectWorkerPaging({projectId:this.store.getters.getProjectId,pageIndex:1,pageSize:50}).then(res=>{
       this.workerList = res.data.rows;
+    }).catch((err) => {
+      this.$router.replace('/login');
     })
   },
   setup() {
