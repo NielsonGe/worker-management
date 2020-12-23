@@ -40,6 +40,7 @@ function PhotoPluginFace() {
     const cameraPhoto = await Camera.getPhoto({
       resultType: CameraResultType.Uri,
       source: CameraSource.Camera,
+      direction: CameraDirection.Front,
       quality: 50
     });
 

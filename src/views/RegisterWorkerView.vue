@@ -145,10 +145,10 @@
             <div class="field-col-item">
                 <ion-grid>
                     <ion-row>
-                        <ion-col class="left-align" size="4">
+                        <ion-col class="left-align" size="6">
                             {{ $t("views.register.startDate") }}
                         </ion-col>
-                        <ion-col class="right-align" size="8">
+                        <ion-col class="right-align" size="6">
                             <ion-datetime :value="formData.startDate" display-format="YYYY-MM-DD"></ion-datetime>
                         </ion-col>
                     </ion-row>
@@ -157,10 +157,10 @@
             <div class="field-col-item">
                 <ion-grid>
                     <ion-row>
-                        <ion-col class="left-align" size="4">
+                        <ion-col class="left-align" size="6">
                             {{ $t("views.register.endDate") }}
                         </ion-col>
-                        <ion-col class="right-align" size="8">
+                        <ion-col class="right-align" size="6">
                             <ion-datetime :value="formData.endDate" display-format="YYYY-MM-DD"></ion-datetime>
                         </ion-col>
                     </ion-row>
