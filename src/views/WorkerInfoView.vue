@@ -686,8 +686,8 @@ export default defineComponent({
                     {
                         text: this.$t("global.confirm"),
                         handler: (value) => {
-                            this.corpParentId = value.corpParent.value;
-                            const data: any = this.companyParent.filter((e: any) => e.id === value)[0];
+                            this.worker.projectCorpId = value.corpParent.value;
+                            const data: any = this.companyParent.filter((e: any) => e.id === value.corpParent.value)[0];
                             ScgApi()
                                 .queryProjectCorpTeamSelect({ projectId: this.worker.projectId, corpId:  data.corpId })
                                 .then((res) => {
