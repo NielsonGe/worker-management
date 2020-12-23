@@ -117,9 +117,12 @@ export default defineComponent({
     },
     methods: {
         onBackClicked(ev: Event) {
-            this.$router.back();
+            this.$router.replace({path: '/worker-info', query: {id: this.$route.query.id}});
         },
         onLeaveClicked(ev: Event) {
+            if(!this.workerData.leaveTime){
+                ToastUtils().showError('warning',1500,this.workerData.status === 1 ? this.$t('view.worker-leave.leave-message'):this.$t('view.worker-leave.enter-message'))
+            }
             ScgApi()
                 .saveProjectWorkerEntryExit({
                     projectId: this.workerData.projectId,
@@ -130,7 +133,7 @@ export default defineComponent({
                 .then((res: any) => {
                     if (res.code == "00000") {
                         ToastUtils().showSuccess(this.$t("global.success"));
-                        this.$router.push({ path: "/worker-list", query: { id: this.workerData.projectId } }) 
+                        this.$router.replace({ path: "/worker-list", query: { id: this.workerData.projectId } }) 
                     }
                 });
             console.log(this.workerData.leaveTime);

@@ -112,7 +112,7 @@
                             {{ $t("views.register.company") }}
                         </ion-col>
                         <ion-col class="right-align" size="7">
-                            {{ getNameByCode(corpParentId, companyParent, { code: "id", name: "corpName" }) }}
+                            {{ getNameByCode(worker.projectCorpId, companyParent, { code: "id", name: "corpName" }) }}
                         </ion-col>
                         <ion-col class="right-align" size="1">
                             <ion-icon class="cell-icon" :icon="caretDownOutline"></ion-icon>
@@ -120,7 +120,7 @@
                     </ion-row>
                 </ion-grid>
             </div>
-            <div class="field-col-item" v-if="companyList && companyList.length > 0">
+            <!-- <div class="field-col-item" v-if="companyList && companyList.length > 0">
                 <ion-grid>
                     <ion-row @click="onCompanyCellClicked">
                         <ion-col class="left-align" size="4"> </ion-col>
@@ -132,7 +132,7 @@
                         </ion-col>
                     </ion-row>
                 </ion-grid>
-            </div>
+            </div> -->
 
             <div class="field-col-item">
                 <ion-grid>
@@ -359,7 +359,6 @@ export default defineComponent({
             corpParentId: "",
             headerUrl:"",
             companyParent: [],
-            companyList: [],
             teamList: [],
             workTypeList: [],
             areaList: [],
@@ -453,6 +452,7 @@ export default defineComponent({
         
             Promise.all([ScgApi().getProjectWorker({ id: query.id }),ScgApi().queryProjectCorpSelect({ projectId: this.store.getters.getProjectId })]).then((res: any)=>{
                 const res0 = res[0];
+                this.companyParent = res[1].data;
                 this.workerData = { ...res0.data };
                 this.worker.id = res0.data.id;
                 this.worker.teamId = res0.data.teamId;
@@ -476,11 +476,11 @@ export default defineComponent({
                 this.worker.jobTypeName = res0.data.jobTypeName;
                 this.worker.areaCodes = res0.data.areaCodes;
                 this.worker.projectCorpId = res0.data.secondProjectCorpId ? res0.data.secondProjectCorpId : res0.data.projectCorpId;
+                // this.worker.projectCorpId = res0.data.projectCorpId;
                 this.worker.entryDate = res0.data.entryDate;
                 this.worker.exitDate = res0.data.exitDate;
                 this.worker.status = res0.data.status;
-                this.companyParent = res[1].data;
-                const corpData: any = this.companyParent.filter((e: any) => e.id === res0.data.projectCorpId)[0];
+                const corpData: any = this.companyParent.filter((e: any) => e.id === this.worker.projectCorpId)[0];
                 ScgApi().queryFile({relationId:res0.data.workerId,type:"worker_recent_photo"}).then((res: any)=>{
                     this.worker.recentPhotoFileId = res.data[0].fileId;
                     this.headerUrl = res.data[0].fileUrl;
@@ -498,16 +498,21 @@ export default defineComponent({
                     this.areaList = res.data;
                     console.log("areaList",this.areaList);
                 });
+                // ScgApi()
+                // .queryProjectCorpSelect({ projectId: this.worker.projectId, corpId: corpData.corpId })
+                // .then((res) => {
+                //     this.companyList = res.data;
+                //     const tempId = res0.data.secondProjectCorpId ? this.companyList.filter((e: any) => e.id === res0.data.secondProjectCorpId)[0]['corpId'] : corpData.corpId;
+                //     ScgApi()
+                //     .queryProjectCorpTeamSelect({ projectId: this.worker.projectId, corpId: tempId })
+                //     .then((res) => {
+                //         this.teamList = res.data;
+                //     });
+                // });
                 ScgApi()
-                .queryProjectCorpSelect({ projectId: this.worker.projectId, corpId: corpData.corpId })
+                .queryProjectCorpTeamSelect({ projectId: this.worker.projectId, corpId: corpData.corpId })
                 .then((res) => {
-                    this.companyList = res.data;
-                    const tempId = res0.data.secondProjectCorpId ? this.companyList.filter((e: any) => e.id === res0.data.secondProjectCorpId)[0]['corpId'] : corpData.corpId;
-                    ScgApi()
-                    .queryProjectCorpTeamSelect({ projectId: this.worker.projectId, corpId: tempId })
-                    .then((res) => {
-                        this.teamList = res.data;
-                    });
+                    this.teamList = res.data;
                 });
             });
     },
@@ -539,7 +544,7 @@ export default defineComponent({
         },
         onLeaveClicked(ev: Event) {
             const query = this.$route.query;
-            this.$router.push({ path: "/worker-leave", query: { id: query.id } });
+            this.$router.replace({ path: "/worker-leave", query: { id: query.id } });
         },
         onModifyClicked(ev: Event) {
             this.worker.areaCodes = this.areaList
@@ -596,42 +601,42 @@ export default defineComponent({
             });
             picker.present();
         },
-        async onCompanyCellClicked(ev: Event) {
-            const options = this.companyList.map((e: any) => {
-                return { text: e.corpName, value: e.id };
-            });
+        // async onCompanyCellClicked(ev: Event) {
+        //     const options = this.companyList.map((e: any) => {
+        //         return { text: e.corpName, value: e.id };
+        //     });
 
-            const columns = [
-                {
-                    name: "corp",
-                    options: options,
-                },
-            ];
+        //     const columns = [
+        //         {
+        //             name: "corp",
+        //             options: options,
+        //         },
+        //     ];
 
-            const picker = await pickerController.create({
-                columns: columns,
-                buttons: [
-                    {
-                        text: this.$t("global.cancel"),
-                        role: "cancel",
-                    },
-                    {
-                        text: this.$t("global.confirm"),
-                        handler: (value) => {
-                            this.worker.projectCorpId = value.corp.value;
-                            const data: any = this.companyList.filter((e: any) => e.id === this.worker.projectCorpId)[0];
-                            ScgApi()
-                                .queryProjectCorpTeamSelect({ projectId: this.worker.projectId, corpId: data.corpId })
-                                .then((res) => {
-                                    this.teamList = res.data;
-                                });
-                        },
-                    },
-                ],
-            });
+        //     const picker = await pickerController.create({
+        //         columns: columns,
+        //         buttons: [
+        //             {
+        //                 text: this.$t("global.cancel"),
+        //                 role: "cancel",
+        //             },
+        //             {
+        //                 text: this.$t("global.confirm"),
+        //                 handler: (value) => {
+        //                     this.worker.projectCorpId = value.corp.value;
+        //                     const data: any = this.companyList.filter((e: any) => e.id === this.worker.projectCorpId)[0];
+        //                     ScgApi()
+        //                         .queryProjectCorpTeamSelect({ projectId: this.worker.projectId, corpId: data.corpId })
+        //                         .then((res) => {
+        //                             this.teamList = res.data;
+        //                         });
+        //                 },
+        //             },
+        //         ],
+        //     });
 
-            picker.present();
-        },
+        //     picker.present();
+        // },
         async onTeamIdCellClicked(ev: Event) {
             const options = this.teamList.map((e: any) => {
                 return { text: e.name, value: e.id };
@@ -682,7 +687,12 @@ export default defineComponent({
                         text: this.$t("global.confirm"),
                         handler: (value) => {
                             this.corpParentId = value.corpParent.value;
-                            this.corpParentChange(value.corpParent.value);
+                            const data: any = this.companyParent.filter((e: any) => e.id === value)[0];
+                            ScgApi()
+                                .queryProjectCorpTeamSelect({ projectId: this.worker.projectId, corpId:  data.corpId })
+                                .then((res) => {
+                                    this.teamList = res.data;
+                                });
                         },
                     },
                 ],
@@ -690,28 +700,28 @@ export default defineComponent({
 
             picker.present();
         },
-        corpParentChange(value: any) {
-            if (value) {
-                const data: any = this.companyParent.filter((e: any) => e.id === value)[0];
-                ScgApi()
-                    .queryProjectCorpSelect({ projectId: this.worker.projectId, corpId:  data.corpId })
-                    .then((res) => {
-                        if (res.data && res.data.length > 0) {
-                            this.worker.projectCorpId = "";
-                            this.companyList = res.data;
-                        } else {
-                            this.worker.projectCorpId = value;
-                            this.companyList = [];
-                            ScgApi()
-                                .queryProjectCorpTeamSelect({ projectId: this.worker.projectId, corpId:  data.corpId })
-                                .then((res) => {
-                                    this.teamList = res.data;
-                                });
-                        }
-                    });
-            }
-            this.worker.projectCorpId = "";
-        },
+        // corpParentChange(value: any) {
+        //     if (value) {
+        //         const data: any = this.companyParent.filter((e: any) => e.id === value)[0];
+        //         ScgApi()
+        //             .queryProjectCorpSelect({ projectId: this.worker.projectId, corpId:  data.corpId })
+        //             .then((res) => {
+        //                 if (res.data && res.data.length > 0) {
+        //                     this.worker.projectCorpId = "";
+        //                     this.companyList = res.data;
+        //                 } else {
+        //                     this.worker.projectCorpId = value;
+        //                     this.companyList = [];
+        //                     ScgApi()
+        //                         .queryProjectCorpTeamSelect({ projectId: this.worker.projectId, corpId:  data.corpId })
+        //                         .then((res) => {
+        //                             this.teamList = res.data;
+        //                         });
+        //                 }
+        //             });
+        //     }
+        //     this.worker.projectCorpId = "";
+        // },
         async onRoleCellClicked(ev: Event) {
             const options = this.roleList.map((e: any) => {
                 return { text: e.name, value: e.code };
