@@ -10,7 +10,7 @@
         <ion-title>{{ info.projectName }}</ion-title>
       </ion-toolbar>
     </ion-header>
-    
+    <right-menu />
     <ion-content :fullscreen="true">
       <ion-slides pager="true" :options="sliderOptions">
         <ion-slide v-for="item in bannerList" :key="item.id">
@@ -142,6 +142,7 @@ import { chevronForwardOutline, arrowBackOutline } from 'ionicons/icons';
 import { useStore } from 'vuex';
 import { ScgApi } from '@/api/ScgApi';
 import { ToastUtils } from '@/utils/ToastUtils';
+import RightMenu from '@/components/RightMenu.vue';
 
 export default defineComponent({
   name: 'HomeView',
@@ -162,8 +163,8 @@ export default defineComponent({
     IonThumbnail, 
     IonLabel,
     IonIcon,
-    IonButton,
-    IonButtons
+    IonButtons,
+    RightMenu
   },
   data() {
     return {

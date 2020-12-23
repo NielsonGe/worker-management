@@ -13,7 +13,7 @@
                 <ion-title>{{ $t("views.register.title") }}</ion-title>
             </ion-toolbar>
         </ion-header>
-
+        <right-menu />
         <ion-content :fullscreen="true">
             <div class="photo-panel">
                 <div class="photo-box">
@@ -145,10 +145,10 @@
             <div class="field-col-item">
                 <ion-grid>
                     <ion-row>
-                        <ion-col class="left-align" size="4">
+                        <ion-col class="left-align" size="6">
                             {{ $t("views.register.startDate") }}
                         </ion-col>
-                        <ion-col class="right-align" size="8">
+                        <ion-col class="right-align" size="6">
                             <ion-datetime :value="formData.startDate" display-format="YYYY-MM-DD"></ion-datetime>
                         </ion-col>
                     </ion-row>
@@ -157,10 +157,10 @@
             <div class="field-col-item">
                 <ion-grid>
                     <ion-row>
-                        <ion-col class="left-align" size="4">
+                        <ion-col class="left-align" size="6">
                             {{ $t("views.register.endDate") }}
                         </ion-col>
-                        <ion-col class="right-align" size="8">
+                        <ion-col class="right-align" size="6">
                             <ion-datetime :value="formData.endDate" display-format="YYYY-MM-DD"></ion-datetime>
                         </ion-col>
                     </ion-row>
@@ -361,10 +361,11 @@ import {
     pickerController,
 } from "@ionic/vue";
 import { arrowBackOutline, checkmarkCircleOutline, person, caretDownOutline, camera, syncOutline } from "ionicons/icons";
-import { PhotoPlugin } from "@/composables/UsePhotoPlugin";
+import { PhotoPlugin, PhotoPluginFace } from "@/composables/UsePhotoPlugin";
 import { ToastUtils } from "@/utils/ToastUtils";
 import { ScgApi } from "@/api/ScgApi";
 import { XFUtils } from "@/utils/XFUtils";
+import RightMenu from '@/components/RightMenu.vue';
 
 export default defineComponent({
     name: "WorkerInfo",
@@ -385,6 +386,7 @@ export default defineComponent({
         IonRadioGroup,
         IonRadio,
         IonLabel,
+        RightMenu
     },
     data() {
         return {
@@ -488,7 +490,9 @@ export default defineComponent({
             .queryProjectCorpSelect({ projectId: this.store.getters.getProjectId })
             .then((res) => {
                 this.companyParent = res.data;
-            });
+            }).catch((err) => {
+      this.$router.replace('/login');
+    });
         ScgApi()
             .queryArea({ projectId: this.store.getters.getProjectId })
             .then((res) => {
@@ -598,7 +602,7 @@ export default defineComponent({
         async onTakePhotoClicked(ev: Event) {
             const errorMsg = this.$t("global.take-photo-error");
 
-            const { takePhoto } = PhotoPlugin();
+            const { takePhoto } = PhotoPluginFace();
             const photoData = takePhoto();
 
             photoData.then(

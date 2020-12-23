@@ -10,7 +10,7 @@
                 <ion-title>{{ workerData.status == 1 ? $t("views.worker-leave.title") : $t("views.worker-leave.enter-title") }}</ion-title>
             </ion-toolbar>
         </ion-header>
-
+        <right-menu />
         <ion-content :fullscreen="true">
             <div class="photo-panel">
                 <div class="photo-box">
@@ -60,6 +60,7 @@ import { IonPage, IonToolbar, IonButtons, IonButton, IonIcon, IonContent, IonHea
 import { arrowBackOutline, person, timeOutline } from "ionicons/icons";
 import { ScgApi } from "@/api/ScgApi";
 import { ToastUtils } from "@/utils/ToastUtils";
+import RightMenu from '@/components/RightMenu.vue';
 
 export default defineComponent({
     name: "WorkerLeave",
@@ -76,6 +77,7 @@ export default defineComponent({
         IonCol,
         IonDatetime,
         IonTitle,
+        RightMenu
     },
     data() {
         return {

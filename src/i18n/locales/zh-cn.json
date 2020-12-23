@@ -107,10 +107,10 @@
       "endDate":"有效期结束日期",
       "teamId":"所属班组",
 	    "isTeamLeader":"是否班组长",
-      "upload-id-card-back": "身份证反面",
-      "upload-id-card-font": "身份证正面",
+      "upload-id-card-back": "证件反面",
+      "upload-id-card-font": "证件正面",
       "name": "姓名",
-      "id-card": "身份证号",
+      "id-card": "证件号",
       "gender": "性别",
       "birthday": "出生",
       "address": "住址",
@@ -126,11 +126,11 @@
     "worker-info": {
       "title": "人员信息",
       "submit": "保存",
-      "upload-id-card": "身份证照片",
-      "upload-id-card-back": "身份证反面",
-      "upload-id-card-font": "身份证正面",
+      "upload-id-card": "证件照片",
+      "upload-id-card-back": "证件反面",
+      "upload-id-card-font": "证件正面",
       "name": "姓名",
-      "id-card": "身份证号",
+      "id-card": "证件号",
       "gender": "性别",
       "birthday": "出生",
       "address": "住址",
@@ -142,6 +142,10 @@
       "enter": "人员进场",
       "datetime-placeholder": "请选择日期",
       "telephone-placeholder": "请输入"
+    },
+    "menu": {
+      "changepwd": "修改密码",
+      "logout": "退出登录"
     }
   }
 }

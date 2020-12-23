@@ -33,4 +33,27 @@ function PhotoPlugin() {
   };
 }
 
-export { PhotoPlugin }
+function PhotoPluginFace() {
+  const { Camera } = Plugins;
+
+  const takePhoto = async (): Promise<string> => {
+    const cameraPhoto = await Camera.getPhoto({
+      resultType: CameraResultType.Uri,
+      source: CameraSource.Camera,
+      direction: CameraDirection.Front,
+      quality: 50
+    });
+
+    const response = await fetch(cameraPhoto.webPath!);
+    const blob = await response.blob();
+    const base64Data: string = await convertBlobToBase64(blob) as string;
+
+    return base64Data;
+  };
+
+  return {
+    takePhoto
+  };
+}
+
+export { PhotoPlugin, PhotoPluginFace }
