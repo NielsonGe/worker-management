@@ -137,6 +137,10 @@
       "enter": "Enter",
       "datetime-placeholder": "Select Date",
       "telephone-placeholder": "Please Input"
+    },
+    "menu": {
+      "changepwd": "ChangePassword",
+      "logout": "Logout"
     }
   }
 }

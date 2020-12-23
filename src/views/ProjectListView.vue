@@ -5,6 +5,8 @@
         <ion-title>{{ $t('views.project-list.title') }}</ion-title>
       </ion-toolbar>
     </ion-header>
+    <right-menu />
+    
     <ion-content :fullscreen="true">
       <ion-list>
         <ion-item lines="full" v-for="item in projectBriefList" :key="item.projectId" @click="onProjectCellClicked(item)">
@@ -25,11 +27,12 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { IonPage, IonContent, IonHeader, IonToolbar, IonTitle, IonList, IonItem, IonThumbnail, IonImg, IonLabel } from '@ionic/vue';
+import { IonPage, IonContent, IonHeader, IonToolbar, IonTitle, IonList, IonItem, IonThumbnail, IonImg, IonLabel} from '@ionic/vue';
 import ProjectBriefInfo from '@/models/ProjectBriefInfo';
 import { getProjectBriefList } from '@/data/ProjectFakeData';
 import { useStore } from 'vuex';
 import { ScgApi } from '@/api/ScgApi';
+import RightMenu from '@/components/RightMenu.vue';
 
 export default defineComponent({
   name: 'ProjectListView',
@@ -43,7 +46,8 @@ export default defineComponent({
     IonItem, 
     IonThumbnail, 
     IonImg,
-    IonLabel
+    IonLabel,
+    RightMenu
   },
   data() {
     return {
@@ -56,8 +60,11 @@ export default defineComponent({
     const token = this.store.getters.getToken;
     ScgApi().queryCurrentUserProjectPaging({pageIndex:1,pageSize:100}).then((res: any)=>{
       this.projectBriefList = res.data.rows;
+    }).catch((err) => {
+      this.$router.replace('/login');
     })
   },
+
   methods: {
     getProjectTypeName(type: number): string {
       switch(type) {
@@ -74,6 +81,8 @@ export default defineComponent({
       this.store.dispatch('setProject', item);
       this.$router.replace('/main/home');
     }
+   
+
   }
 });
 </script>
@@ -102,4 +111,5 @@ ion-item {
   margin-top: 5px;
   color: #666666;
 }
+
 </style>

@@ -17,7 +17,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/project-list',
     name: 'ProjectList',
-    component: () => import("@/views/ProjectListView.vue"),
+    component: () =>  import("@/views/ProjectListView.vue") ,
     meta: {
       title: '项目列表'
     }
@@ -74,7 +74,17 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           title: 'Activity View'
         }
+      },
+      {
+        path: 'menu',
+        name: 'Menu',
+        component: () => import("@/components/RightMenu.vue"),
+        meta: {
+          title: 'Menu View'
+        }
+
       }
+     
     ]
   },
   {
