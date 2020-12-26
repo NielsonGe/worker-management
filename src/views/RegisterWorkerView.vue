@@ -880,7 +880,7 @@ export default defineComponent({
         // },
         async onCompanyParentCellClicked(ev: Event) {
             const options = this.companyParent.map((e: any) => {
-                return { text: e.corpName, value: e.id };
+                return { text: e.name, value: e.id };
             });
             const columns = [
                 {
@@ -900,9 +900,8 @@ export default defineComponent({
                         text: this.$t("global.confirm"),
                         handler: (value) => {
                             this.formData.projectCorpId = value.corpParent.value;
-                            const data: any = this.companyParent.filter((e: any) => e.id === this.formData.projectCorpId)[0];
                             ScgApi()
-                            .queryProjectCorpTeamSelect({ projectId: this.formData.projectId, corpId: data.corpId })
+                            .queryProjectCorpTeamSelect({ projectId: this.formData.projectId, corpId: this.formData.projectCorpId })
                             .then((res) => {
                                 this.teamList = res.data;
                             });
