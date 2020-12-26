@@ -112,7 +112,7 @@
                             {{ $t("views.register.company") }}
                         </ion-col>
                         <ion-col class="right-align" size="7">
-                            {{ getNameByCode(worker.projectCorpId, companyParent, { code: "id", name: "corpName" }) }}
+                            {{ getNameByCode(worker.corpId, companyParent, { code: "id", name: "name" }) }}
                         </ion-col>
                         <ion-col class="right-align" size="1">
                             <ion-icon class="cell-icon" :icon="caretDownOutline"></ion-icon>
@@ -404,7 +404,7 @@ export default defineComponent({
             worker: {
                 id: "",
                 projectId: "",
-                projectCorpId: "",
+                corpId: "",
                 teamId: "",
                 isTeamLeader: "",
                 workerName: "",
@@ -470,17 +470,14 @@ export default defineComponent({
                 this.worker.grantOrg = res0.data.grantOrg;
                 this.worker.startDate = res0.data.startDate;
                 this.worker.endDate = res0.data.endDate;
-                this.corpParentId = res0.data.projectCorpId;
                 this.worker.role = res0.data.role;
                 this.worker.jobTypeCode = res0.data.jobTypeCode;
                 this.worker.jobTypeName = res0.data.jobTypeName;
                 this.worker.areaCodes = res0.data.areaCodes;
-                this.worker.projectCorpId = res0.data.secondProjectCorpId ? res0.data.secondProjectCorpId : res0.data.projectCorpId;
-                // this.worker.projectCorpId = res0.data.projectCorpId;
+                this.worker.corpId = res0.data.corpId;
                 this.worker.entryDate = res0.data.entryDate;
                 this.worker.exitDate = res0.data.exitDate;
                 this.worker.status = res0.data.status;
-                const corpData: any = this.companyParent.filter((e: any) => e.id === this.worker.projectCorpId)[0];
                 ScgApi().queryFile({relationId:res0.data.workerId,type:"worker_recent_photo"}).then((res: any)=>{
                     this.worker.recentPhotoFileId = res.data[0].fileId;
                     this.headerUrl = res.data[0].fileUrl;
@@ -510,7 +507,7 @@ export default defineComponent({
                 //     });
                 // });
                 ScgApi()
-                .queryProjectCorpTeamSelect({ projectId: this.worker.projectId, corpId: corpData.corpId })
+                .queryProjectCorpTeamSelect({ projectId: this.worker.projectId, corpId: this.worker.corpId })
                 .then((res) => {
                     this.teamList = res.data;
                 });
@@ -666,9 +663,8 @@ export default defineComponent({
         },
         async onCompanyParentCellClicked(ev: Event) {
             const options = this.companyParent.map((e: any) => {
-                return { text: e.corpName, value: e.id };
+                return { text: e.name, value: e.id };
             });
-            console.log("corpParent", options);
             const columns = [
                 {
                     name: "corpParent",
@@ -686,10 +682,9 @@ export default defineComponent({
                     {
                         text: this.$t("global.confirm"),
                         handler: (value) => {
-                            this.worker.projectCorpId = value.corpParent.value;
-                            const data: any = this.companyParent.filter((e: any) => e.id === value.corpParent.value)[0];
+                            this.worker.corpId = value.corpParent.value;
                             ScgApi()
-                                .queryProjectCorpTeamSelect({ projectId: this.worker.projectId, corpId:  data.corpId })
+                                .queryProjectCorpTeamSelect({ projectId: this.worker.projectId, corpId:  this.worker.corpId })
                                 .then((res) => {
                                     this.teamList = res.data;
                                 });

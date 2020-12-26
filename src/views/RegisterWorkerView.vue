@@ -192,7 +192,7 @@
                             {{ $t("views.register.company") }}
                         </ion-col>
                         <ion-col class="right-align" size="7">
-                            {{ getNameByCode(formData.projectCorpId, companyParent, { code: "id", name: "corpName" }) }}
+                            {{ getNameByCode(formData.corpId, companyParent, { code: "id", name: "name" }) }}
                         </ion-col>
                         <ion-col class="right-align" size="1">
                             <ion-icon class="cell-icon" :icon="caretDownOutline"></ion-icon>
@@ -368,7 +368,6 @@ import { arrowBackOutline, checkmarkCircleOutline, person, caretDownOutline, cam
 import { PhotoPlugin, PhotoPluginFace } from "@/composables/UsePhotoPlugin";
 import { ToastUtils } from "@/utils/ToastUtils";
 import { ScgApi } from "@/api/ScgApi";
-import { XFUtils } from "@/utils/XFUtils";
 import RightMenu from '@/components/RightMenu.vue';
 const photoval: any="";
 
@@ -402,7 +401,7 @@ export default defineComponent({
             showLoading: false,
             formData: {
                 projectId: "",
-                projectCorpId: "",
+                corpId: "",
                 teamId: "",
                 isTeamLeader: 0,
                 workerName: "",
@@ -1071,9 +1070,9 @@ export default defineComponent({
                     {
                         text: this.$t("global.confirm"),
                         handler: (value) => {
-                            this.formData.projectCorpId = value.corpParent.value;
+                            this.formData.corpId = value.corpParent.value;
                             ScgApi()
-                            .queryProjectCorpTeamSelect({ projectId: this.formData.projectId, corpId: this.formData.projectCorpId })
+                            .queryProjectCorpTeamSelect({ projectId: this.formData.projectId, corpId: this.formData.corpId })
                             .then((res) => {
                                 this.teamList = res.data;
                             });
