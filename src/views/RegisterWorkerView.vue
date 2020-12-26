@@ -38,7 +38,7 @@
             </div>
             <div class="field-col">
                 <ion-grid>
-                    <ion-row @click="onTakeIdCardPhotoFontClicked()">
+                    <ion-row @click="onTakeIdCardPhotoFontClicked2()">
                         <ion-col class="left-align" size="11">
                             {{ $t("views.register.upload-id-card-font") }}
                         </ion-col>
@@ -52,7 +52,7 @@
 
             <div class="field-col-item">
                 <ion-grid>
-                    <ion-row @click="onTakeIdCardPhotoBackClicked()">
+                    <ion-row @click="onTakeIdCardPhotoBackClicked2()">
                         <ion-col class="left-align" size="11">
                             {{ $t("views.register.upload-id-card-back") }}
                         </ion-col>
@@ -63,6 +63,10 @@
                     </ion-row>
                 </ion-grid>
             </div>
+
+            <input type="file" id="takeidphoto1" accept="image/*" capture="environment" @change="testphoto($event)" />
+            <input type="file" id="takeidphoto2" accept="image/*" capture="environment" @change="testphotofan($event)" />
+
 
             <div class="field-col-item">
                 <ion-grid>
@@ -169,7 +173,7 @@
 
             <div class="field-col-item section-margin">
                 <ion-grid>
-                    <ion-row @click="onTakePhotoClicked">
+                    <ion-row @click="onTakePhotoClicked2">
                         <ion-col class="left-align" size="4">
                             {{ $t("views.register.photo") }}
                         </ion-col>
@@ -180,7 +184,7 @@
                     </ion-row>
                 </ion-grid>
             </div>
-
+            <input type="file" id="takeidphoto3" accept="image/*" capture="environment" @change="testphotoface($event)" />
             <div class="field-col-item section-margin">
                 <ion-grid>
                     <ion-row @click="onCompanyParentCellClicked">
@@ -366,6 +370,7 @@ import { ToastUtils } from "@/utils/ToastUtils";
 import { ScgApi } from "@/api/ScgApi";
 import { XFUtils } from "@/utils/XFUtils";
 import RightMenu from '@/components/RightMenu.vue';
+const photoval: any="";
 
 export default defineComponent({
     name: "WorkerInfo",
@@ -390,7 +395,7 @@ export default defineComponent({
     },
     data() {
         return {
-            photoData: "",
+            photoData: photoval,
             idCardData1: "",
             idCardData2: "",
             corpParentId: "",
@@ -537,6 +542,18 @@ export default defineComponent({
         onBackClicked(ev: Event) {
             this.$router.replace("/main/home");
         },
+
+        async onTakeIdCardPhotoFontClicked2(ev: any) {
+            const pt1: any =document.getElementById("takeidphoto1");
+            pt1.click();
+        },
+
+        async onTakeIdCardPhotoBackClicked2(ev: Event) {
+            const pt2: any =document.getElementById("takeidphoto2");
+            pt2.click();
+
+         },
+
         async onTakeIdCardPhotoFontClicked(ev: Event) {
             const errorMsg = this.$t("global.take-photo-error");
 
@@ -569,6 +586,98 @@ export default defineComponent({
                 }
             );
         },
+         async testphoto ( ev: any ){
+              const errorMsg = this.$t("global.take-photo-error");
+             const _self= this;
+       
+            const files = ev.target.files;
+            if (files && files.length > 0) {
+            try {
+               const file = files[0];
+               const fileReader = new FileReader();
+               fileReader.onload = function () {
+                   let basew64str: any = this.result;
+                   basew64str = basew64str.split("base64,")[1]
+                //    console.log("base64===>",basew64str);
+                _self.showLoading = true;
+                    ScgApi()
+                        .ocrIdCard({ contentBase64String: basew64str })
+                        .then((res: any) => {
+                            if (res.code == "00000") {
+                                const cardData = res.data;
+                                
+                                _self.formData.idNumber = cardData.idNumber;
+                                _self.formData.workerName = cardData.name;
+                                _self.formData.address = cardData.address;
+                                _self.formData.birthday = cardData.birthday;
+                                _self.formData.gender = cardData.gender;
+                                _self.idCardData1 = "1";
+                            }
+                        })
+                        .finally(() => {
+                           console.log("takephotodone");
+                           _self.showLoading = false;
+                        });
+                   
+               };
+               fileReader.readAsDataURL(file);
+               }
+            catch (e) {
+                console.log('图片转Base64出错' + e.toString())
+                 ToastUtils().showError("danger", 2000, errorMsg);
+               }
+            }
+            
+        },
+
+        async testphotofan(ev: any){
+             const errorMsg = this.$t("global.take-photo-error");
+            const _self= this;
+            //  console.log(_self.$options.methods);
+            //  console.log(_self.formData);
+            //  alert("eeee");
+            // const picsfz1 = document.getElementById("takeidphoto1");
+            // tslint:disable-next-line
+            // console.log("取得input框====>",ev.target);
+            // console.log(ev.target.files); 
+            const files = ev.target.files;
+            if (files && files.length > 0) {
+            try {
+               const file = files[0];
+               const fileReader = new FileReader();
+               fileReader.onload = function () {
+                   let basew64str: any = this.result;
+                   basew64str = basew64str.split("base64,")[1]
+                   console.log("base64===>",basew64str);
+                   _self.showLoading = true;
+                    ScgApi()
+                        .ocrIdCard({ contentBase64String: basew64str })
+                        .then((res: any) => {
+                            if (res.code == "00000") {
+                                const cardData = res.data;
+                                
+                                _self.formData.startDate = cardData.startDate;
+                                _self.formData.endDate = cardData.endDate;
+                                _self.formData.grantOrg = cardData.grantOrg;
+                                _self.idCardData2 = "1";
+                            }
+                        })
+                        .finally(() => {
+                           console.log("takephotodone");
+                           _self.showLoading = false;
+                        });
+                   
+               };
+               fileReader.readAsDataURL(file);
+               }
+            catch (e) {
+                console.log('图片转Base64出错' + e.toString());
+                 ToastUtils().showError("danger", 2000, errorMsg);
+               }
+            }
+        },
+
+
         async onTakeIdCardPhotoBackClicked(ev: Event) {
             const errorMsg = this.$t("global.take-photo-error");
 
@@ -639,6 +748,69 @@ export default defineComponent({
                     ToastUtils().showError("danger", 2000, errorMsg);
                 }
             );
+        },
+         async onTakePhotoClicked2(ev: Event) {
+            const pt3: any =document.getElementById("takeidphoto3");
+            pt3.click();
+         },
+
+        async testphotoface(ev: any){
+             const errorMsg = this.$t("global.take-photo-error");
+            const _self= this;
+
+            const files = ev.target.files;
+            if (files && files.length > 0) {
+            try {
+               const file = files[0];
+               const fileReader = new FileReader();
+               fileReader.onload = function () {
+                  
+                   let basew64str: any = this.result;
+                  
+                   const fileType = basew64str.split(";base64")[0].split(":image/")[1];
+                //    alert(fileType);
+                   basew64str = basew64str.split(";base64,")[1];
+                   console.log("base64===>",basew64str);
+
+                   let type;
+                    switch (fileType) {
+                        case "jpeg":
+                        case "pjpeg":
+                            type = "jpg";
+                            break;
+                        case "png":
+                        case "x-png":
+                            type = "png";
+                            break;
+                        case "gif":
+                            type = "gif";
+                            break;
+
+                    }
+                    _self.showLoading = true;
+                     ScgApi()
+                        .postFileBase64String({
+                            type: "worker_recent_photo",
+                            fileName: new Date().getTime() + "A" + Math.ceil(Math.random() * 10000) + "." + type,
+                            contentBase64String: basew64str,
+                        })
+                        .then((res) => {
+                            _self.formData.recentPhotoFileId = res.data.id;
+                            _self.photoData= this.result;
+                        }) 
+                        .finally(() => {
+                            _self.showLoading = false;
+                        });
+                    
+                   
+               };
+               fileReader.readAsDataURL(file);
+               }
+            catch (e) {
+                console.log('图片转Base64出错' + e.toString());
+                ToastUtils().showError("danger", 2000, errorMsg);
+               }
+            }
         },
 
         async onIdTypeCellClicked(ev: Event) {
@@ -1046,5 +1218,9 @@ ion-content {
 
 .input-cell {
     height: 20px;
+}
+
+#takeidphoto1 , #takeidphoto2, #takeidphoto3{
+    display: none;
 }
 </style>
