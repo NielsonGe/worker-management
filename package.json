@@ -19,6 +19,7 @@
     "axios": "^0.21.0",
     "cordova-plugin-file": "^6.0.2",
     "core-js": "^3.6.5",
+    "cropperjs": "^1.5.9",
     "js-base64": "^3.6.0",
     "js-md5": "^0.7.3",
     "jsencrypt": "^3.0.0-rc.1",
