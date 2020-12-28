@@ -10,7 +10,7 @@
               {{ $t('views.login.username') }}
             </ion-col>
             <ion-col class="right-align right-padding" size="9">
-              <ion-input class="input-cell" :placeholder="$t('views.login.username-placeholder')" v-model="username" clearInput></ion-input>
+              <ion-input class="input-cell" :placeholder="$t('views.login.username-placeholder')" v-model="username"></ion-input>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -23,8 +23,10 @@
               {{ $t('views.login.password') }}
             </ion-col>
             <ion-col class="right-align right-padding" size="9">
-              <ion-input class="input-cell" type="password" :placeholder="$t('views.login.password-placeholder')" v-model="password" clearInput></ion-input>
-            </ion-col>
+              <ion-input class="input-cell pwd" :type="showpwd" :placeholder="$t('views.login.password-placeholder')" v-model="password"></ion-input>
+            <i class="icon ion-eye-disabled show" @click="showpwdmd('text')"></i>
+            <i class="icon ion-eye"  @click="showpwdmd('password')"></i>
+            </ion-col>          
           </ion-row>
         </ion-grid>
       </div>
@@ -36,10 +38,10 @@
               {{ $t('views.login.verify-code') }}
             </ion-col>
             <ion-col class="right-align" size="5">
-              <ion-input class="input-cell" :placeholder="$t('views.login.verify-code-placeholder')" v-model="verifyCode" clearInput></ion-input>
+              <ion-input class="input-cell" :placeholder="$t('views.login.verify-code-placeholder')" v-model="verifyCode"></ion-input>
             </ion-col>
             <ion-col class="left-align center-vertical right-padding" size="4" @click="refreshVerifyCode">
-              <img style="width:100%, height:100%" :src="verifyCodeData" />
+              <img class="verifycodediv" style="width:100%, height:100%" :src="verifyCodeData" />
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -86,7 +88,8 @@ export default defineComponent({
       verifyCode: '',
       verifyCodeData: '',
       store: useStore(),
-      backdropCount: 0
+      backdropCount: 0,
+      showpwd: 'password'
     }
   },
   mounted() {
@@ -161,6 +164,8 @@ export default defineComponent({
         console.log(error);
       })
 
+
+
       // -- FOR DEBUG ONLY --
       // const loginAccount = findAccount(this.username, this.password);
 
@@ -174,8 +179,22 @@ export default defineComponent({
       // this.store.dispatch('setToken', loginAccount.token);
       
       // this.$router.replace("/project-list");
-    }
+    },
+ showpwdmd(v: string){
+      this.showpwd = v;
+     
+      document.querySelector(".icon.show")?.classList.remove("show");
+      if(v=="text"){
+        document.querySelector(".icon.ion-eye")?.classList.add("show");
+      }else{
+        document.querySelector(".icon.ion-eye-disabled")?.classList.add("show");
+      }
+      
+ }
+
   }
+
+
 });
 </script>
 
@@ -251,5 +270,27 @@ ion-input {
 
 .right-padding {
   padding-right: 15px;
+}
+
+.icon {
+  display: none;
+  position: absolute;
+   font-size: 26px;
+   top:8px;
+   right: 10px;
+   color: #666;
+}
+
+.icon.show{
+  display: block;
+}
+
+.verifycodediv{
+  position:absolute;
+  width: 90%;
+}
+
+.field-col-item .input-cell.pwd{
+  width:86%;
 }
 </style>
