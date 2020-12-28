@@ -67,7 +67,6 @@
             <input type="file" id="takeidphoto1" accept="image/*" capture="environment" @change="testphoto($event)" />
             <input type="file" id="takeidphoto2" accept="image/*" capture="environment" @change="testphotofan($event)" />
 
-
             <div class="field-col-item">
                 <ion-grid>
                     <ion-row>
@@ -184,6 +183,11 @@
                     </ion-row>
                 </ion-grid>
             </div>
+            <div class="cropper-box" v-show="openCropper">
+                <img id="avatar" />
+                <ion-icon class="cropper-cancel" :icon="closeSharp" @click="cancelCrop()"></ion-icon>
+                <ion-icon class="cropper-crop" :icon="checkmarkSharp" @click="crop()"></ion-icon>
+            </div>
             <input type="file" id="takeidphoto3" accept="image/*" capture="environment" @change="testphotoface($event)" />
             <div class="field-col-item section-margin">
                 <ion-grid>
@@ -192,7 +196,7 @@
                             {{ $t("views.register.company") }}
                         </ion-col>
                         <ion-col class="right-align" size="7">
-                            {{ getNameByCode(formData.projectCorpId, companyParent, { code: "id", name: "corpName" }) }}
+                            {{ getNameByCode(formData.corpId, companyParent, { code: "id", name: "name" }) }}
                         </ion-col>
                         <ion-col class="right-align" size="1">
                             <ion-icon class="cell-icon" :icon="caretDownOutline"></ion-icon>
@@ -341,10 +345,10 @@
         </ion-content>
     </ion-page>
 </template>
-
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useStore } from "vuex";
+import 'cropperjs/dist/cropper.css';
 import {
     IonPage,
     IonToolbar,
@@ -364,13 +368,13 @@ import {
     IonLabel,
     pickerController,
 } from "@ionic/vue";
-import { arrowBackOutline, checkmarkCircleOutline, person, caretDownOutline, camera, syncOutline } from "ionicons/icons";
+import { arrowBackOutline, checkmarkCircleOutline,checkmarkSharp,closeSharp, person, caretDownOutline, camera, syncOutline } from "ionicons/icons";
 import { PhotoPlugin, PhotoPluginFace } from "@/composables/UsePhotoPlugin";
 import { ToastUtils } from "@/utils/ToastUtils";
 import { ScgApi } from "@/api/ScgApi";
-import { XFUtils } from "@/utils/XFUtils";
-import RightMenu from '@/components/RightMenu.vue';
-const photoval: any="";
+import Cropper from 'cropperjs';
+import RightMenu from "@/components/RightMenu.vue";
+const photoval: any = "";
 
 export default defineComponent({
     name: "WorkerInfo",
@@ -391,7 +395,7 @@ export default defineComponent({
         IonRadioGroup,
         IonRadio,
         IonLabel,
-        RightMenu
+        RightMenu,
     },
     data() {
         return {
@@ -400,9 +404,10 @@ export default defineComponent({
             idCardData2: "",
             corpParentId: "",
             showLoading: false,
+            openCropper: false,
             formData: {
                 projectId: "",
-                projectCorpId: "",
+                corpId: "",
                 teamId: "",
                 isTeamLeader: 0,
                 workerName: "",
@@ -470,10 +475,20 @@ export default defineComponent({
                     code: 1,
                 },
             ],
-            store: useStore()
+            store: useStore(),
+            option: {
+                aspectRatio:1/1,
+                viewMode:1,
+                movable:false,
+                rotatable:false,
+                scalable:false,
+                zoomable:false,
+                background:false,
+            } as Cropper.Options,
+            cropper:null as Cropper | null
         };
     },
-    
+
     ionViewWillEnter() {
         this.formData.projectId = this.store.getters.getProjectId;
         ScgApi()
@@ -495,20 +510,23 @@ export default defineComponent({
             .queryProjectCorpSelect({ projectId: this.store.getters.getProjectId })
             .then((res) => {
                 this.companyParent = res.data;
-            }).catch((err) => {
-      this.$router.replace('/login');
-    });
+            })
+            .catch((err) => {
+                this.$router.replace("/login");
+            });
         ScgApi()
             .queryArea({ projectId: this.store.getters.getProjectId })
             .then((res) => {
                 this.areaList = res.data;
             });
     },
-    
+
     setup() {
         return {
             arrowBackOutline,
             checkmarkCircleOutline,
+            checkmarkSharp,
+            closeSharp,
             person,
             caretDownOutline,
             camera,
@@ -516,6 +534,15 @@ export default defineComponent({
         };
     },
     methods: {
+        convertFileToBase64(file: File){
+            return new Promise((resolve, reject) => {
+            const reader = new FileReader;
+            reader.onerror = reject;
+            reader.onload = () => {
+                resolve(reader.result);
+            };
+            reader.readAsDataURL(file);
+        })},
         getNameByCode(value: any, list: Array<any>, config?: { code: string; name: string }) {
             const c = config || { code: "code", name: "name" };
             const obj: any = {};
@@ -525,7 +552,7 @@ export default defineComponent({
             return obj[value] || null;
         },
         onSubmitClicked(ev: Event) {
-        this.formData.areaCodes = this.areaList
+            this.formData.areaCodes = this.areaList
                 .filter((e: any) => e.isChecked)
                 .map((e: any) => e.code)
                 .join(",");
@@ -544,15 +571,14 @@ export default defineComponent({
         },
 
         async onTakeIdCardPhotoFontClicked2(ev: any) {
-            const pt1: any =document.getElementById("takeidphoto1");
+            const pt1: any = document.getElementById("takeidphoto1");
             pt1.click();
         },
 
         async onTakeIdCardPhotoBackClicked2(ev: Event) {
-            const pt2: any =document.getElementById("takeidphoto2");
+            const pt2: any = document.getElementById("takeidphoto2");
             pt2.click();
-
-         },
+        },
 
         async onTakeIdCardPhotoFontClicked(ev: Event) {
             const errorMsg = this.$t("global.take-photo-error");
@@ -586,97 +612,91 @@ export default defineComponent({
                 }
             );
         },
-         async testphoto ( ev: any ){
-              const errorMsg = this.$t("global.take-photo-error");
-             const _self= this;
-       
+        async testphoto(ev: any) {
+            const errorMsg = this.$t("global.take-photo-error");
+            const _self = this;
+
             const files = ev.target.files;
             if (files && files.length > 0) {
-            try {
-               const file = files[0];
-               const fileReader = new FileReader();
-               fileReader.onload = function () {
-                   let basew64str: any = this.result;
-                   basew64str = basew64str.split("base64,")[1]
-                //    console.log("base64===>",basew64str);
-                _self.showLoading = true;
-                    ScgApi()
-                        .ocrIdCard({ contentBase64String: basew64str })
-                        .then((res: any) => {
-                            if (res.code == "00000") {
-                                const cardData = res.data;
-                                
-                                _self.formData.idNumber = cardData.idNumber;
-                                _self.formData.workerName = cardData.name;
-                                _self.formData.address = cardData.address;
-                                _self.formData.birthday = cardData.birthday;
-                                _self.formData.gender = cardData.gender;
-                                _self.idCardData1 = "1";
-                            }
-                        })
-                        .finally(() => {
-                           console.log("takephotodone");
-                           _self.showLoading = false;
-                        });
-                   
-               };
-               fileReader.readAsDataURL(file);
-               }
-            catch (e) {
-                console.log('图片转Base64出错' + e.toString())
-                 ToastUtils().showError("danger", 2000, errorMsg);
-               }
+                try {
+                    const file = files[0];
+                    const fileReader = new FileReader();
+                    fileReader.onload = function() {
+                        let basew64str: any = this.result;
+                        basew64str = basew64str.split("base64,")[1];
+                        //    console.log("base64===>",basew64str);
+                        _self.showLoading = true;
+                        ScgApi()
+                            .ocrIdCard({ contentBase64String: basew64str })
+                            .then((res: any) => {
+                                if (res.code == "00000") {
+                                    const cardData = res.data;
+
+                                    _self.formData.idNumber = cardData.idNumber;
+                                    _self.formData.workerName = cardData.name;
+                                    _self.formData.address = cardData.address;
+                                    _self.formData.birthday = cardData.birthday;
+                                    _self.formData.gender = cardData.gender;
+                                    _self.idCardData1 = "1";
+                                }
+                            })
+                            .finally(() => {
+                                console.log("takephotodone");
+                                _self.showLoading = false;
+                            });
+                    };
+                    fileReader.readAsDataURL(file);
+                } catch (e) {
+                    console.log("图片转Base64出错" + e.toString());
+                    ToastUtils().showError("danger", 2000, errorMsg);
+                }
             }
-            
         },
 
-        async testphotofan(ev: any){
-             const errorMsg = this.$t("global.take-photo-error");
-            const _self= this;
+        async testphotofan(ev: any) {
+            const errorMsg = this.$t("global.take-photo-error");
+            const _self = this;
             //  console.log(_self.$options.methods);
             //  console.log(_self.formData);
             //  alert("eeee");
             // const picsfz1 = document.getElementById("takeidphoto1");
             // tslint:disable-next-line
             // console.log("取得input框====>",ev.target);
-            // console.log(ev.target.files); 
+            // console.log(ev.target.files);
             const files = ev.target.files;
             if (files && files.length > 0) {
-            try {
-               const file = files[0];
-               const fileReader = new FileReader();
-               fileReader.onload = function () {
-                   let basew64str: any = this.result;
-                   basew64str = basew64str.split("base64,")[1]
-                   console.log("base64===>",basew64str);
-                   _self.showLoading = true;
-                    ScgApi()
-                        .ocrIdCard({ contentBase64String: basew64str })
-                        .then((res: any) => {
-                            if (res.code == "00000") {
-                                const cardData = res.data;
-                                
-                                _self.formData.startDate = cardData.startDate;
-                                _self.formData.endDate = cardData.endDate;
-                                _self.formData.grantOrg = cardData.grantOrg;
-                                _self.idCardData2 = "1";
-                            }
-                        })
-                        .finally(() => {
-                           console.log("takephotodone");
-                           _self.showLoading = false;
-                        });
-                   
-               };
-               fileReader.readAsDataURL(file);
-               }
-            catch (e) {
-                console.log('图片转Base64出错' + e.toString());
-                 ToastUtils().showError("danger", 2000, errorMsg);
-               }
+                try {
+                    const file = files[0];
+                    const fileReader = new FileReader();
+                    fileReader.onload = function() {
+                        let basew64str: any = this.result;
+                        basew64str = basew64str.split("base64,")[1];
+                        console.log("base64===>", basew64str);
+                        _self.showLoading = true;
+                        ScgApi()
+                            .ocrIdCard({ contentBase64String: basew64str })
+                            .then((res: any) => {
+                                if (res.code == "00000") {
+                                    const cardData = res.data;
+
+                                    _self.formData.startDate = cardData.startDate;
+                                    _self.formData.endDate = cardData.endDate;
+                                    _self.formData.grantOrg = cardData.grantOrg;
+                                    _self.idCardData2 = "1";
+                                }
+                            })
+                            .finally(() => {
+                                console.log("takephotodone");
+                                _self.showLoading = false;
+                            });
+                    };
+                    fileReader.readAsDataURL(file);
+                } catch (e) {
+                    console.log("图片转Base64出错" + e.toString());
+                    ToastUtils().showError("danger", 2000, errorMsg);
+                }
             }
         },
-
 
         async onTakeIdCardPhotoBackClicked(ev: Event) {
             const errorMsg = this.$t("global.take-photo-error");
@@ -749,70 +769,79 @@ export default defineComponent({
                 }
             );
         },
-         async onTakePhotoClicked2(ev: Event) {
+        async onTakePhotoClicked2(ev: Event) {
             const pt3: any =document.getElementById("takeidphoto3");
             pt3.click();
-         },
+        },
 
-        async testphotoface(ev: any){
-             const errorMsg = this.$t("global.take-photo-error");
-            const _self= this;
+        async testphotoface(ev: any) {
+            const errorMsg = this.$t("global.take-photo-error");
 
             const files = ev.target.files;
             if (files && files.length > 0) {
-            try {
-               const file = files[0];
-               const fileReader = new FileReader();
-               fileReader.onload = function () {
-                  
-                   let basew64str: any = this.result;
-                  
-                   const fileType = basew64str.split(";base64")[0].split(":image/")[1];
-                //    alert(fileType);
-                   basew64str = basew64str.split(";base64,")[1];
-                   console.log("base64===>",basew64str);
-
-                   let type;
-                    switch (fileType) {
-                        case "jpeg":
-                        case "pjpeg":
-                            type = "jpg";
-                            break;
-                        case "png":
-                        case "x-png":
-                            type = "png";
-                            break;
-                        case "gif":
-                            type = "gif";
-                            break;
-
-                    }
-                    _self.showLoading = true;
-                     ScgApi()
-                        .postFileBase64String({
-                            type: "worker_recent_photo",
-                            fileName: new Date().getTime() + "A" + Math.ceil(Math.random() * 10000) + "." + type,
-                            contentBase64String: basew64str,
-                        })
-                        .then((res) => {
-                            _self.formData.recentPhotoFileId = res.data.id;
-                            _self.photoData= this.result;
-                        }) 
-                        .finally(() => {
-                            _self.showLoading = false;
-                        });
+                try {
+                    const file = files[0];
+                    const basew64str: any = await this.convertFileToBase64(file);
+                    this.openCropper = true;
+                    const avatar: HTMLImageElement = document.getElementById("avatar") as HTMLImageElement;
+                    avatar.src = basew64str;
+                    this.cropper = new Cropper(avatar,this.option);
                     
-                   
-               };
-               fileReader.readAsDataURL(file);
-               }
-            catch (e) {
-                console.log('图片转Base64出错' + e.toString());
-                ToastUtils().showError("danger", 2000, errorMsg);
-               }
+                } catch (e) {
+                    console.log("图片转Base64出错" + e.toString());
+                    ToastUtils().showError("danger", 2000, errorMsg);
+                }
             }
         },
+        async crop(){
+            this.cropper?.crop();
+            const base64str: string | undefined = await this.cropper?.getCroppedCanvas().toDataURL();
+            const fileType = base64str?.split(";base64")[0].split(":image/")[1];
+            //    alert(fileType);
+            const contentBase64String = base64str?.split(";base64,")[1];
+            let type;
+            switch (fileType) {
+                case "jpeg":
+                case "pjpeg":
+                    type = "jpg";
+                    break;
+                case "png":
+                case "x-png":
+                    type = "png";
+                    break;
+                case "gif":
+                    type = "gif";
+                    break;
+            }
+            this.showLoading = true;
+            ScgApi()
+                .postFileBase64String({
+                    type: "worker_recent_photo",
+                    fileName: new Date().getTime() + "A" + Math.ceil(Math.random() * 10000) + "." + type,
+                    contentBase64String,
+                })
+                .then((res) => {
+                    this.formData.recentPhotoFileId = res.data.id;
+                    this.photoData = base64str;
+                    const inputFile: any = document.getElementById('takeidphoto3');
+                    inputFile.value = '';
+                    this.openCropper = false;
+                    this.cropper?.destroy();
+                })
+                .finally(() => {
+                    this.showLoading = false;
+                });
 
+
+
+            
+        },
+        async cancelCrop(){
+            const inputFile: any = document.getElementById('takeidphoto3');
+            inputFile.value = '';
+            this.openCropper = false;
+            this.cropper?.destroy();
+        },
         async onIdTypeCellClicked(ev: Event) {
             const options = this.idTypeList.map((e: any) => {
                 return { text: e.name, value: e.code };
@@ -1052,7 +1081,7 @@ export default defineComponent({
         // },
         async onCompanyParentCellClicked(ev: Event) {
             const options = this.companyParent.map((e: any) => {
-                return { text: e.corpName, value: e.id };
+                return { text: e.name, value: e.id };
             });
             const columns = [
                 {
@@ -1071,13 +1100,12 @@ export default defineComponent({
                     {
                         text: this.$t("global.confirm"),
                         handler: (value) => {
-                            this.formData.projectCorpId = value.corpParent.value;
-                            const data: any = this.companyParent.filter((e: any) => e.id === this.formData.projectCorpId)[0];
+                            this.formData.corpId = value.corpParent.value;
                             ScgApi()
-                            .queryProjectCorpTeamSelect({ projectId: this.formData.projectId, corpId: data.corpId })
-                            .then((res) => {
-                                this.teamList = res.data;
-                            });
+                                .queryProjectCorpTeamSelect({ projectId: this.formData.projectId, corpId: this.formData.corpId })
+                                .then((res) => {
+                                    this.teamList = res.data;
+                                });
                         },
                     },
                 ],
@@ -1221,7 +1249,32 @@ ion-content {
     height: 20px;
 }
 
-#takeidphoto1 , #takeidphoto2, #takeidphoto3{
+#takeidphoto1,
+#takeidphoto2,
+#takeidphoto3 {
     display: none;
+}
+.cropper-box {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 9999;
+}
+.cropper-cancel{
+    position: absolute;
+    bottom: 20px;
+    left: 20%;
+    color: #fff;
+    font-size: 30px;
+}
+.cropper-crop{
+    position: absolute;
+    bottom: 20px;
+    right: 20%;
+    color: #fff;
+    font-size: 30px;
 }
 </style>
