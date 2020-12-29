@@ -1,5 +1,5 @@
 ﻿module.exports = {
-    publicPath: process.env.NODE_ENV === "production" ? "." : ".",
+    publicPath: process.env.NODE_ENV === "production" ? "." : "http://10.50.74.26:82/",
     filenameHashing: false,
     configureWebpack: {
         //重点
