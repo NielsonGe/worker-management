@@ -21,7 +21,7 @@
             <div class="sort-text" @click="onSortClicked">{{ $t('views.worker-list.sort') }}<span><ion-icon class="sort-icon" :icon="codeOutline"></ion-icon></span></div>
           </ion-col> -->
           <ion-col size="1">
-            <div class="sort-career-icon" @click="onSearchChanged()"><ion-icon :icon="search"></ion-icon></div>
+            <div class="sort-career-icon" @click="onSearchChanged()"><ion-icon class="noshow" :icon="search"></ion-icon></div>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -117,6 +117,7 @@ export default defineComponent({
   methods: {
     changeValue(event: any){
       this.searchText.workerName = event.detail.value;
+      this.onSearchChanged();
     },
     onSearchChanged() {
       ScgApi().queryProjectWorkerPaging({projectId:this.store.getters.getProjectId,pageIndex:1,pageSize:50,workerName:this.searchText.workerName}).then(res=>{
@@ -258,5 +259,9 @@ ion-item {
 
 .list-md-lines-full .item.cell, .list-md .cell.item-lines-full.md{
   --border-width: 0 0 3px 0 !important;
+}
+
+.noshow{
+  display: none;
 }
 </style>

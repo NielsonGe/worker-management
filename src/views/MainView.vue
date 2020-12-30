@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-tabs>
-      <ion-tab-bar slot="bottom">
+      <ion-tab-bar class="bottombar" slot="bottom">
         <ion-tab-button tab="home" href="/main/home">
           <ion-label>{{ $t('views.main.home-tab') }}</ion-label>
           <ion-icon :icon="homeOutline" />
@@ -45,5 +45,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.bottombar{
+  z-index: -100;
+}
+.bottombar.hide{
+  display: none;
+}
 
 </style>
