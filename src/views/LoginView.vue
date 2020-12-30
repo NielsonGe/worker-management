@@ -286,8 +286,7 @@ ion-input {
 }
 
 .verifycodediv{
-  position:absolute;
-  width: 90%;
+  height: 6.5vh;
 }
 
 .field-col-item .input-cell.pwd{
