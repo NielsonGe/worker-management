@@ -1,6 +1,7 @@
 ﻿module.exports = {
-﻿   //outputDir:"realnameh5",
-    publicPath: process.env.NODE_ENV === "production" ? "/realnameh5/" : "/realnameh5/",
+
+    publicPath: process.env.NODE_ENV === "production" ? "/realnameh5/" : ".",
+    
     filenameHashing: false,
     configureWebpack: {
         //重点
