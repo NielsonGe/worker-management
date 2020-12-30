@@ -1,5 +1,5 @@
 <template>
-    <ion-page>
+    <ion-page style="position:relative;height:100%;">
         <div class="fixed-loading" v-show="showLoading">
             <ion-icon class="icon-loading" v-show="showLoading" :icon="syncOutline"></ion-icon>
         </div>
@@ -13,6 +13,11 @@
                 <ion-title>{{ $t("views.register.title") }}</ion-title>
             </ion-toolbar>
         </ion-header>
+        <div class="cropper-box" v-show="openCropper">
+            <img id="avatar" />
+            <ion-icon class="cropper-cancel" :icon="closeSharp" @click="cancelCrop()"></ion-icon>
+            <ion-icon class="cropper-crop" :icon="checkmarkSharp" @click="crop()"></ion-icon>
+        </div>
         <right-menu />
         <ion-content :fullscreen="true">
             <div class="photo-panel">
@@ -183,11 +188,6 @@
                     </ion-row>
                 </ion-grid>
             </div>
-            <div class="cropper-box" v-show="openCropper">
-                <img id="avatar" />
-                <ion-icon class="cropper-cancel" :icon="closeSharp" @click="cancelCrop()"></ion-icon>
-                <ion-icon class="cropper-crop" :icon="checkmarkSharp" @click="crop()"></ion-icon>
-            </div>
             <input type="file" id="takeidphoto3" accept="image/*" capture="environment" @change="testphotoface($event)" />
             <div class="field-col-item section-margin">
                 <ion-grid>
@@ -348,7 +348,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useStore } from "vuex";
-import 'cropperjs/dist/cropper.css';
+import "cropperjs/dist/cropper.css";
 import {
     IonPage,
     IonToolbar,
@@ -368,11 +368,11 @@ import {
     IonLabel,
     pickerController,
 } from "@ionic/vue";
-import { arrowBackOutline, checkmarkCircleOutline,checkmarkSharp,closeSharp, person, caretDownOutline, camera, syncOutline } from "ionicons/icons";
+import { arrowBackOutline, checkmarkCircleOutline, checkmarkSharp, closeSharp, person, caretDownOutline, camera, syncOutline } from "ionicons/icons";
 import { PhotoPlugin, PhotoPluginFace } from "@/composables/UsePhotoPlugin";
 import { ToastUtils } from "@/utils/ToastUtils";
 import { ScgApi } from "@/api/ScgApi";
-import Cropper from 'cropperjs';
+import Cropper from "cropperjs";
 import RightMenu from "@/components/RightMenu.vue";
 const photoval: any = "";
 
@@ -477,15 +477,15 @@ export default defineComponent({
             ],
             store: useStore(),
             option: {
-                aspectRatio:1/1,
-                viewMode:1,
-                movable:false,
-                rotatable:false,
-                scalable:false,
-                zoomable:false,
-                background:false,
+                aspectRatio: 1 / 1,
+                viewMode: 1,
+                movable: false,
+                rotatable: false,
+                scalable: false,
+                zoomable: false,
+                background: false,
             } as Cropper.Options,
-            cropper:null as Cropper | null
+            cropper: null as Cropper | null,
         };
     },
 
@@ -534,15 +534,16 @@ export default defineComponent({
         };
     },
     methods: {
-        convertFileToBase64(file: File){
+        convertFileToBase64(file: File) {
             return new Promise((resolve, reject) => {
-            const reader = new FileReader;
-            reader.onerror = reject;
-            reader.onload = () => {
-                resolve(reader.result);
-            };
-            reader.readAsDataURL(file);
-        })},
+                const reader = new FileReader();
+                reader.onerror = reject;
+                reader.onload = () => {
+                    resolve(reader.result);
+                };
+                reader.readAsDataURL(file);
+            });
+        },
         getNameByCode(value: any, list: Array<any>, config?: { code: string; name: string }) {
             const c = config || { code: "code", name: "name" };
             const obj: any = {};
@@ -770,7 +771,7 @@ export default defineComponent({
             );
         },
         async onTakePhotoClicked2(ev: Event) {
-            const pt3: any =document.getElementById("takeidphoto3");
+            const pt3: any = document.getElementById("takeidphoto3");
             pt3.click();
         },
 
@@ -785,15 +786,16 @@ export default defineComponent({
                     this.openCropper = true;
                     const avatar: HTMLImageElement = document.getElementById("avatar") as HTMLImageElement;
                     avatar.src = basew64str;
-                    this.cropper = new Cropper(avatar,this.option);
-                    
+                    this.cropper = new Cropper(avatar, this.option);
+                    const pt3: any = document.getElementById("takeidphoto3");
+                    pt3.blur();
                 } catch (e) {
                     console.log("图片转Base64出错" + e.toString());
                     ToastUtils().showError("danger", 2000, errorMsg);
                 }
             }
         },
-        async crop(){
+        async crop() {
             this.cropper?.crop();
             const base64str: string | undefined = await this.cropper?.getCroppedCanvas().toDataURL();
             const fileType = base64str?.split(";base64")[0].split(":image/")[1];
@@ -823,22 +825,18 @@ export default defineComponent({
                 .then((res) => {
                     this.formData.recentPhotoFileId = res.data.id;
                     this.photoData = base64str;
-                    const inputFile: any = document.getElementById('takeidphoto3');
-                    inputFile.value = '';
+                    const inputFile: any = document.getElementById("takeidphoto3");
+                    inputFile.value = "";
                     this.openCropper = false;
                     this.cropper?.destroy();
                 })
                 .finally(() => {
                     this.showLoading = false;
                 });
-
-
-
-            
         },
-        async cancelCrop(){
-            const inputFile: any = document.getElementById('takeidphoto3');
-            inputFile.value = '';
+        async cancelCrop() {
+            const inputFile: any = document.getElementById("takeidphoto3");
+            inputFile.value = "";
             this.openCropper = false;
             this.cropper?.destroy();
         },
@@ -1258,23 +1256,26 @@ ion-content {
     width: 100%;
     height: 100%;
     background: #000;
-    position: fixed;
+    position: absolute;
     left: 0;
     top: 0;
-    z-index: 9999;
+    z-index: 999999;
+    box-sizing: border-box;
 }
-.cropper-cancel{
+.cropper-cancel {
     position: absolute;
-    bottom: 20px;
+    bottom: 10px;
     left: 20%;
     color: #fff;
     font-size: 30px;
+    z-index: 999999;
 }
-.cropper-crop{
+.cropper-crop {
     position: absolute;
-    bottom: 20px;
+    bottom: 10px;
     right: 20%;
     color: #fff;
     font-size: 30px;
+    z-index: 999999;
 }
 </style>
