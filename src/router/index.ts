@@ -1,15 +1,13 @@
-import { createRouter, createWebHashHistory } from '@ionic/vue-router';
+import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
-
-const baseurl = "/realnameh5";
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: baseurl + '/',
-    redirect: baseurl + '/login'
+    path: '/',
+    redirect: '/login'
   },
   {
-    path: baseurl + '/login',
+    path: '/login',
     name: 'Login',
     component: () => import("@/views/LoginView.vue"),
     meta: {
@@ -17,7 +15,7 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: baseurl + '/project-list',
+    path: '/project-list',
     name: 'ProjectList',
     component: () =>  import("@/views/ProjectListView.vue") ,
     meta: {
@@ -25,7 +23,7 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: baseurl + '/worker-list',
+    path: '/worker-list',
     name: 'WorkerList',
     component: () => import("@/views/WorkerListView.vue"),
     meta: {
@@ -33,7 +31,7 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: baseurl + '/worker-info',
+    path: '/worker-info',
     name: 'WorkerInfo',
     component: () => import("@/views/WorkerInfoView.vue"),
     meta: {
@@ -41,7 +39,7 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: baseurl + '/worker-leave',
+    path: '/worker-leave',
     name: 'WorkerLeave',
     component: () => import("@/views/WorkerLeaveView.vue"),
     meta: {
@@ -49,7 +47,7 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: baseurl + '/main/',
+    path: '/main/',
     name: 'Main',
     component: () => import("@/views/MainView.vue"),
     children: [
@@ -91,7 +89,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/:catchAll(.*)',
-    redirect: baseurl + '/login'
+    redirect: '/login'
   }
 ]
 
