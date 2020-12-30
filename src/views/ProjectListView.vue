@@ -11,7 +11,7 @@
       <ion-list>
         <ion-item lines="full" v-for="item in projectBriefList" :key="item.projectId" @click="onProjectCellClicked(item)">
           <ion-thumbnail class="thumbnail" slot="start">
-            <ion-img src="assets/ch1.jpg"></ion-img>
+            <ion-img src="/realnameh5/assets/ch1.jpg"></ion-img>
           </ion-thumbnail>
           <ion-label>
             <h2><b>{{ item.projectName }}</b></h2>
