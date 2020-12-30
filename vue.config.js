@@ -5,6 +5,7 @@
         //重点
         output: {
             // 输出重构 打包编译后的js文件名称,添加时间戳.
+            outputDir:"realnameh5",
             filename: `js/[name].${process.env.npm_package_version}.js`,
             chunkFilename: `js/[name].${process.env.npm_package_version}.js`,
         },
