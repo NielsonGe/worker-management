@@ -10,7 +10,7 @@
               {{ $t('views.login.username') }}
             </ion-col>
             <ion-col class="right-align right-padding" size="9">
-              <ion-input class="input-cell" :placeholder="$t('views.login.username-placeholder')" v-model="username"></ion-input>
+              <ion-input class="input-cell name" :placeholder="$t('views.login.username-placeholder')" v-model="username" defaultValue="username"></ion-input>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -23,7 +23,7 @@
               {{ $t('views.login.password') }}
             </ion-col>
             <ion-col class="right-align right-padding" size="9">
-              <ion-input class="input-cell pwd" :type="showpwd" :placeholder="$t('views.login.password-placeholder')" v-model="password"></ion-input>
+              <ion-input class="input-cell pwd" :type="showpwd" :placeholder="$t('views.login.password-placeholder')" v-model="password" defaultValue="password" ></ion-input>
             <i class="icon ion-eye-disabled show" @click="showpwdmd('text')"></i>
             <i class="icon ion-eye"  @click="showpwdmd('password')"></i>
             </ion-col>          

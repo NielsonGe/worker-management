@@ -47,12 +47,14 @@ ionViewDidEnter(){
      openFirst() {
         this.showmask = "masklayer show";
         this.showmenu = "rightmenubody show";
+        document.querySelector(".bottombar")?.classList.add("hide");
 
     },
     closeFirst() {
        
         this.showmenu = "rightmenubody";
         this.showmask = "masklayer";
+        document.querySelector(".bottombar.hide")?.classList.remove("hide");
     },
 
     logOut() {
@@ -66,8 +68,9 @@ ionViewDidEnter(){
       // ScgApi().logoutSystem(param).then(response => {
         this.store.dispatch('setToken', null);
         localStorage.setItem('token', "");
-this.closeFirst();
-        this.$router.replace("/login");
+        this.closeFirst();
+        this.$router.push({path: '/login', query: {from: 'logout'}});
+        
       // }).catch(error => {
       //   console.log(error);
       // })
