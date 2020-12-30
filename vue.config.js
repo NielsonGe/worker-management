@@ -1,10 +1,12 @@
 ﻿module.exports = {
-    publicPath: process.env.NODE_ENV === "production" ? "/realnameh5/" : ".",
+﻿   //outputDir:"realnameh5",
+    publicPath: process.env.NODE_ENV === "production" ? "/realnameh5/" : "/realnameh5/",
     filenameHashing: false,
     configureWebpack: {
         //重点
         output: {
             // 输出重构 打包编译后的js文件名称,添加时间戳.
+          
             filename: `js/[name].${process.env.npm_package_version}.js`,
             chunkFilename: `js/[name].${process.env.npm_package_version}.js`,
         },
