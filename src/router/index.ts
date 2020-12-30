@@ -95,7 +95,6 @@ const routes: Array<RouteRecordRaw> = [
   }
 ]
 
-process.env.BASE_URL = baseurl;
 const router = createRouter({
   history: createWebHashHistory(process.env.BASE_URL),
   routes
