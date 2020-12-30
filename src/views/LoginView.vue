@@ -226,7 +226,7 @@ ion-input {
 	text-align: center;
 	font-size: 2em;
 	color: #1da1f2;
-	background: url("/assets/logoicon.png") no-repeat center top;
+	background: url("/realnameh5/assets/logoicon.png") no-repeat center top;
 }
 
 .item {
