@@ -98,6 +98,12 @@ export default defineComponent({
 
     this.getRsaPublickKey();
     this.loadVerifyCode();
+    const query = this.$route.query;
+    // console.log(query);
+    if(query.from=="logout"){
+      this.username="";
+      this.password="";
+    }
   },
   methods: {
     getRsaPublickKey(): void {
