@@ -816,6 +816,7 @@ export default defineComponent({
                     break;
             }
             this.showLoading = true;
+            this.openCropper = false;
             ScgApi()
                 .postFileBase64String({
                     type: "worker_recent_photo",
@@ -825,12 +826,11 @@ export default defineComponent({
                 .then((res) => {
                     this.formData.recentPhotoFileId = res.data.id;
                     this.photoData = base64str;
-                    const inputFile: any = document.getElementById("takeidphoto3");
-                    inputFile.value = "";
-                    this.openCropper = false;
-                    this.cropper?.destroy();
                 })
                 .finally(() => {
+                    const inputFile: any = document.getElementById("takeidphoto3");
+                    inputFile.value = "";
+                    this.cropper?.destroy();
                     this.showLoading = false;
                 });
         },
@@ -1259,7 +1259,7 @@ ion-content {
     position: absolute;
     left: 0;
     top: 0;
-    z-index: 999999;
+    z-index: 99;
     box-sizing: border-box;
 }
 .cropper-cancel {
@@ -1268,7 +1268,7 @@ ion-content {
     left: 20%;
     color: #fff;
     font-size: 30px;
-    z-index: 999999;
+    z-index: 99;
 }
 .cropper-crop {
     position: absolute;
@@ -1276,6 +1276,6 @@ ion-content {
     right: 20%;
     color: #fff;
     font-size: 30px;
-    z-index: 999999;
+    z-index: 99;
 }
 </style>
