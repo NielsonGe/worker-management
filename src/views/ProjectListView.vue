@@ -11,7 +11,12 @@
       <ion-list>
         <ion-item lines="full" v-for="item in projectBriefList" :key="item.projectId" @click="onProjectCellClicked(item)">
           <ion-thumbnail class="thumbnail" slot="start">
+<<<<<<< HEAD
             <ion-img src="/realnameh5/assets/ch1.jpg"></ion-img>
+=======
+            <ion-img v-if="projectenv == 'development'" src="/assets/ch1.jpg"></ion-img>
+            <ion-img v-else src="/realnameh5/assets/ch1.jpg"></ion-img>
+>>>>>>> develop
           </ion-thumbnail>
           <ion-label>
             <h2><b>{{ item.projectName }}</b></h2>
@@ -52,7 +57,8 @@ export default defineComponent({
   data() {
     return {
       store: useStore(),
-      projectBriefList: []
+      projectBriefList: [],
+      projectenv: process.env.NODE_ENV
     }
   },
   ionViewWillEnter() {
