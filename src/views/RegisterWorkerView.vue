@@ -544,6 +544,23 @@ export default defineComponent({
                 reader.readAsDataURL(file);
             });
         },
+        dataURLtoFile(dataurl: string, filename: string) {
+            const temp: any = dataurl.split(',')[0];
+            const mime = temp.match(/:(.*?);/)[1];
+            const bstr = atob(dataurl.split(',')[1]);
+            let n: number = bstr.length;
+            const u8arr = new Uint8Array(n);
+            while(n--){
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            return new File([u8arr], filename, {type:mime});
+        },
+        getImgSize(base64url: string) {
+            const str = base64url.replace('data:image/jpeg;base64,', '');//这里根据自己上传图片的格式进行相应修改
+            const strLength: number = str.length;
+            const fileLength = parseInt(strLength - (strLength / 8) * 2+"");
+            return parseInt((fileLength / 1024).toFixed(2));
+        },
         getNameByCode(value: any, list: Array<any>, config?: { code: string; name: string }) {
             const c = config || { code: "code", name: "name" };
             const obj: any = {};
@@ -797,9 +814,31 @@ export default defineComponent({
         },
         async crop() {
             this.cropper?.crop();
-            const base64str: string | undefined = await this.cropper?.getCroppedCanvas().toDataURL();
+            const canvasData: HTMLCanvasElement| undefined = this.cropper?.getCroppedCanvas();
+            const imageWidth: any = canvasData?.width;
+            const imageHeight: any = canvasData?.height;
+            let base64str: any = await canvasData?.toDataURL('image/jpeg');
+            const size = this.getImgSize(base64str);
+            const maxSize = 500;
+            if(size > 500){
+                const w = parseInt( maxSize / size * imageWidth + "" );
+                const h = parseInt( maxSize / size * imageHeight + "" );
+                console.log(w,"--",imageWidth);
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = w;
+                canvas.height = h;
+                const img = new Image();
+                img.src=base64str;
+                base64str = await new Promise((resolve,reject)=>{
+                    img.onload= async function(){
+                        ctx?.drawImage(img, 0, 0, w, h);
+                        resolve(await canvas.toDataURL('image/jpeg', 0.96));
+                    }
+                })
+            }
+
             const fileType = base64str?.split(";base64")[0].split(":image/")[1];
-            //    alert(fileType);
             const contentBase64String = base64str?.split(";base64,")[1];
             let type;
             switch (fileType) {
