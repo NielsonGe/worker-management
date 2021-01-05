@@ -89,10 +89,15 @@ export default defineComponent({
       verifyCodeData: '',
       store: useStore(),
       backdropCount: 0,
-      showpwd: 'password'
+      showpwd: 'password',
+      switchLogoPath: 'title'
     }
   },
   mounted() {
+    // console.log("huanjing=====>",process.env.NODE_ENV);
+    if(process.env.NODE_ENV == "production"){
+      this.switchLogoPath = 'title prod'
+    }
     this.store.dispatch('setToken', null);
     this.store.dispatch('setAccount', null);
 
@@ -221,6 +226,15 @@ ion-input {
 }
 
 .title {
+	padding: 140px 0 20px;
+	margin-top: 50px;
+	text-align: center;
+	font-size: 2em;
+	color: #1da1f2;
+	background: url("/assets/logoicon.png") no-repeat center top;
+}
+
+.title.prod {
 	padding: 140px 0 20px;
 	margin-top: 50px;
 	text-align: center;
