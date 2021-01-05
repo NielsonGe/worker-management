@@ -112,7 +112,7 @@ ionViewDidEnter(){
 }
 
 .rightmenubody.show{
-  width: 80%;
+  width: 300px;
   transition: width 1s;
 }
 
