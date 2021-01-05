@@ -2,18 +2,18 @@ import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 
 const routes: Array<RouteRecordRaw> = [
-  // {
-  //   path: '/',
-  //   redirect: '/login'
-  // },
   {
     path: '/',
-    name: 'Login',
-    component: () => import("@/views/LoginView.vue"),
-    meta: {
-      title: '登录'
-    }
+    redirect: '/login'
   },
+  // {
+  //   path: '/',
+  //   name: 'Login',
+  //   component: () => import("@/views/LoginView.vue"),
+  //   meta: {
+  //     title: '登录'
+  //   }
+  // },
   {
     path: '/login',
     name: 'Login',
