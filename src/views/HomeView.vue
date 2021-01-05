@@ -23,7 +23,8 @@
           <ion-col class="ion-text-center" size="3" @click="onManageWorkerClicked(info.projectId)">
             <div>
               <center>
-                <ion-img class="section-icon" src="/realnameh5/assets/icon_nav_sz.png" />
+                <ion-img v-if="projectenv == 'production'"  class="section-icon" src="/realnameh5/assets/icon_nav_sz.png" />
+                <ion-img v-else  class="section-icon" src="/assets/icon_nav_sz.png" />
               </center>
             </div>
             <div>
@@ -33,7 +34,8 @@
           <ion-col class="ion-text-center" size="3" @click="waiting()">
             <div>
               <center>
-                <ion-img class="section-icon" src="/realnameh5/assets/icon_nav_kc.png" />
+                <ion-img v-if="projectenv == 'production'" class="section-icon" src="/realnameh5/assets/icon_nav_kc.png" />
+                <ion-img v-else class="section-icon" src="/assets/icon_nav_kc.png" />
               </center>
             </div>
             <div>
@@ -43,7 +45,8 @@
           <ion-col class="ion-text-center" size="3" @click="waiting()">
             <div>
               <center>
-                <ion-img class="section-icon" src="/realnameh5/assets/icon_nav_sp.png" />
+                <ion-img v-if="projectenv == 'production'"  class="section-icon" src="/realnameh5/assets/icon_nav_sp.png" />
+                <ion-img v-else  class="section-icon" src="/assets/icon_nav_sp.png" />
               </center>
             </div>
             <div>
@@ -53,7 +56,8 @@
           <ion-col class="ion-text-center" size="3" @click="waiting()">
             <div>
               <center>
-                <ion-img class="section-icon" src="/realnameh5/assets/icon_nav_hd.png" />
+                <ion-img v-if="projectenv == 'production'" class="section-icon" src="/realnameh5/assets/icon_nav_hd.png" />
+                <ion-img v-else class="section-icon" src="/assets/icon_nav_hd.png" />
               </center>
             </div>
             <div>
@@ -173,7 +177,8 @@ export default defineComponent({
       statistic: {},
       announcementList: new Array<ProjectAnnouncement>(),
       projectId: "",
-      store:useStore()
+      store:useStore(),
+      projectenv: process.env.NODE_ENV
     }
   },
   ionViewWillEnter() {

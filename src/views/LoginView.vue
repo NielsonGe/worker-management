@@ -34,13 +34,13 @@
       <div class="field-col-item">
         <ion-grid>
           <ion-row>
-            <ion-col class="left-align center-vertical left-padding" size="3">
+            <ion-col class="left-align center-vertical left-padding yzmlabel" size="3">
               {{ $t('views.login.verify-code') }}
             </ion-col>
             <ion-col class="right-align" size="5">
-              <ion-input class="input-cell" :placeholder="$t('views.login.verify-code-placeholder')" v-model="verifyCode"></ion-input>
+              <ion-input class="input-cell yzm" :placeholder="$t('views.login.verify-code-placeholder')" v-model="verifyCode"></ion-input>
             </ion-col>
-            <ion-col class="left-align center-vertical right-padding" size="4" @click="refreshVerifyCode">
+            <ion-col class="left-align center-vertical right-padding yzm" size="4" @click="refreshVerifyCode">
               <img class="verifycodediv" style="width:100%, height:100%" :src="verifyCodeData" />
             </ion-col>
           </ion-row>
@@ -89,10 +89,15 @@ export default defineComponent({
       verifyCodeData: '',
       store: useStore(),
       backdropCount: 0,
-      showpwd: 'password'
+      showpwd: 'password',
+      switchLogoPath: 'title'
     }
   },
   mounted() {
+    // console.log("huanjing=====>",process.env.NODE_ENV);
+    if(process.env.NODE_ENV == "production"){
+      this.switchLogoPath = 'title prod'
+    }
     this.store.dispatch('setToken', null);
     this.store.dispatch('setAccount', null);
 
@@ -232,6 +237,15 @@ ion-input {
 	text-align: center;
 	font-size: 2em;
 	color: #1da1f2;
+	background: url("/assets/logoicon.png") no-repeat center top;
+}
+
+.title.prod {
+	padding: 140px 0 20px;
+	margin-top: 50px;
+	text-align: center;
+	font-size: 2em;
+	color: #1da1f2;
 	background: url("/realnameh5/assets/logoicon.png") no-repeat center top;
 }
 
@@ -292,10 +306,26 @@ ion-input {
 }
 
 .verifycodediv{
-  height: 6.5vh;
+  min-height: 50px;
+  width: 100px;
+  right:20px;
 }
 
 .field-col-item .input-cell.pwd{
-  width:86%;
+  right:25px;
+}
+
+.field-col-item .input-cell.yzm{
+  right:0px;
+  line-height: 50px;
+}
+
+.left-align.yzm{
+  max-width: 120px !important;
+  margin: 0 !important;
+}
+
+.yzmlabel{
+  margin-left: 0 !important;
 }
 </style>

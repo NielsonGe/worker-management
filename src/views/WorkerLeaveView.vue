@@ -38,7 +38,7 @@
                             {{  workerData.status == 1 ? $t("views.worker-leave.leave-time") : $t("views.worker-leave.enter-time")}}
                         </ion-col>
                         <ion-col class="right-align" size="7">
-                            <ion-datetime class="wholeline" v-model="workerData.leaveTime" display-format="YYYY-MM-DD"></ion-datetime>
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm" class="wholeline" v-model="workerData.leaveTime" display-format="YYYY-MM-DD"></ion-datetime>
                         </ion-col>
                         <ion-col class="right-align center-vertical" size="1">
                             <ion-icon class="cell-icon" :icon="timeOutline"></ion-icon>
@@ -90,7 +90,9 @@ export default defineComponent({
                 leaveTime:"",
                 recentPhotoFileId:""
             },
-            photoData:""
+            photoData:"",
+            datePickerCancel: this.$t("global.cancel"),
+            datePickerConfirm: this.$t("global.confirm")
         };
     },
     setup() {
