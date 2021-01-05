@@ -1150,7 +1150,6 @@ export default defineComponent({
     align-items: center;
     background: rgba(255, 255, 255, 0.2);
     transition: all 1s;
-    z-index:9999999;
 }
 
 .fixed-loading .icon-loading {
