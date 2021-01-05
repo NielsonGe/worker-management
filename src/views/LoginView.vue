@@ -34,13 +34,13 @@
       <div class="field-col-item">
         <ion-grid>
           <ion-row>
-            <ion-col class="left-align center-vertical left-padding yzmlabel" size="3">
+            <ion-col class="left-align center-vertical left-padding" size="3">
               {{ $t('views.login.verify-code') }}
             </ion-col>
             <ion-col class="right-align" size="5">
-              <ion-input class="input-cell yzm" :placeholder="$t('views.login.verify-code-placeholder')" v-model="verifyCode"></ion-input>
+              <ion-input class="input-cell" :placeholder="$t('views.login.verify-code-placeholder')" v-model="verifyCode"></ion-input>
             </ion-col>
-            <ion-col class="left-align center-vertical right-padding yzm" size="4" @click="refreshVerifyCode">
+            <ion-col class="left-align center-vertical right-padding" size="4" @click="refreshVerifyCode">
               <img class="verifycodediv" style="width:100%, height:100%" :src="verifyCodeData" />
             </ion-col>
           </ion-row>
@@ -306,26 +306,10 @@ ion-input {
 }
 
 .verifycodediv{
-  min-height: 50px;
-  width: 100px;
-  right:20px;
+  height: 6.5vh;
 }
 
 .field-col-item .input-cell.pwd{
-  right:25px;
-}
-
-.field-col-item .input-cell.yzm{
-  right:0px;
-  line-height: 50px;
-}
-
-.left-align.yzm{
-  max-width: 120px !important;
-  margin: 0 !important;
-}
-
-.yzmlabel{
-  margin-left: 0 !important;
+  width:86%;
 }
 </style>
