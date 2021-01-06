@@ -507,6 +507,11 @@ export default defineComponent({
                 this.jobTypeList = res.data;
             });
         ScgApi()
+            .queryDictionaryTrees({ dictCode: "worker_role" })
+            .then((res) => {
+                this.roleList = res.data;
+            });
+        ScgApi()
             .queryProjectCorpSelect({ projectId: this.store.getters.getProjectId })
             .then((res) => {
                 this.companyParent = res.data;

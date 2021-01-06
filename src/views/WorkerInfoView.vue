@@ -443,6 +443,12 @@ export default defineComponent({
                 this.jobTypeList = res.data;
             }).catch((err) => {
       this.$router.replace('/login');
+
+      ScgApi()
+            .queryDictionaryTrees({ dictCode: "worker_role" })
+            .then((res) => {
+                this.roleList = res.data;
+            });
     });
         ScgApi()
             .queryDictionaryTrees({ dictCode: "work_type" })
