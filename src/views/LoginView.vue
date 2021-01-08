@@ -9,8 +9,8 @@
             <ion-col class="left-align center-vertical left-padding" size="3">
               {{ $t('views.login.username') }}
             </ion-col>
-            <ion-col class="right-align right-padding" size="9">
-              <ion-input class="input-cell name" :placeholder="$t('views.login.username-placeholder')" v-model="username" defaultValue="username"></ion-input>
+            <ion-col class="left-align right-padding" size="9">
+              <input class="input-cell name" :placeholder="$t('views.login.username-placeholder')" v-model="username"  />
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -22,8 +22,8 @@
             <ion-col class="left-align center-vertical left-padding" size="3">
               {{ $t('views.login.password') }}
             </ion-col>
-            <ion-col class="right-align right-padding" size="9">
-              <ion-input class="input-cell pwd" :type="showpwd" :placeholder="$t('views.login.password-placeholder')" v-model="password" defaultValue="password" ></ion-input>
+            <ion-col class="left-align right-padding" size="9">
+              <input class="input-cell pwd" :type="showpwd" :placeholder="$t('views.login.password-placeholder')" v-model="password"  />
             <i class="icon ion-eye-disabled show" @click="showpwdmd('text')"></i>
             <i class="icon ion-eye"  @click="showpwdmd('password')"></i>
             </ion-col>          
@@ -37,11 +37,9 @@
             <ion-col class="left-align center-vertical left-padding yzmlabel" size="3">
               {{ $t('views.login.verify-code') }}
             </ion-col>
-            <ion-col class="right-align" size="5">
-              <ion-input class="input-cell yzm" :placeholder="$t('views.login.verify-code-placeholder')" v-model="verifyCode"></ion-input>
-            </ion-col>
-            <ion-col class="left-align center-vertical right-padding yzm toclk" size="4" @click="refreshVerifyCode">
-              <img class="verifycodediv" style="width:100%, height:100%" :src="verifyCodeData" />
+            <ion-col class="left-align" size="9">
+              <input class="input-cell yzm" :placeholder="$t('views.login.verify-code-placeholder')" v-model="verifyCode" />
+              <img class="verifycodediv" style="width:100%, height:100%" :src="verifyCodeData" @click="refreshVerifyCode" />
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -72,7 +70,7 @@ export default defineComponent({
   components: {
     IonPage,
     IonContent,
-    IonInput,
+    // IonInput,
     IonButton,
     IonBackdrop,
     IonGrid, 
@@ -93,7 +91,7 @@ export default defineComponent({
       switchLogoPath: 'title'
     }
   },
-  mounted() {
+  ionViewWillEnter() {
     // console.log("huanjing=====>",process.env.NODE_ENV);
     if(process.env.NODE_ENV == "production"){
       this.switchLogoPath = 'title prod'
@@ -108,7 +106,10 @@ export default defineComponent({
     if(query.from=="logout"){
       this.username="";
       this.password="";
+      this.verifyCode="";
     }
+
+
   },
   methods: {
     getRsaPublickKey(): void {
@@ -172,12 +173,12 @@ export default defineComponent({
           this.$router.replace("/project-list");
         }).catch(error => {
           console.log(error);
-          const obj: any = document.querySelector(".yzm.toclk");
+          const obj: any = document.querySelector(".verifycodediv");
           obj.click();
         })
       }).catch(error => {
         console.log(error);
-        const obj: any = document.querySelector(".yzm.toclk");
+        const obj: any = document.querySelector(".verifycodediv");
         obj.click();
       })
 
@@ -302,9 +303,10 @@ ion-input {
   display: none;
   position: absolute;
    font-size: 26px;
-   top:8px;
-   right: 10px;
+   top:10px;
+   right: 20px;
    color: #666;
+   z-index: 99;
 }
 
 .icon.show{
@@ -312,27 +314,51 @@ ion-input {
 }
 
 .verifycodediv{
+  position: absolute;
+  top:15px;
   min-height: 50px;
   width: 100px;
   right:20px;
+  z-index: 99;
 }
 
+.field-col-item .input-cell:focus,.field-col-item .input-cell:active,.field-col-item .input-cell{
+border: none !important;
+outline:none;
+width: 100%;
+text-align: left;
+height: 40px;
+}
 .field-col-item .input-cell.pwd{
-  right:25px;
+  border: none !important;
+  width: 100%;
+  padding-right:40px !important;
 }
 
 .field-col-item .input-cell.yzm{
+  float:right;
   right:0px;
   line-height: 50px;
+  border: none !important;
+  height: 70px !important;
+  padding-right:130px !important;
 }
 
 .left-align.yzm{
   max-width: 120px !important;
   margin: 0 !important;
+  border: none !important;
 }
+
+.field-col-item .input-cell.name{
+  padding-right: 5px !important;
+  border: none !important;
+}
+
 
 .yzmlabel{
   margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 
 </style>
