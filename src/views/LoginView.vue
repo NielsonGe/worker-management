@@ -40,7 +40,7 @@
             <ion-col class="right-align" size="5">
               <ion-input class="input-cell yzm" :placeholder="$t('views.login.verify-code-placeholder')" v-model="verifyCode"></ion-input>
             </ion-col>
-            <ion-col class="left-align center-vertical right-padding yzm" size="4" @click="refreshVerifyCode">
+            <ion-col class="left-align center-vertical right-padding yzm toclk" size="4" @click="refreshVerifyCode">
               <img class="verifycodediv" style="width:100%, height:100%" :src="verifyCodeData" />
             </ion-col>
           </ion-row>
@@ -116,7 +116,9 @@ export default defineComponent({
         this.rsaPublicKey = '-----BEGIN PUBLIC KEY-----' + response.data.rsaPublicKey + '-----END PUBLIC KEY-----';
       }).catch(error => {
         console.log(error);
-      })
+      });
+      this.username="";
+      this.password="";
     },
     refreshVerifyCode(ev: Event) {
       this.loadVerifyCode();
@@ -170,9 +172,13 @@ export default defineComponent({
           this.$router.replace("/project-list");
         }).catch(error => {
           console.log(error);
+          const obj: any = document.querySelector(".yzm.toclk");
+          obj.click();
         })
       }).catch(error => {
         console.log(error);
+        const obj: any = document.querySelector(".yzm.toclk");
+        obj.click();
       })
 
 
