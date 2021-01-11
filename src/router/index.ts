@@ -55,6 +55,38 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
+    path: '/team-list',
+    name: 'TeamList',
+    component: () => import("@/views/TeamListView.vue"),
+    meta: {
+      title: '班组列表'
+    }
+  },
+  {
+    path: '/company-list',
+    name: 'CompanyList',
+    component: () => import("@/views/CompanyListView.vue"),
+    meta: {
+      title: '公司列表'
+    }
+  },
+  {
+    path: '/register-team',
+    name: 'RegisterTeam',
+    component: () => import("@/views/RegisterTeamView.vue"),
+    meta: {
+      title: '劳工队伍登记'
+    }
+  },
+  {
+    path: '/team-info',
+    name: 'TeamInfo',
+    component: () => import("@/views/TeamInfoView.vue"),
+    meta: {
+      title: '劳工队伍信息'
+    }
+  },
+  {
     path: '/main/',
     name: 'Main',
     component: () => import("@/views/MainView.vue"),
@@ -82,17 +114,7 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           title: 'Activity View'
         }
-      },
-      {
-        path: 'menu',
-        name: 'Menu',
-        component: () => import("@/components/RightMenu.vue"),
-        meta: {
-          title: 'Menu View'
-        }
-
       }
-     
     ]
   },
   {

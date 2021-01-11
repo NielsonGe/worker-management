@@ -94,7 +94,7 @@ ionViewDidEnter(){
 .rightmenu{
   position: absolute;
   right: 10px;
-  top:14px;
+  top:8px;
   font-size: 30px;
   z-index: 99;
 }

@@ -138,6 +138,36 @@
       "datetime-placeholder": "Select Date",
       "telephone-placeholder": "Please Input"
     },
+    "team-list": {
+      "title": "Team List",
+      "submit": "New Team",
+      "belong": "Belong To:"
+    },
+    "register-team": {
+      "title": "Team Manage",
+      "submit": "submit",
+      "company": "Company",
+      "parent-company": "Parent Company",
+      "company-type": "Company Type",
+      "team-name": "Team Name",
+      "input-placeholder": "Please Input",
+      "create-new-team": "+ Create New Team",
+      "create": "Create",
+      "add-over": "Add Over"
+    },
+    "company-list": {
+      "title": "Company List",
+      "search-placeholder": "Search Company Name"
+    },
+    "team-info": {
+      "title": "Team Info",
+      "submit": "Save",
+      "company": "CompanyName",
+      "parent-company": "Parent Company",
+      "company-type": "Company Type",
+      "team-name": "Team Name",
+      "delete": "Delete"
+    },
     "menu": {
       "changepwd": "ChangePassword",
       "logout": "Logout"

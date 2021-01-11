@@ -143,6 +143,37 @@
       "datetime-placeholder": "请选择日期",
       "telephone-placeholder": "请输入"
     },
+    "team-list": {
+      "title": "参建班组列表",
+      "submit": "添加班组",
+      "belong": "所属单位："
+    },
+    "register-team": {
+      "title": "班组管理",
+      "submit": "提交",
+      "company": "单位名",
+      "parent-company": "上级公司",
+      "company-type": "公司类型",
+      "team-name": "班组名",
+      "team-name2": "班组选择",
+      "input-placeholder": "请输入",
+      "create-new-team": "+ 创建新班组",
+      "create": "创建",
+      "add-over": "结束添加新班组"
+    },
+    "company-list": {
+      "title": "单位列表",
+      "search-placeholder": "检索单位名称"
+    },
+    "team-info": {
+      "title": "班组信息编辑",
+      "submit": "保存",
+      "company": "单位名",
+      "parent-company": "上级公司",
+      "company-type": "公司类型",
+      "team-name": "班组名",
+      "delete": "删除"
+    },
     "menu": {
       "changepwd": "修改密码",
       "logout": "退出登录"

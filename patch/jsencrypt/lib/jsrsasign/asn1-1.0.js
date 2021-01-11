@@ -3,7 +3,7 @@
 /*
  * asn1.js - ASN.1 DER encoder classes
  *
- * Copyright (c) 2013-2017 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2017 Kenji Urushima ()
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -18,7 +18,7 @@ import {YAHOO} from "./yahoo";
 /**
  * @fileOverview
  * @name asn1-1.0.js
- * @author Kenji Urushima kenji.urushima@gmail.com
+ * @author Kenji Urushima
  * @version asn1 1.0.13 (2017-Jun-02)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
