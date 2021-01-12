@@ -69,8 +69,8 @@
                 </ion-grid>
             </div>
 
-            <input type="file" id="takeidphoto1" accept="image/jpg,image/jpeg,image/png" capture="environment" @change="testphoto($event)" />
-            <input type="file" id="takeidphoto2" accept="image/jpg,image/jpeg,image/png" capture="environment" @change="testphotofan($event)" />
+            <input type="file" id="takeidphoto1" accept="image/jpeg" capture="environment" @change="testphoto($event)" />
+            <input type="file" id="takeidphoto2" accept="image/jpeg" capture="environment" @change="testphotofan($event)" />
 
             <div class="field-col-item">
                 <ion-grid>
@@ -188,7 +188,7 @@
                     </ion-row>
                 </ion-grid>
             </div>
-            <input type="file" id="takeidphoto3" accept="image/jpg,image/jpeg,image/png" capture="environment" @change="testphotoface($event)" />
+            <input type="file" id="takeidphoto3" accept="image/jpeg" capture="environment" @change="testphotoface($event)" />
             <div class="field-col-item section-margin">
                 <ion-grid>
                     <ion-row @click="onCompanyParentCellClicked">
@@ -270,7 +270,7 @@
                                     :key="key"
                                 >
                                     <ion-checkbox
-                                        style="margin-right:5px;"
+                                        style="margin-right:5px; \"
                                         @update:modelValue="entry.isChecked = $event"
                                         :checked="entry.isChecked"
                                     ></ion-checkbox
@@ -1323,5 +1323,11 @@ ion-content {
     color: #fff;
     font-size: 30px;
     z-index: 999999;
+}
+
+
+.checkbxstyle:host{
+border-radius: 0 !important;
+size:20px !important;
 }
 </style>
