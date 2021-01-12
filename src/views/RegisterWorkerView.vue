@@ -69,8 +69,8 @@
                 </ion-grid>
             </div>
 
-            <input type="file" id="takeidphoto1" accept="image/jpeg" capture="environment" @change="testphoto($event)" />
-            <input type="file" id="takeidphoto2" accept="image/jpeg" capture="environment" @change="testphotofan($event)" />
+            <input type="file" id="takeidphoto1" accept="image/jpg" capture="environment" @change="testphoto($event)" />
+            <input type="file" id="takeidphoto2" accept="image/jpg" capture="environment" @change="testphotofan($event)" />
 
             <div class="field-col-item">
                 <ion-grid>
@@ -188,7 +188,7 @@
                     </ion-row>
                 </ion-grid>
             </div>
-            <input type="file" id="takeidphoto3" accept="image/jpeg" capture="environment" @change="testphotoface($event)" />
+            <input type="file" id="takeidphoto3" accept="image/jpg" capture="environment" @change="testphotoface($event)" />
             <div class="field-col-item section-margin">
                 <ion-grid>
                     <ion-row @click="onCompanyParentCellClicked">
