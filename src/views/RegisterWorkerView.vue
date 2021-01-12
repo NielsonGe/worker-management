@@ -270,7 +270,7 @@
                                     :key="key"
                                 >
                                     <ion-checkbox
-                                        style="margin-right:5px; \"
+                                        style="margin-right:5px;"
                                         @update:modelValue="entry.isChecked = $event"
                                         :checked="entry.isChecked"
                                     ></ion-checkbox
@@ -1325,9 +1325,4 @@ ion-content {
     z-index: 999999;
 }
 
-
-.checkbxstyle:host{
-border-radius: 0 !important;
-size:20px !important;
-}
 </style>
