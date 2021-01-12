@@ -695,7 +695,7 @@ export default defineComponent({
                     fileReader.onload = function() {
                         let basew64str: any = this.result;
                         basew64str = basew64str.split("base64,")[1];
-                        console.log("base64===>", basew64str);
+                        // console.log("base64===>", basew64str);
                         _self.showLoading = true;
                         ScgApi()
                             .ocrIdCard({ contentBase64String: basew64str })
