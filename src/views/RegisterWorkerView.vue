@@ -438,10 +438,10 @@ export default defineComponent({
             areaList: [],
             jobTypeList: [],
             roleList: [
-                // {
-                //     name: this.$t("global.role-type-0"),
-                //     code: 0,
-                // },
+                {
+                    name: this.$t("global.role-type-0"),
+                    code: 0,
+                },
                 {
                     name: this.$t("global.role-type-1"),
                     code: 1,
