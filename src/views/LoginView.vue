@@ -60,7 +60,12 @@ import Account from '@/models/Account';
 import { LoginAccount, findAccount } from '@/data/AccountFakeData';
 import { ToastUtils } from '@/utils/ToastUtils';
 import { ScgApi } from '@/api/ScgApi';
+import config from '@/config/config';
 import JSEncrypt from 'jsencrypt';
+import AES from 'crypto-js/aes';
+import CryptoJS from 'crypto-js';
+import { base64 } from 'js-md5';
+import { Base64 }  from 'js-base64';
 
 //import PhotoFakeData from '@/data/PhotoFakeData';
 //import { XFUtils } from '@/utils/XFUtils';
@@ -93,6 +98,8 @@ export default defineComponent({
   },
   ionViewWillEnter() {
     // console.log("huanjing=====>",process.env.NODE_ENV);
+    console.log("secretkey===>",config.secretkey);
+   console.log("加密后===>",AES.encrypt('test123456',config.secretkey).toString());
     if(process.env.NODE_ENV == "production"){
       this.switchLogoPath = 'title prod'
     }
@@ -135,7 +142,7 @@ export default defineComponent({
     login() {
       // FOR DEBUG
       // console.log("Username: " + this.username);
-      // console.log("Password: " + this.password);
+      console.log("Password: " + this.password);
 
       // console.log("start identify card");
       // XFUtils().identifyIdCard(PhotoFakeData).then(response => {
@@ -150,12 +157,22 @@ export default defineComponent({
         return;
       }
 
+      const key = CryptoJS.enc.Utf8.parse(config.secretkey);
+       const src = CryptoJS.enc.Utf8.parse(this.username);
+       const iv = CryptoJS.enc.Utf8.parse(config.secretkey.substr(0,16));
+      const uname = config.useaes ? AES.encrypt(src, key, { mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: iv }).toString() : this.username;
+      // alert(AES.decrypt(uname,config.secretkey, { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7 }).toString(CryptoJS.enc.Utf8));
+      // uname = config.useaes ?  Base64.encode(uname) : uname;
+      // alert(uname)
       const jsEncrypt = new JSEncrypt({});
       jsEncrypt.setPublicKey(this.rsaPublicKey);
       const encryptPassword = jsEncrypt.encrypt(this.password);
 
+
+
       const param = {
-        'userName': this.username,
+        'userName': uname,
+        // 'userName': AES.decrypt(uname,config.secretkey).toString() ,
         'password': encryptPassword,
         'codeKey': this.verifyCodeKey,
         'code': this.verifyCode
@@ -165,9 +182,16 @@ export default defineComponent({
         this.store.dispatch('setToken', response.data.access_token);
         localStorage.setItem('token',response.data.access_token);
         ScgApi().getCurrentUserInfo().then(response => {
-          console.log(response);
+          console.log("currentuserinfo====>",response);
 
           const account = response.data;
+          
+          if(config.useaes) {
+            account.userName = AES.decrypt(account.userName,key, { mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: iv }).toString(CryptoJS.enc.Utf8);
+            account.mobile = account.mobile ? AES.decrypt(account.mobile,key, { mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: iv }).toString(CryptoJS.enc.Utf8) : "";
+            account.email = account.email ? AES.decrypt(account.email,key, { mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: iv }).toString(CryptoJS.enc.Utf8) :  "";           
+          }
+          console.log("account====>",account);
           this.store.dispatch('setAccount', account);
 
           this.$router.replace("/project-list");
