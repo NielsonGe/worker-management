@@ -34,6 +34,9 @@ import { getProjectBriefList } from '@/data/ProjectFakeData';
 import { useStore } from 'vuex';
 import { ScgApi } from '@/api/ScgApi';
 import RightMenu from '@/components/RightMenu.vue';
+import config from '@/config/config';
+import AES from 'crypto-js/aes';
+import CryptoJS from 'crypto-js';
 
 export default defineComponent({
   name: 'ProjectListView',
@@ -53,7 +56,7 @@ export default defineComponent({
   data() {
     return {
       store: useStore(),
-      projectBriefList: [],
+      projectBriefList: [] as any,
       projectenv: process.env.NODE_ENV
     }
   },
@@ -62,6 +65,21 @@ export default defineComponent({
     const token = this.store.getters.getToken;
     ScgApi().queryCurrentUserProjectPaging({pageIndex:1,pageSize:100}).then((res: any)=>{
       this.projectBriefList = res.data.rows;
+
+       const key = CryptoJS.enc.Utf8.parse(config.secretkey);
+     
+       const iv = CryptoJS.enc.Utf8.parse(config.secretkey.substr(0,16));
+
+      if(config.useaes) {
+         this.projectBriefList = this.projectBriefList.map((item: any)=>{
+            item.linkManPhone = item.linkManPhone ? AES.decrypt(item.linkManPhone,key, { mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: iv }).toString(CryptoJS.enc.Utf8) : "";
+        return item;
+      })
+
+      }
+
+      // console.log("projectlist==>",this.projectBriefList)
+      
     }).catch((err) => {
       this.$router.replace('/login');
     })

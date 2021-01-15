@@ -69,8 +69,8 @@
                 </ion-grid>
             </div>
 
-            <input type="file" id="takeidphoto1" accept="image/*" capture="environment" @change="testphoto($event)" />
-            <input type="file" id="takeidphoto2" accept="image/*" capture="environment" @change="testphotofan($event)" />
+            <input type="file" id="takeidphoto1" accept="image/*" capture="camera" @change="testphoto($event)" />
+            <input type="file" id="takeidphoto2" accept="image/*" capture="camera" @change="testphotofan($event)" />
 
             <div class="field-col-item">
                 <ion-grid>
@@ -188,7 +188,7 @@
                     </ion-row>
                 </ion-grid>
             </div>
-            <input type="file" id="takeidphoto3" accept="image/*" capture="environment" @change="testphotoface($event)" />
+            <input type="file" id="takeidphoto3" accept="image/*" capture="camera" @change="testphotoface($event)" />
             <div class="field-col-item section-margin">
                 <ion-grid>
                     <ion-row @click="onCompanyParentCellClicked">
@@ -438,10 +438,10 @@ export default defineComponent({
             areaList: [],
             jobTypeList: [],
             roleList: [
-                // {
-                //     name: this.$t("global.role-type-0"),
-                //     code: 0,
-                // },
+                {
+                    name: this.$t("global.role-type-0"),
+                    code: 0,
+                },
                 {
                     name: this.$t("global.role-type-1"),
                     code: 1,
@@ -695,7 +695,7 @@ export default defineComponent({
                     fileReader.onload = function() {
                         let basew64str: any = this.result;
                         basew64str = basew64str.split("base64,")[1];
-                        console.log("base64===>", basew64str);
+                        // console.log("base64===>", basew64str);
                         _self.showLoading = true;
                         ScgApi()
                             .ocrIdCard({ contentBase64String: basew64str })
@@ -1324,4 +1324,5 @@ ion-content {
     font-size: 30px;
     z-index: 999999;
 }
+
 </style>

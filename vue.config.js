@@ -2,16 +2,25 @@
 
     publicPath: process.env.NODE_ENV === "production" ? "/realnameh5/" : ".",
     
-    filenameHashing: false,
-    configureWebpack: {
-        //重点
-        output: {
-            // 输出重构 打包编译后的js文件名称,添加时间戳.
-          
-            filename: `js/[name].${process.env.npm_package_version}.js`,
-            chunkFilename: `js/[name].${process.env.npm_package_version}.js`,
-        },
+    filenameHashing: true,
+
+    configureWebpack: config => {
+        if (process.env.NODE_ENV === 'production') {
+            config.optimization.minimizer[0].options.extractComments = true
+            config.optimization.minimizer[0].options.uglifyOptions = {output:{comments:false}}
+        }
+
     },
+
+    // configureWebpack: {
+    //     //重点
+    //     output: {
+    //         // 输出重构 打包编译后的js文件名称,添加时间戳.
+          
+    //         filename: `js/[name].${process.env.npm_package_version}.js`,
+    //         chunkFilename: `js/[name].${process.env.npm_package_version}.js`,
+    //     },
+    // },
     css: {
         //重点.
         extract: {
