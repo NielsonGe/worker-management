@@ -155,11 +155,12 @@
       "parent-company": "上级公司",
       "company-type": "公司类型",
       "team-name": "班组名",
-      "team-name2": "班组选择",
+      "team-name2": "班组",
       "input-placeholder": "请输入",
       "create-new-team": "+ 创建新班组",
       "create": "创建",
-      "add-over": "结束添加新班组"
+      "add-over": "结束"
+  
     },
     "company-list": {
       "title": "单位列表",

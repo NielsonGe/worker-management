@@ -64,6 +64,9 @@ export default class HttpService {
         postFileBase64String: "/api/v1.0/file/postFileBase64String",
         queryArea: "/api/v1.0/area/queryArea",
         ocrIdCard: "/api/v1.0/file/ocrIdCard",
-        
+        queryCompanyListPaging: "/api/v1.0/project/getCompanyListPaging",
+        queryTeamList: "/api/v1.0/project/queryTeamList",
+        queryParentCompanyList: "/api/v1.0/project/queryParentCompanyList",
+        saveProjectTeam:  "/api/v1.0/project/saveProjectTeam"
     };
 }

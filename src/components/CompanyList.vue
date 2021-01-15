@@ -1,17 +1,6 @@
 <template>
-  <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-buttons slot="start">
-          <ion-button @click="onBackClicked()">
-            <ion-icon slot="icon-only" :icon="arrowBackOutline"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-        <ion-title>{{ $t('views.company-list.title') }}</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <right-menu />
-    <ion-content :fullscreen="true">
+
+    <div>
          <ion-grid>
         <ion-row>
           <ion-col size="11">
@@ -26,7 +15,7 @@
       
       <ion-list>
 
-        <ion-item class="cell" lines="full" v-for="item in companyList" :key="item.id" @click="onCompanyCellClicked(item.id)">
+        <ion-item class="cell" lines="full" v-for="item in companyList" :key="item.id" @click="onChildCompanyCellClicked(item)">
           <ion-grid>
             <ion-row>
               <ion-col size="11">
@@ -39,8 +28,8 @@
           </ion-grid>
         </ion-item>
       </ion-list>
-    </ion-content>
-  </ion-page>
+    </div>
+
 </template>
 
 <script lang="ts">
@@ -55,22 +44,22 @@ import { useStore } from 'vuex';
 import RightMenu from '@/components/RightMenu.vue';
 
 export default defineComponent({
-  name: 'CompanyListView',
+  name: 'CompanyList',
   components: {
-    IonPage,
+    // IonPage,
     IonGrid,
     IonRow,
     IonCol,
-    IonHeader, 
-    IonToolbar, 
-    IonButtons, 
-    IonButton, 
-    IonTitle,
-    IonContent,
+    // IonHeader, 
+    // IonToolbar, 
+    // IonButtons, 
+    // IonButton, 
+    // IonTitle,
+    // IonContent,
     IonList,
     IonItem,
-    IonIcon,
-    RightMenu
+    // IonIcon,
+    // RightMenu
   },
   data() {
     return {
@@ -105,22 +94,19 @@ export default defineComponent({
   },
   methods: {
 
-    
-    onBackClicked() {
-      this.$router.replace('/main/home');
-    },
-    onCompanyCellClicked(id: string) {
-      this.$router.push({path: '/register-team', query: {id: id}});
-    },
 
-      changeValue(event: any){
-      this.companyName= event.detail.value;
-          //  ScgApi().queryCompanyListPaging({pageIndex:1,pageSize:50,name:this.companyName}).then(res=>{
-        // this.companyList = res.data.rows;
-    //   })
-    // console.log("changevalue",event)
-    },
+    //   changeValue(event: any){
+    //   this.companyName= event.detail.value;
+    //       //  ScgApi().queryCompanyListPaging({pageIndex:1,pageSize:50,name:this.companyName}).then(res=>{
+    //     // this.companyList = res.data.rows;
+    // //   })
+    // // console.log("changevalue",event)
+    // },
     
+     onChildCompanyCellClicked(item: any) {
+         console.log("item=====>",item);
+        this.$emit('sentcompany',item);
+    },
   },
 
 
@@ -138,6 +124,7 @@ ion-item {
   --background: #ffffff;
   --border-color: #f3f4f6;
 }
+
 
 .team-name {
   color: #000000;

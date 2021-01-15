@@ -51,6 +51,7 @@ import { ScgApi } from '@/api/ScgApi';
 import { useStore } from 'vuex';
 import RightMenu from '@/components/RightMenu.vue';
 
+
 export default defineComponent({
   name: 'TeamListView',
   components: {
@@ -67,7 +68,8 @@ export default defineComponent({
     IonList,
     IonItem,
     IonIcon,
-    RightMenu
+    RightMenu,
+
   },
   data() {
     return {
@@ -76,15 +78,16 @@ export default defineComponent({
         {id:"1",name:"设备班组",companyName:"大顺建筑设备有限公司",type:"设备分包",companyId:"1"},
         {id:"1",name:"设备班组",companyName:"大顺建筑设备有限公司",type:"设备分包",companyId:"1"}
       ] as any,
+      store: useStore(),
       
     }
   },
   ionViewWillEnter() {
-    // ScgApi().queryProjectWorkerPaging({projectId:this.store.getters.getProjectId,pageIndex:1,pageSize:50}).then(res=>{
-    //   this.teamList = res.data.rows;
-    // }).catch((err) => {
-    //   this.$router.replace('/login');
-    // })
+    ScgApi().queryTeamList({projectId:this.store.getters.getProjectId}).then(res=>{
+      this.teamList = res.data.rows;
+    }).catch((err) => {
+      // this.$router.replace('/login');
+    })
   },
   setup() {
     const route = useRoute();

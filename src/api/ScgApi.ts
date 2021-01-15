@@ -81,6 +81,22 @@ function ScgApi() {
         return httpService.post(httpService.api.ocrIdCard,data);
     };
 
+    const queryCompanyListPaging = (data: any) => {
+        return httpService.get(httpService.api.queryCompanyListPaging,data);
+    };
+
+    const queryTeamList = (data: any) => {
+        return httpService.get(httpService.api.queryTeamList,data);
+    };
+
+    const queryParentCompanyList = (data: any) => {
+        return httpService.get(httpService.api.queryParentCompanyList,data);
+    };
+
+    const saveProjectTeam = (data: any) => {
+        return httpService.post(httpService.api.saveProjectTeam,data);
+    };
+
     return {
         getVerifyCode,
         getRsaPublicKey,
@@ -98,7 +114,11 @@ function ScgApi() {
         saveWorkerAndProjectWorker,
         saveProjectWorkerEntryExit,
         queryArea,
-        ocrIdCard
+        ocrIdCard,
+        queryCompanyListPaging,
+        queryTeamList,
+        queryParentCompanyList,
+        saveProjectTeam
     };
 }
 
