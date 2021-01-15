@@ -78,7 +78,7 @@ export default defineComponent({
 
       }
 
-      console.log("projectlist==>",this.projectBriefList)
+      // console.log("projectlist==>",this.projectBriefList)
       
     }).catch((err) => {
       this.$router.replace('/login');

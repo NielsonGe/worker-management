@@ -97,9 +97,7 @@ export default defineComponent({
     }
   },
   ionViewWillEnter() {
-    // console.log("huanjing=====>",process.env.NODE_ENV);
-    console.log("secretkey===>",config.secretkey);
-   console.log("加密后===>",AES.encrypt('test123456',config.secretkey).toString());
+
     if(process.env.NODE_ENV == "production"){
       this.switchLogoPath = 'title prod'
     }
@@ -142,7 +140,7 @@ export default defineComponent({
     login() {
       // FOR DEBUG
       // console.log("Username: " + this.username);
-      console.log("Password: " + this.password);
+      // console.log("Password: " + this.password);
 
       // console.log("start identify card");
       // XFUtils().identifyIdCard(PhotoFakeData).then(response => {
@@ -191,7 +189,7 @@ export default defineComponent({
             account.mobile = account.mobile ? AES.decrypt(account.mobile,key, { mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: iv }).toString(CryptoJS.enc.Utf8) : "";
             account.email = account.email ? AES.decrypt(account.email,key, { mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: iv }).toString(CryptoJS.enc.Utf8) :  "";           
           }
-          console.log("account====>",account);
+          // console.log("account====>",account);
           this.store.dispatch('setAccount', account);
 
           this.$router.replace("/project-list");
