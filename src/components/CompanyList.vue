@@ -19,7 +19,7 @@
           <ion-grid>
             <ion-row>
               <ion-col size="11">
-                {{ item.companyName }}
+                {{ item.corpName }}
               </ion-col>
               <ion-col class="leadto" size="1">
                 >
@@ -64,9 +64,9 @@ export default defineComponent({
   data() {
     return {
       companyList: [
-        {id:"1",companyName:"大顺建筑设备有限公司",type:"专业分包"},
-        {id:"2",companyName:"大金劳务派遣有限公司",type:"劳务派遣"},
-        {id:"3",companyName:"阿里建筑机械金融租赁有限公司",type:"设备分包"}
+        // {id:"1",corpName:"大顺建筑设备有限公司",type:"专业分包"},
+        // {id:"2",corpName:"大金劳务派遣有限公司",type:"劳务派遣"},
+        // {id:"3",corpName:"阿里建筑机械金融租赁有限公司",type:"设备分包"}
       ] as any,
         companyName: "",
         store:useStore(),
@@ -74,8 +74,9 @@ export default defineComponent({
     }
   },
   ionViewWillEnter() {
-    ScgApi().queryCompanyListPaging({name:this.$data.companyName,pageIndex:1,pageSize:50}).then(res=>{
-      this.companyList = res.data.rows;
+    
+    ScgApi().queryCorpFuzzy({keyword:this.companyName}).then(res=>{
+      this.companyList = res.data;
     }).catch((err) => {
       // this.$router.replace('/login');
     })
@@ -107,6 +108,16 @@ export default defineComponent({
          console.log("item=====>",item);
         this.$emit('sentcompany',item);
     },
+
+    changeValue(e: any){
+      this.companyName = e.detail.value;
+       ScgApi().queryCorpFuzzy({keyword:this.companyName}).then(res=>{
+      this.companyList = res.data;
+    }).catch((err) => {
+      // this.$router.replace('/login');
+    })
+
+    }
   },
 
 

@@ -85,8 +85,8 @@ export default defineComponent({
     }
   },
   ionViewWillEnter() {
-    ScgApi().queryCompanyListPaging({name:this.$data.companyName,pageIndex:1,pageSize:50}).then(res=>{
-      this.companyList = res.data.rows;
+    ScgApi().queryCorpFuzzy({keyword:this.$data.companyName}).then(res=>{
+      this.companyList = res.data;
     }).catch((err) => {
       // this.$router.replace('/login');
     })

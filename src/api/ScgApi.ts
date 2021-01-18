@@ -81,8 +81,8 @@ function ScgApi() {
         return httpService.post(httpService.api.ocrIdCard,data);
     };
 
-    const queryCompanyListPaging = (data: any) => {
-        return httpService.get(httpService.api.queryCompanyListPaging,data);
+    const queryCorpFuzzy = (data: any) => {
+        return httpService.get(httpService.api.queryCorpFuzzy,data);
     };
 
     const queryTeamList = (data: any) => {
@@ -95,6 +95,10 @@ function ScgApi() {
 
     const saveProjectTeam = (data: any) => {
         return httpService.post(httpService.api.saveProjectTeam,data);
+    };
+
+    const getProjectCorpTeam = (data: any) => {
+        return httpService.get(httpService.api.getProjectCorpTeam,data);
     };
 
     return {
@@ -115,10 +119,11 @@ function ScgApi() {
         saveProjectWorkerEntryExit,
         queryArea,
         ocrIdCard,
-        queryCompanyListPaging,
+        queryCorpFuzzy,
         queryTeamList,
         queryParentCompanyList,
-        saveProjectTeam
+        saveProjectTeam,
+        getProjectCorpTeam
     };
 }
 

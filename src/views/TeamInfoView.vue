@@ -22,7 +22,7 @@
                             {{ $t("views.team-info.company") }}
                         </ion-col>
                         <ion-col class="right-align displayonly" size="8">
-                            {{ formData.companyName }}
+                            {{ formData.corpName }}
                         </ion-col>
                     </ion-row>
 
@@ -31,7 +31,7 @@
                             {{ $t("views.team-info.company-type") }}
                         </ion-col>
                          <ion-col class="right-align displayonly" size="8">
-                            {{ formData.companyType }}
+                           {{ getNameByCode(formData.corpType, companyTypelist, { code: "code", name: "name" }) }}
                         </ion-col>
                     </ion-row>
 
@@ -40,7 +40,7 @@
                             {{ $t("views.team-info.parent-company") }}
                         </ion-col>
                          <ion-col class="right-align displayonly" size="8">
-                            {{ formData.parentCompanyName }}
+                            {{ formData.parentCorpName }}
                         </ion-col>
                         
                     </ion-row>
@@ -50,7 +50,7 @@
                             {{ $t("views.team-info.team-name") }}
                         </ion-col>
                         <ion-col class="right-align" size="8">
-                            <input class="input-cell teamname" v-model="formData.teamName"  />
+                            <input class="input-cell teamname" v-model="formData.name"  />
                         </ion-col>
                      </ion-row>
 
@@ -121,23 +121,42 @@ export default defineComponent({
         return {
 
             formData: {
-                id: "",
-                projectId: "",
-                parentCompanyName: "庞德建筑有限公司的上级公司",
-                companyType: "劳务外包",
-                companyName: "庞德建筑有限公司",
-                teamName: "电工班组"
+                id:"2b772bca-0b02-4b12-b39d-849422ac7e2f",
+                projectId:"cf6c45c1-2365-11eb-be30-0242ac110000",
+                projectCorpId:"c8bb0392-27fd-11eb-b39a-0242ac110001",
+                corpId:"663448d9-c1aa-45a2-81b5-f945d951c740",
+                corpName:"上海珊服劳务有限公司",
+                corpType:"001",
+                parentCorpId:"663448d9-c1aa-45a2-81b5-f945d951c740",
+                parentCorpName:"上海珊服劳务有限公司",
+                name:"木工班组"
             } as any,
+            
+            companyTypelist: [
+                {code:"001",name:"劳务外包"},
+                {code:"002",name:"专业外包"},
+                {code:"003",name:"设备外包"}
+            ],
           
         };
     },
 
-    // ionViewWillEnter() {
-      
+    ionViewWillEnter() {
+      const query = this.$route.query;
+
+       ScgApi().getProjectCorpTeam({id: query.id}).then(res=>{
+      this.formData = res.data;
+    }).catch((err) => {
+      // this.$router.replace('/login');
+    }),
    
+   ScgApi()
+            .queryDictionaryTrees({ dictCode: "corp_type" })
+            .then((res) => {
+                this.companyTypelist = res.data;
+            });      
         
-        
-    // },
+    },
 
     setup() {
         return {

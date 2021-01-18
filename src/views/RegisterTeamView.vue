@@ -38,7 +38,7 @@
                             {{ $t("views.register-team.company-type") }}
                         </ion-col>
                         <ion-col class="right-align" size="7">
-                            {{ getNameByCode(formData.companyTypeId, companyTypelist, { code: "id", name: "companyType" }) }}
+                            {{ getNameByCode(formData.corpType, companyTypelist, { code: "code", name: "name" }) }}
                         </ion-col>
                         <ion-col class="right-align" size="1">
                             <ion-icon class="cell-icon" :icon="caretDownOutline"></ion-icon>
@@ -203,7 +203,7 @@ export default defineComponent({
                 projectId: "",
                 parentCompanyId: "",
                 parentCompanyName: ">",
-                companyTypeId: "",
+                corpType: "",
                 corpId: "",
                 teamId: "",
                 companyName: ">",
@@ -217,9 +217,9 @@ export default defineComponent({
             // ],
             
             companyTypelist: [
-                {id:"1",companyType:"劳务外包"},
-                {id:"2",companyType:"专业外包"},
-                {id:"3",companyType:"设备外包"}
+                {code:"1",name:"劳务外包"},
+                {code:"2",name:"专业外包"},
+                {code:"3",name:"设备外包"}
             ],
             teamListDic: [
      
@@ -227,12 +227,14 @@ export default defineComponent({
         };
     },
 
-    // ionViewWillEnter() {
-      
-   
-        
-        
-    // },
+  ionViewWillEnter() {
+    
+        ScgApi()
+            .queryDictionaryTrees({ dictCode: "corp_type" })
+            .then((res) => {
+                this.companyTypelist = res.data;
+            });
+  },
 
     setup() {
         return {
@@ -299,7 +301,7 @@ export default defineComponent({
         async getCompany(item: any) {
 // console.log("getCompany====>",item)
 // alert(item.companyName)
-            this.formData.companyName = item.companyName;
+            this.formData.companyName = item.corpName;
             this.formData.corpId = item.id;
             document.querySelector(".companylistblk")?.classList.remove("show");
             document.querySelector(".mainblk")?.classList.remove("hide")
@@ -309,7 +311,7 @@ export default defineComponent({
         async getParentCompany(item: any) {
 // console.log("getCompany====>",item)
 // alert(item.companyName)
-            this.formData.parentCompanyName = item.companyName;
+            this.formData.parentCompanyName = item.corpName;
             this.formData.parentCompanyId = item.id;
             document.querySelector(".parentcompanylistblk")?.classList.remove("show");
             document.querySelector(".mainblk")?.classList.remove("hide")
@@ -318,7 +320,7 @@ export default defineComponent({
 
           async onCompanyTypeCellClicked(ev: Event) {
             const options = this.companyTypelist.map((e: any) => {
-                return { text: e.companyType, value: e.id };
+                return { text: e.name, value: e.code };
             });
             const columns = [
                 {
@@ -336,7 +338,7 @@ export default defineComponent({
                     {
                         text: this.$t("global.confirm"),
                         handler: (value) => {
-                            this.formData.companyTypeId = value.companyTypes.value;
+                            this.formData.corpType = value.companyTypes.value;
                         },
                     },
                 ],

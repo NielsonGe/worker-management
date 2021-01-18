@@ -14,7 +14,7 @@
     <ion-content :fullscreen="true">
 
       <ion-list>
-        <ion-item class="cell" lines="full" v-for="item in teamList" :key="item.id" @click="onWokerCellClicked(item.id)">
+        <ion-item class="cell" lines="full" v-for="item in teamList" :key="item.id" @click="onTeamCellClicked(item.id)">
           <ion-grid>
             <ion-row>
               <ion-col size="10">
@@ -74,16 +74,16 @@ export default defineComponent({
   data() {
     return {
       teamList: [
-        {id:"1",name:"设备班组",companyName:"大顺建筑设备有限公司",type:"设备分包",companyId:"1"},
-        {id:"1",name:"设备班组",companyName:"大顺建筑设备有限公司",type:"设备分包",companyId:"1"},
-        {id:"1",name:"设备班组",companyName:"大顺建筑设备有限公司",type:"设备分包",companyId:"1"}
+        {id:"41a2b43f-4720-11eb-992c-0242ac110002",name:"设备班组",companyName:"大顺建筑设备有限公司",type:"设备分包",companyId:"1"},
+        {id:"6865333a-4720-11eb-992c-0242ac110002",name:"设备班组",companyName:"大顺建筑设备有限公司",type:"设备分包",companyId:"1"},
+        {id:"6fcd0fcd-4721-11eb-992c-0242ac110002",name:"设备班组",companyName:"大顺建筑设备有限公司",type:"设备分包",companyId:"1"}
       ] as any,
       store: useStore(),
       
     }
   },
   ionViewWillEnter() {
-    ScgApi().queryTeamList({projectId:this.store.getters.getProjectId}).then(res=>{
+    ScgApi().queryTeamList({projectId:this.store.getters.getProjectId,pageIndex:1,pageSize:100}).then(res=>{
       this.teamList = res.data.rows;
     }).catch((err) => {
       // this.$router.replace('/login');
@@ -129,8 +129,8 @@ export default defineComponent({
     onBackClicked() {
       this.$router.replace('/main/home');
     },
-    onWokerCellClicked(id: string) {
-      this.$router.push({path: '/worker-info', query: {id: id}});
+    onTeamCellClicked(id: string) {
+      this.$router.push({path: '/team-info', query: {id: id}});
     },
     
   }
