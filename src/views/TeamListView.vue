@@ -27,10 +27,10 @@
             <ion-row>
               <ion-col size="9">
                 {{ $t('views.team-list.belong')}}
-                {{ item.companyName }}
+                {{ item.corpName }}
               </ion-col>
               <ion-col size="3" class="right">
-                {{ item.type }}
+              {{ getNameByCode(item.corpType, companyTypelist, { code: "code", name: "name" }) }}
               </ion-col>
             </ion-row>
           </ion-grid>
@@ -74,16 +74,50 @@ export default defineComponent({
   data() {
     return {
       teamList: [
-        {id:"41a2b43f-4720-11eb-992c-0242ac110002",name:"设备班组",companyName:"大顺建筑设备有限公司",type:"设备分包",companyId:"1"},
-        {id:"6865333a-4720-11eb-992c-0242ac110002",name:"设备班组",companyName:"大顺建筑设备有限公司",type:"设备分包",companyId:"1"},
-        {id:"6fcd0fcd-4721-11eb-992c-0242ac110002",name:"设备班组",companyName:"大顺建筑设备有限公司",type:"设备分包",companyId:"1"}
+        //  {
+        //         id:"2b772bca-0b02-4b12-b39d-849422ac7e2f",
+        //         projectId:"cf6c45c1-2365-11eb-be30-0242ac110000",
+        //         projectCorpId:"c8bb0392-27fd-11eb-b39a-0242ac110001",
+        //         corpId:"663448d9-c1aa-45a2-81b5-f945d951c740",
+        //         corpName:"上海珊服劳务有限公司",
+        //         corpType:"001",
+        //         parentCorpId:"663448d9-c1aa-45a2-81b5-f945d951c740",
+        //         parentCorpName:"上海珊服劳务有限公司",
+        //         name:"木工班组"
+        //     },
+        //     {
+        //         id:"2b772bca-0b02-4b12-b39d-849422ac7e2f",
+        //         projectId:"cf6c45c1-2365-11eb-be30-0242ac110000",
+        //         projectCorpId:"c8bb0392-27fd-11eb-b39a-0242ac110001",
+        //         corpId:"663448d9-c1aa-45a2-81b5-f945d951c740",
+        //         corpName:"上海珊服劳务有限公司",
+        //         corpType:"001",
+        //         parentCorpId:"663448d9-c1aa-45a2-81b5-f945d951c740",
+        //         parentCorpName:"上海珊服劳务有限公司",
+        //         name:"木工班组"
+        //     }
       ] as any,
+
+      companyTypelist: [
+                // {code:"001",name:"劳务外包"},
+                // {code:"002",name:"专业外包"},
+                // {code:"003",name:"设备外包"}
+            ],
       store: useStore(),
       
     }
   },
   ionViewWillEnter() {
-    ScgApi().queryTeamList({projectId:this.store.getters.getProjectId,pageIndex:1,pageSize:100}).then(res=>{
+
+      
+        ScgApi()
+            .queryDictionaryTrees({ dictCode: "corp_type" })
+            .then((res) => {
+                this.companyTypelist = res.data;
+            });
+
+  
+  ScgApi().queryTeamList({projectId:this.store.getters.getProjectId,pageIndex:1,pageSize:100}).then(res=>{
       this.teamList = res.data.rows;
     }).catch((err) => {
       // this.$router.replace('/login');
@@ -132,6 +166,15 @@ export default defineComponent({
     onTeamCellClicked(id: string) {
       this.$router.push({path: '/team-info', query: {id: id}});
     },
+
+    getNameByCode(value: any, list: Array<any>, config?: { code: string; name: string }) {
+            const c = config || { code: "code", name: "name" };
+            const obj: any = {};
+            list.forEach((e: any) => {
+                obj[e[c.code]] = e[c.name];
+            });
+            return obj[value] || null;
+        },
     
   }
 });
