@@ -34,7 +34,7 @@
                         <ion-col class="left-align center-vertical displayonlylabel" size="4">
                             {{ $t("views.team-info.parent-company") }}
                         </ion-col>
-                         <ion-col class="right-align" size="8">
+                         <ion-col class="right-align nowrap" size="8">
                             {{ formData.parentCorpName }}
                         </ion-col>
                         
@@ -67,7 +67,7 @@
             </div>
             <div class="section-margin" style="margin-bottom: 10px;">
                 <ion-button expand="block" class="halfbtn white" style="display:none" @click="createnewteam">{{ $t("views.team-info.delete") }}</ion-button>
-                <ion-button expand="block" color="success" class="wholebtn suc" @click="teamselected">{{ $t("views.team-info.submit") }}</ion-button>
+                <ion-button expand="block" color="success" class="wholebtn suc" @click="saveTeam">{{ $t("views.team-info.submit") }}</ion-button>
             </div>
             
 
@@ -132,15 +132,15 @@ export default defineComponent({
         return {
 
             formData: {
-                id:"2b772bca-0b02-4b12-b39d-849422ac7e2f",
-                projectId:"cf6c45c1-2365-11eb-be30-0242ac110000",
-                projectCorpId:"c8bb0392-27fd-11eb-b39a-0242ac110001",
-                corpId:"663448d9-c1aa-45a2-81b5-f945d951c740",
-                corpName:"上海珊服劳务有限公司",
-                corpType:"001",
-                parentCorpId:"663448d9-c1aa-45a2-81b5-f945d951c740",
-                parentCorpName:"上海珊服劳务有限公司",
-                name:"木工班组"
+                id:"",
+                projectId:"",
+                projectCorpId:"",
+                corpId:"",
+                corpName:"",
+                corpType:"",
+                parentCorpId:"",
+                parentCorpName:"",
+                name:""
             } as any,
             
             companyTypelist: [
@@ -194,7 +194,7 @@ export default defineComponent({
             return obj[value] || null;
         },
        
-        async onSubmitClicked(){
+        async saveTeam(){
             console.log(this.formData);
 
             const data: any = { ...this.formData };
@@ -253,6 +253,11 @@ export default defineComponent({
             });
             picker.present();
         },
+
+  onBackClicked() {
+      this.$router.replace('/team-list');
+    },
+
        
     },
 
@@ -381,6 +386,10 @@ bottom: 50px;
 
 .parentcompanylistblk.show{
     display: block;
+}
+
+.nowrap{
+    white-space: nowrap
 }
 
 

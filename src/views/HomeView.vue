@@ -42,7 +42,7 @@
               <div class="section-name">{{ $t('views.home.manage-attendance') }}</div>
             </div>
           </ion-col>
-          <ion-col class="ion-text-center" size="3" @click="waiting()">
+          <ion-col class="ion-text-center" size="3" @click="omManagerTeamClicked(info.projectId)">
             <div>
               <center>
                 <ion-img v-if="projectenv == 'production'"  class="section-icon" src="/realnameh5/assets/icon_nav_sp.png" />
@@ -213,6 +213,10 @@ export default defineComponent({
     },
     onManageWorkerClicked(id: number) {
       this.$router.replace({path: "/worker-list", query: { id: this.projectId}})
+    },
+
+    omManagerTeamClicked(id: number) {
+      this.$router.replace({path: "/team-list", query: { id: this.projectId}})
     },
     waiting(){
       ToastUtils().showError('warning',2000,this.$t('global.home-message'))

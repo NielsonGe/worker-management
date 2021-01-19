@@ -28,7 +28,7 @@
                         <ion-col class="left-align center-vertical" size="4">
                             {{ $t("views.register-team.company") }}
                         </ion-col>
-                        <ion-col class="right-align corpname" size="8">
+                        <ion-col class="right-align corpname nowrap" size="8">
                             {{ formData.companyName }}
                         </ion-col>
                     </ion-row>
@@ -45,7 +45,7 @@
                         <ion-col class="right-align" size="1">
                             <ion-icon class="cell-icon" :icon="caretDownOutline"></ion-icon>
                         </ion-col> -->
-                         <ion-col class="right-align corpname" size="8">
+                         <ion-col class="right-align corpname nowrap" size="8">
                             {{ formData.parentCompanyName }}
                         </ion-col>
                     </ion-row>
@@ -301,6 +301,10 @@ export default defineComponent({
             document.querySelector(".mainblk")?.classList.add("hide");
             
         },
+
+    onBackClicked() {
+      this.$router.replace('/team-list');
+    },
 
 
         async getCompany(item: any) {
@@ -569,5 +573,9 @@ ion-content {
 .input-cell.teamname{
     text-align: right ;
     line-height: 30px;
+}
+
+.nowrap{
+    white-space: nowrap
 }
 </style>
