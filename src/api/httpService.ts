@@ -68,6 +68,6 @@ export default class HttpService {
         getProjectCorpTeam: "/api/v1.0/project/getProjectCorpTeam",
         queryTeamList: "/api/v1.0/project/queryProjectCorpTeamPaging",
         queryParentCompanyList: "/api/v1.0/project/queryParentCompanyList",
-        saveProjectTeam:  "/api/v1.0/project/saveProjectTeam"
+        saveProjectCorpTeam:  "/api/v1.0/project/saveProjectCorpTeam"
     };
 }

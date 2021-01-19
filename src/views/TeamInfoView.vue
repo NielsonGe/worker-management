@@ -14,7 +14,11 @@
             </ion-toolbar>
         </ion-header>
         <right-menu />
-        <ion-content :fullscreen="true">
+
+        <div class="parentcompanylistblk">
+            <company-list @sentcompany="getParentCompany" />
+        </div>
+        <ion-content :fullscreen="true" class="mainblk">
             <div class="field-col-item">
                 <ion-grid>
                     <ion-row>
@@ -26,26 +30,30 @@
                         </ion-col>
                     </ion-row>
 
-                    <ion-row @click="onCompanyTypeCellClicked">
-                        <ion-col class="left-align center-vertical displayonlylabel" size="4">
-                            {{ $t("views.team-info.company-type") }}
-                        </ion-col>
-                         <ion-col class="right-align displayonly" size="8">
-                           {{ getNameByCode(formData.corpType, companyTypelist, { code: "code", name: "name" }) }}
-                        </ion-col>
-                    </ion-row>
-
-                    <ion-row @click="onParentIdCellClicked">
+                    <ion-row @click="onParentIdCellClicked2">
                         <ion-col class="left-align center-vertical displayonlylabel" size="4">
                             {{ $t("views.team-info.parent-company") }}
                         </ion-col>
-                         <ion-col class="right-align displayonly" size="8">
+                         <ion-col class="right-align" size="8">
                             {{ formData.parentCorpName }}
                         </ion-col>
                         
                     </ion-row>
 
-                     <ion-row @click="onSelectTeamCellClicked">
+                    <ion-row @click="onCompanyTypeCellClicked">
+                        <ion-col class="left-align center-vertical displayonlylabel" size="4">
+                            {{ $t("views.team-info.company-type") }}
+                        </ion-col>
+                         <ion-col class="right-align" size="7">
+                           {{ getNameByCode(formData.corpType, companyTypelist, { code: "code", name: "name" }) }}
+                        </ion-col>
+                        <ion-col class="right-align" size="1">
+                            <ion-icon class="cell-icon" :icon="caretDownOutline"></ion-icon>
+                        </ion-col>
+                    </ion-row>
+
+
+                     <ion-row>
                         <ion-col class="left-align center-vertical" size="4">
                             {{ $t("views.team-info.team-name") }}
                         </ion-col>
@@ -58,8 +66,8 @@
    
             </div>
             <div class="section-margin" style="margin-bottom: 10px;">
-                <ion-button expand="block" class="halfbtn white" @click="createnewteam">{{ $t("views.team-info.delete") }}</ion-button>
-                <ion-button expand="block" color="success" class="halfbtn suc" @click="teamselected">{{ $t("views.team-info.submit") }}</ion-button>
+                <ion-button expand="block" class="halfbtn white" style="display:none" @click="createnewteam">{{ $t("views.team-info.delete") }}</ion-button>
+                <ion-button expand="block" color="success" class="wholebtn suc" @click="teamselected">{{ $t("views.team-info.submit") }}</ion-button>
             </div>
             
 
@@ -94,6 +102,8 @@ import { ToastUtils } from "@/utils/ToastUtils";
 import { ScgApi } from "@/api/ScgApi";
 import Cropper from "cropperjs";
 import RightMenu from "@/components/RightMenu.vue";
+import CompanyList from "@/components/CompanyList.vue";
+import { useStore } from "vuex";
 const photoval: any = "";
 
 export default defineComponent({
@@ -116,6 +126,7 @@ export default defineComponent({
         // IonRadio,
         // IonLabel,
         RightMenu,
+        CompanyList
     },
     data() {
         return {
@@ -137,11 +148,14 @@ export default defineComponent({
                 {code:"002",name:"专业外包"},
                 {code:"003",name:"设备外包"}
             ],
+
+            store: useStore(),
           
         };
     },
 
     ionViewWillEnter() {
+      this.formData.projectId = this.store.getters.getProjectId;
       const query = this.$route.query;
 
        ScgApi().getProjectCorpTeam({id: query.id}).then(res=>{
@@ -182,9 +196,67 @@ export default defineComponent({
        
         async onSubmitClicked(){
             console.log(this.formData);
-        }
-    }
+
+            const data: any = { ...this.formData };
+            ScgApi()
+                .saveProjectCorpTeam(data)
+                .then((res: any) => {
+                    if (res.code == "00000") {
+                        ToastUtils().showSuccess(this.$t("global.success"));
+                        this.$router.replace("/team-list");
+                    }
+                });
+
+        },
+
+        async onParentIdCellClicked2() {
+
+            document.querySelector(".parentcompanylistblk")?.classList.add("show");
+            document.querySelector(".mainblk")?.classList.add("hide");
+        },
+
+    
+        async getParentCompany(item: any) {
+// console.log("getCompany====>",item)
+// alert(item.companyName)
+            this.formData.parentCorpName = item.corpName;
+            this.formData.parentCorpId = item.id;
+            document.querySelector(".parentcompanylistblk")?.classList.remove("show");
+            document.querySelector(".mainblk")?.classList.remove("hide")
+
+        },
+
+          async onCompanyTypeCellClicked(ev: Event) {
+            const options = this.companyTypelist.map((e: any) => {
+                return { text: e.name, value: e.code };
+            });
+            const columns = [
+                {
+                    name: "companyTypes",
+                    options: options,
+                },
+            ];
+            const picker = await pickerController.create({
+                columns: columns,
+                buttons: [
+                    {
+                        text: this.$t("global.cancel"),
+                        role: "cancel",
+                    },
+                    {
+                        text: this.$t("global.confirm"),
+                        handler: (value) => {
+                            this.formData.corpType = value.companyTypes.value;
+                        },
+                    },
+                ],
+            });
+            picker.present();
+        },
        
+    },
+
+
 });
 </script>
 
@@ -270,12 +342,46 @@ ion-row{
 
 }
 
+.wholebtn.suc{
+position: absolute;
+width: 90%;
+left:5%;
+bottom: 50px;
+}
+
 .halfbtn.suc{
     width: 40%;
     float: left;
     margin-left: 20px;
 }
 
+.mainblk.hide{
+   display: none;
+}
+
+.companylistblk{
+    display: none;
+    z-index:10;
+    position: absolute;
+    top:40px;
+    width: 100%;
+}
+
+.companylistblk.show{
+    display: block;
+}
+
+.parentcompanylistblk{
+    display: none;
+    z-index:10;
+    position: absolute;
+    top:40px;
+    width: 100%;
+}
+
+.parentcompanylistblk.show{
+    display: block;
+}
 
 
 

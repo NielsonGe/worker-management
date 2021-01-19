@@ -93,8 +93,8 @@ function ScgApi() {
         return httpService.get(httpService.api.queryParentCompanyList,data);
     };
 
-    const saveProjectTeam = (data: any) => {
-        return httpService.post(httpService.api.saveProjectTeam,data);
+    const saveProjectCorpTeam = (data: any) => {
+        return httpService.post(httpService.api.saveProjectCorpTeam,data);
     };
 
     const getProjectCorpTeam = (data: any) => {
@@ -122,7 +122,7 @@ function ScgApi() {
         queryCorpFuzzy,
         queryTeamList,
         queryParentCompanyList,
-        saveProjectTeam,
+        saveProjectCorpTeam,
         getProjectCorpTeam
     };
 }

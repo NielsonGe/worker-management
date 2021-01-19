@@ -33,6 +33,23 @@
                         </ion-col>
                     </ion-row>
 
+
+
+                    <ion-row @click="onParentIdCellClicked2">
+                        <ion-col class="left-align center-vertical" size="4">
+                            {{ $t("views.register-team.parent-company") }}
+                        </ion-col>
+                        <!-- <ion-col class="right-align" size="7">
+                            {{ getNameByCode(formData.parentCorpId, parentCompanylist, { code: "id", name: "companyName" }) }}
+                        </ion-col>
+                        <ion-col class="right-align" size="1">
+                            <ion-icon class="cell-icon" :icon="caretDownOutline"></ion-icon>
+                        </ion-col> -->
+                         <ion-col class="right-align corpname" size="8">
+                            {{ formData.parentCompanyName }}
+                        </ion-col>
+                    </ion-row>
+
                     <ion-row @click="onCompanyTypeCellClicked">
                         <ion-col class="left-align center-vertical" size="4">
                             {{ $t("views.register-team.company-type") }}
@@ -45,28 +62,14 @@
                         </ion-col>
                     </ion-row>
 
-                    <ion-row @click="onParentIdCellClicked2">
-                        <ion-col class="left-align center-vertical" size="4">
-                            {{ $t("views.register-team.parent-company") }}
-                        </ion-col>
-                        <!-- <ion-col class="right-align" size="7">
-                            {{ getNameByCode(formData.parentCompanyId, parentCompanylist, { code: "id", name: "companyName" }) }}
-                        </ion-col>
-                        <ion-col class="right-align" size="1">
-                            <ion-icon class="cell-icon" :icon="caretDownOutline"></ion-icon>
-                        </ion-col> -->
-                         <ion-col class="right-align corpname" size="8">
-                            {{ formData.parentCompanyName }}
-                        </ion-col>
-                    </ion-row>
-
                      <!-- <ion-row @click="onSelectTeamCellClicked"> -->
                      <ion-row style="border:none">
                         <ion-col class="left-align center-vertical" size="4">
-                            {{ $t("views.register-team.team-name2") }}
+                            {{ $t("views.register-team.team-name") }}
                         </ion-col>
                         <ion-col class="right-align" size="8">
-                           <!-- <i class="icon ion-ios-arrow-forward"></i> -->
+                           <!-- <i class="icon ion-ios-arrow-forward"></i> -->  
+                           <ion-input class="input-cell teamname" v-model="formData.name" :placeholder="$t('views.register-team.input-placeholder')" ></ion-input>
                         </ion-col>
                      </ion-row>
                     <div class="teamlistblk">
@@ -80,14 +83,14 @@
                      </ion-col>
                      </ion-row>
                     </div>
-                     <div class="createnewitembtn step1">
+                     <div class="createnewitembtn step1 hide">
                         <!-- <ion-button expand="block" class="halfbtn white" @click="createnewteam">{{ $t("views.register-team.create-new-team") }}</ion-button> -->
                         <a  expand="block"  class="halfbtn" @click="createnewteam">{{ $t("views.register-team.create-new-team") }}</a>
    
                         <!-- <ion-button expand="block" color="success" class="halfbtn suc" @click="teamselected">{{ $t("global.confirm") }}</ion-button> -->
                     </div>
                     <div class="createnewitembtn step2 hide">
-                        <input class="newteamtext" type="text" v-model="formData.newteam" />
+                        <input class="newteamtext" type="text" v-model="formData.name" />
                         <ion-button expand="block" color="success" class="short suc" @click="newteamadded">{{ $t("views.register-team.add-over") }}</ion-button>
                         <ion-button expand="block" class="short white" @click="docreateteam">{{ $t("views.register-team.create") }}</ion-button>                  
                     </div>
@@ -133,7 +136,7 @@
                     <ion-button expand="block" color="success" class="halfbtn suc" @click="teamselected">{{ $t("global.confirm") }}</ion-button>
                 </div>
                 <div class="createnewitembtn step2 hide">
-                    <input class="newteamtext" type="text" v-model="formData.newteam" />
+                    <input class="newteamtext" type="text" v-model="formData.name" />
                     <ion-button expand="block" color="success" class="short suc" @click="newteamadded">{{ $t("global.cancel") }}</ion-button>
                     <ion-button expand="block" class="short white" @click="docreateteam">{{ $t("views.register-team.create") }}</ion-button>                  
                 </div>
@@ -172,6 +175,7 @@ import { ScgApi } from "@/api/ScgApi";
 import CompanyList from "@/components/CompanyList.vue";
 import Cropper from "cropperjs";
 import RightMenu from "@/components/RightMenu.vue";
+import { useStore } from "vuex";
 const photoval: any = "";
 
 export default defineComponent({
@@ -181,7 +185,7 @@ export default defineComponent({
         IonToolbar,
         IonTitle,
         IonContent,
-        // IonInput,
+        IonInput,
         IonButton,
         IonHeader,
         IonButtons,
@@ -201,14 +205,14 @@ export default defineComponent({
 
             formData: {
                 projectId: "",
-                parentCompanyId: "",
+                parentCorpId: "",
                 parentCompanyName: ">",
                 corpType: "",
                 corpId: "",
                 teamId: "",
                 companyName: ">",
                 teamList: "",
-                newteam: ""
+                name: ""
             } as any,
             // parentCompanylist: [
             //     {id:"1",companyName:"大顺建筑设备有限公司"},
@@ -223,12 +227,13 @@ export default defineComponent({
             ],
             teamListDic: [
      
-            ] as any
+            ] as any,
+            store: useStore(),
         };
     },
 
   ionViewWillEnter() {
-    
+    this.formData.projectId = this.store.getters.getProjectId;
         ScgApi()
             .queryDictionaryTrees({ dictCode: "corp_type" })
             .then((res) => {
@@ -277,7 +282,7 @@ export default defineComponent({
         //             {
         //                 text: this.$t("global.confirm"),
         //                 handler: (value) => {
-        //                     this.formData.parentCompanyId = value.parentCompany.value;
+        //                     this.formData.parentCorpId = value.parentCompany.value;
         //                 },
         //             },
         //         ],
@@ -312,7 +317,7 @@ export default defineComponent({
 // console.log("getCompany====>",item)
 // alert(item.companyName)
             this.formData.parentCompanyName = item.corpName;
-            this.formData.parentCompanyId = item.id;
+            this.formData.parentCorpId = item.id;
             document.querySelector(".parentcompanylistblk")?.classList.remove("show");
             document.querySelector(".mainblk")?.classList.remove("hide")
 
@@ -355,27 +360,27 @@ export default defineComponent({
             document.querySelector(".createnewitembtn.step2")?.classList.remove("hide");
         },
         async docreateteam(){
-            // alert(this.formData.newteam);
+            // alert(this.formData.name);
             const ind = String(this.teamListDic.length + 1) ;
             const teamListDicItem = {
                 id: ind,
-                name: this.formData.newteam,
+                name: this.formData.name,
                 isChecked: false
             };
             this.teamListDic.push(teamListDicItem);
-            this.formData.newteam = "";
+            this.formData.name = "";
 
         },
         async newteamadded(){
-            if(this.formData.newteam !== ""){
+            if(this.formData.name !== ""){
             const ind = String(this.teamListDic.length + 1) ;
             const teamListDicItem = {
                 id: ind,
-                name: this.formData.newteam,
+                name: this.formData.name,
                 isChecked: false
             };
             this.teamListDic.push(teamListDicItem);
-            this.formData.newteam = "";}
+            this.formData.name = "";}
             document.querySelector(".createnewitembtn.step2")?.classList.add("hide");
             document.querySelector(".createnewitembtn.step1")?.classList.add("hide");
         },
@@ -392,8 +397,18 @@ export default defineComponent({
            
         },
         async onSubmitClicked(){
-            this.formData.teamList = this.teamListDic.map((e: any) => e.name).join(",");
+            // this.formData.teamList = this.teamListDic.map((e: any) => e.name).join(",");
             console.log(this.formData);
+            const data: any = { ...this.formData };
+            ScgApi()
+                .saveProjectCorpTeam(data)
+                .then((res: any) => {
+                    if (res.code == "00000") {
+                        ToastUtils().showSuccess(this.$t("global.success"));
+                        this.$router.replace("/team-list");
+                    }
+                });
+
         }
     }
        
@@ -549,5 +564,10 @@ ion-content {
 
 .right-align.corpname{
     text-align: right;
+}
+
+.input-cell.teamname{
+    text-align: right ;
+    line-height: 30px;
 }
 </style>
