@@ -25,7 +25,7 @@
                         <ion-col class="left-align center-vertical displayonlylabel" size="4">
                             {{ $t("views.team-info.company") }}
                         </ion-col>
-                        <ion-col class="right-align displayonly" size="8">
+                        <ion-col class="right-align displayonly nowrap" size="8">
                             {{ formData.corpName }}
                         </ion-col>
                     </ion-row>
