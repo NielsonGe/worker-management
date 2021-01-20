@@ -67,7 +67,8 @@
     "main": {
       "home-tab": "首页",
       "register-tab": "登记",
-      "activity-tab": "活动"
+      "activity-tab": "活动",
+      "personal-center": "个人中心"
     },
     "worker-leave": {
       "title": "人员退场",

@@ -11,7 +11,7 @@
           <ion-icon :icon="createOutline"></ion-icon>
         </ion-tab-button>
         <ion-tab-button tab="activity" href="/main/activity" :disabled="true">
-          <ion-label>{{ $t('views.main.activity-tab') }}</ion-label>
+          <ion-label>{{ $t('views.main.personal-center') }}</ion-label>
           <ion-icon :icon="starOutline"></ion-icon>
         </ion-tab-button>
       </ion-tab-bar>

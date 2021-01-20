@@ -142,7 +142,8 @@
       "title": "Team List",
       "submit": "New Team",
       "belong": "Belong To:",
-      "create": "Create Team"
+      "create": "Create Team",
+      "personal-center": "Personal Center"
     },
     "register-team": {
       "title": "Team Manage",
