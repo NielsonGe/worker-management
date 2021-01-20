@@ -10,18 +10,19 @@
         <ion-title>{{ $t('views.worker-list.title') }}</ion-title>
       </ion-toolbar>
     </ion-header>
-    <right-menu />
+    <!-- <right-menu /> -->
+    <div class="addworker" @click="addWorker">+</div>
     <ion-content :fullscreen="true">
       <ion-grid>
         <ion-row>
-          <ion-col size="11">
+          <ion-col size="8">
             <ion-input class="input-cell search-bar" @ionChange="changeValue($event)" v-model="searchText.workerName" :placeholder="$t('views.worker-list.search-placeholder')" clearInput />
           </ion-col>
-          <!-- <ion-col style="text-align:center;" size="3">
+          <ion-col style="text-align:center;" size="3">
             <div class="sort-text" @click="onSortClicked">{{ $t('views.worker-list.sort') }}<span><ion-icon class="sort-icon" :icon="codeOutline"></ion-icon></span></div>
-          </ion-col> -->
+          </ion-col>
           <ion-col size="1">
-            <div class="sort-career-icon" @click="onSearchChanged()"><ion-icon class="noshow" :icon="search"></ion-icon></div>
+            <div class="sort-career-icon" @click="onSearchChanged()"><ion-icon  :icon="search"></ion-icon></div>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -62,7 +63,7 @@ import NameFilterPopoverView from '@/views/NameFilterPopoverView.vue'
 import CareerTypeAndGenderFilterPopoverView from '@/views/CareerTypeAndGenderFilterPopoverView.vue'
 import { ScgApi } from '@/api/ScgApi';
 import { useStore } from 'vuex';
-import RightMenu from '@/components/RightMenu.vue';
+// import RightMenu from '@/components/RightMenu.vue';
 
 export default defineComponent({
   name: 'WorkerListView',
@@ -80,7 +81,7 @@ export default defineComponent({
     IonList,
     IonItem,
     IonIcon,
-    RightMenu
+    // RightMenu
   },
   data() {
     return {
@@ -149,6 +150,10 @@ export default defineComponent({
     },
     onBackClicked() {
       this.$router.replace('/main/home');
+    },
+
+    addWorker(){
+      this.$router.replace('/main/register');
     },
     onWokerCellClicked(id: string) {
       this.$router.push({path: '/worker-info', query: {id: id}});
@@ -263,5 +268,16 @@ ion-item {
 
 .noshow{
   display: none;
+}
+
+.addworker{
+  position: fixed;
+  width:36px;
+  height:50px;
+  top:0;
+  right:0;
+  z-index:100;
+  font-size:30px;
+  line-height: 50px;
 }
 </style>

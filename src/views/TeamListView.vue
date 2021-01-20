@@ -10,7 +10,8 @@
         <ion-title>{{ $t('views.team-list.title') }}</ion-title>
       </ion-toolbar>
     </ion-header>
-    <right-menu />
+    <!-- <right-menu /> -->
+    <div class="addteam" @click="createTeam"> + </div>
     <ion-content :fullscreen="true">
 
       <ion-list class="teamlist">
@@ -38,7 +39,7 @@
       </ion-list>
       <div class="marginbottom"></div>
      </ion-content>
-     <ion-button expand="block" class="whole white create fix" @click="createTeam">{{ $t("views.team-list.create") }}</ion-button> 
+     <!-- <ion-button expand="block" class="whole white create fix" @click="createTeam">{{ $t("views.team-list.create") }}</ion-button>  -->
 
   </ion-page>
 </template>
@@ -52,7 +53,7 @@ import NameFilterPopoverView from '@/views/NameFilterPopoverView.vue'
 import CareerTypeAndGenderFilterPopoverView from '@/views/CareerTypeAndGenderFilterPopoverView.vue'
 import { ScgApi } from '@/api/ScgApi';
 import { useStore } from 'vuex';
-import RightMenu from '@/components/RightMenu.vue';
+// import RightMenu from '@/components/RightMenu.vue';
 
 
 export default defineComponent({
@@ -71,7 +72,7 @@ export default defineComponent({
     IonList,
     IonItem,
     IonIcon,
-    RightMenu,
+    // RightMenu,
 
   },
   data() {
@@ -247,5 +248,14 @@ ion-item {
   background-color: rgba(225,225,225,0);
 }
 
-
+.addteam{
+  position: fixed;
+  width:36px;
+  height:50px;
+  top:0;
+  right:0;
+  z-index:100;
+  font-size:30px;
+  line-height: 50px;
+}
 </style>
