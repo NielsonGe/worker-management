@@ -141,7 +141,8 @@
     "team-list": {
       "title": "Team List",
       "submit": "New Team",
-      "belong": "Belong To:"
+      "belong": "Belong To:",
+      "create": "Create Team"
     },
     "register-team": {
       "title": "Team Manage",
@@ -153,7 +154,9 @@
       "input-placeholder": "Please Input",
       "create-new-team": "+ Create New Team",
       "create": "Create",
-      "add-over": "Add Over"
+      "add-over": "Add Over",
+      "company-placeholder": "Must >",
+      "parent-company-placeholder": "Optional >"
     },
     "company-list": {
       "title": "Company List",

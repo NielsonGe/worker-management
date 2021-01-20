@@ -13,7 +13,7 @@
     <right-menu />
     <ion-content :fullscreen="true">
 
-      <ion-list>
+      <ion-list class="teamlist">
         <ion-item class="cell" lines="full" v-for="item in teamList" :key="item.id" @click="onTeamCellClicked(item.id)">
           <ion-grid>
             <ion-row>
@@ -36,7 +36,10 @@
           </ion-grid>
         </ion-item>
       </ion-list>
-    </ion-content>
+      <div class="marginbottom"></div>
+     </ion-content>
+     <ion-button expand="block" class="whole white create fix" @click="createTeam">{{ $t("views.team-list.create") }}</ion-button> 
+
   </ion-page>
 </template>
 
@@ -175,6 +178,9 @@ export default defineComponent({
             });
             return obj[value] || null;
         },
+    createTeam(){
+      this.$router.push({path: '/register-team'});
+    }
     
   }
 });
@@ -226,4 +232,20 @@ ion-item {
   float:right;
   color:#5AA;
 }
+
+.create.fix{
+  position: fixed;
+  bottom:40px;
+  width: 90%;
+  left:5%;
+
+}
+
+.marginbottom{
+  width: 100%;
+  height: 120px;
+  background-color: rgba(225,225,225,0);
+}
+
+
 </style>

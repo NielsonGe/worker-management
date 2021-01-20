@@ -65,11 +65,11 @@
                      <!-- <ion-row @click="onSelectTeamCellClicked"> -->
                      <ion-row style="border:none">
                         <ion-col class="left-align center-vertical" size="4">
-                            {{ $t("views.register-team.team-name") }}
+                            {{ $t("views.register-team.team-name2") }}
                         </ion-col>
                         <ion-col class="right-align" size="8">
                            <!-- <i class="icon ion-ios-arrow-forward"></i> -->  
-                           <ion-input class="input-cell teamname" v-model="formData.name" :placeholder="$t('views.register-team.input-placeholder')" ></ion-input>
+                           <!-- <ion-input class="input-cell teamname" v-model="formData.name" :placeholder="$t('views.register-team.input-placeholder')" ></ion-input> -->
                         </ion-col>
                      </ion-row>
                     <div class="teamlistblk">
@@ -83,7 +83,7 @@
                      </ion-col>
                      </ion-row>
                     </div>
-                     <div class="createnewitembtn step1 hide">
+                     <div class="createnewitembtn step1">
                         <!-- <ion-button expand="block" class="halfbtn white" @click="createnewteam">{{ $t("views.register-team.create-new-team") }}</ion-button> -->
                         <a  expand="block"  class="halfbtn" @click="createnewteam">{{ $t("views.register-team.create-new-team") }}</a>
    
@@ -116,7 +116,7 @@
                 </ion-grid> -->
             </div>
             <div class="section-margin" style="margin-bottom: 20px;">
-                <ion-button expand="block" color="success" @click="onSubmitClicked">{{ $t("global.submit") }}</ion-button>
+                <!-- <ion-button expand="block" color="success" @click="onSubmitClicked">{{ $t("global.submit") }}</ion-button> -->
             </div>
             </div>
             <!-- <div class="teamrigister step2 hide">
@@ -185,7 +185,7 @@ export default defineComponent({
         IonToolbar,
         IonTitle,
         IonContent,
-        IonInput,
+        // IonInput,
         IonButton,
         IonHeader,
         IonButtons,
@@ -206,11 +206,11 @@ export default defineComponent({
             formData: {
                 projectId: "",
                 parentCorpId: "",
-                parentCompanyName: ">",
+                parentCompanyName: this.$t("views.register-team.parent-company-placeholder"),
                 corpType: "",
                 corpId: "",
                 teamId: "",
-                companyName: ">",
+                companyName: this.$t("views.register-team.company-placeholder"),
                 teamList: "",
                 name: ""
             } as any,
@@ -363,7 +363,7 @@ export default defineComponent({
             document.querySelector(".createnewitembtn")?.classList.add("hide");
             document.querySelector(".createnewitembtn.step2")?.classList.remove("hide");
         },
-        async docreateteam(){
+        docreateteam(){
             // alert(this.formData.name);
             const ind = String(this.teamListDic.length + 1) ;
             const teamListDicItem = {
@@ -372,10 +372,22 @@ export default defineComponent({
                 isChecked: false
             };
             this.teamListDic.push(teamListDicItem);
-            this.formData.name = "";
+            
+            console.log(this.formData);
+            const data: any = { ...this.formData };
+            ScgApi()
+                .saveProjectCorpTeam(data)
+                .then((res: any) => {
+                    if (res.code == "00000") {
+                        ToastUtils().showSuccess(this.$t("global.success"));
+                        // this.$router.replace("/team-list");
+                        this.formData.name = "";
+                    }
+                });
+
 
         },
-        async newteamadded(){
+        newteamadded(){
             if(this.formData.name !== ""){
             const ind = String(this.teamListDic.length + 1) ;
             const teamListDicItem = {
@@ -384,9 +396,23 @@ export default defineComponent({
                 isChecked: false
             };
             this.teamListDic.push(teamListDicItem);
-            this.formData.name = "";}
-            document.querySelector(".createnewitembtn.step2")?.classList.add("hide");
-            document.querySelector(".createnewitembtn.step1")?.classList.add("hide");
+            
+             console.log(this.formData);
+            const data: any = { ...this.formData };
+            ScgApi()
+                .saveProjectCorpTeam(data)
+                .then((res: any) => {
+                    if (res.code == "00000") {
+                        ToastUtils().showSuccess(this.$t("global.success"));
+                        this.formData.name = "";
+                        this.$router.replace("/team-list");
+                    }
+                });
+
+            }else{
+                // this.$router.replace("/team-list");
+            }
+            
         },
         async teamselected(){
             // this.formData.teamList = this.teamListDic
