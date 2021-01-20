@@ -412,7 +412,7 @@ export default defineComponent({
                 });
 
             }else{
-                // this.$router.replace("/team-list");
+                this.$router.replace("/team-list");
             }
             
         },

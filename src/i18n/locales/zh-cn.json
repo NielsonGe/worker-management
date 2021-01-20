@@ -23,7 +23,13 @@
     "sort-name-1": "姓名降序",
     "sort-name-2": "年龄升序",
     "sort-name-3": "年龄降序",
+    "sort-leave-0": "在场优先",
+    "sort-leave-1": "离场优先",
+    "sort-leave-2": "新建优先",
+    "sort-leave-3": "先建优先",
     "career-type-name": "工种类型",
+    "team-name-belong": "所属班组",
+    "company-name-belong": "所属公司",
     "gender-type-name": "性别",
     "gender-type-0": "未知",
     "gender-type-1": "男",
@@ -163,7 +169,7 @@
       "create": "创建",
       "add-over": "结束",
       "company-placeholder": "所属单位必选 >",
-      "parent-company-placeholder": "没有父级单位可不选 >"
+      "parent-company-placeholder": "无 >"
   
     },
     "company-list": {
@@ -181,7 +187,8 @@
     },
     "menu": {
       "changepwd": "修改密码",
-      "logout": "退出登录"
+      "logout": "退出登录",
+      "changelang": "中/En"
     }
   }
 }

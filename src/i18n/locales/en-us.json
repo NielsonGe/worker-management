@@ -14,18 +14,24 @@
     "career-type-1": "Career Type 1",
     "career-type-2": "Career Type 2",
     "career-type-3": "Career Type 3",
+    "sort-leave-0": "Onsite First",
+    "sort-leave-1": "Offsite First",
+    "sort-leave-2": "Recent First",
+    "sort-leave-3": "Recent Last",
     "worker-status-unknown": "Worker Status Unknown",
-    "worker-status-0": "Worker Status 0",
-    "worker-status-1": "Worker Status 1",
+    "worker-status-0": "Offsite",
+    "worker-status-1": "Onsite",
     "sort-name-0": "Name Ascending",
     "sort-name-1": "Name Descending",
     "sort-name-2": "Age Ascending",
     "sort-name-3": "Age Descending",
     "career-type-name": "Career Type",
+    "team-name-belong": "Team Belong",
+    "company-name-belong": "Company Belong",
     "gender-type-name": "Gender",
     "gender-type-0": "None",
     "gender-type-1": "Male",
-    "gender-type-1": "Female",
+    "gender-type-2": "Female",
     "gender-type-unknown": "Gender Unknown",
     "unknown": "Unknown",
     "cancel": "Cancel",
@@ -65,7 +71,8 @@
     "main": {
       "home-tab": "Home",
       "register-tab": "Register",
-      "activity-tab": "Activity"
+      "activity-tab": "Activity",
+      "personal-center": "Personal Center"
     },
     "worker-leave": {
       "title": "Worker Leave",
@@ -83,6 +90,7 @@
       "manage-worker": "Worker",
       "manage-attendance": "Attendance",
       "crop-member": "Crop Member",
+      "manage-team": "Manage Team",
       "worker-count": "Member Count",
       "total-worker-count": "Worker Count",
       "attendance-worker-count": "Attendance Count",
@@ -98,12 +106,12 @@
     "register": {
       "title": "Register Worker",
       "submit": "Submit",
-      "idType":"证件类型",
-      "grantOrg":	"发证机关",
-	    "startDate":"有效期开始日期",
-      "endDate":"有效期结束日期",
-      "teamId":"所属班组",
-	    "isTeamLeader":"是否班组长",
+      "idType":"IdType",
+      "grantOrg":	"GrantOrg",
+	    "startDate":"StartDate",
+      "endDate":"EndDate",
+      "teamId":"Team",
+	    "isTeamLeader":"IsTeamLeader",
       "upload-id-card-back": "Update Id Card Back",
       "upload-id-card-font": "Update Id Card Font",
       "name": "Name",
@@ -116,12 +124,13 @@
       "career": "Career",
       "telephone": "Telephone",
       "input-placeholder": "Please Input",
-      "area":"分区权限"
+      "area":"Area Permission",
+      "role":"Role"
     },
     "worker-info": {
       "title": "Worker Info",
       "submit": "Submit",
-      "upload-id-card": "身份证照片",
+      "upload-id-card": "Id Card Photo",
       "upload-id-card-back": "Update Id Card Back",
       "upload-id-card-font": "Update Id Card Font",
       "name": "Name",
@@ -174,7 +183,8 @@
     },
     "menu": {
       "changepwd": "ChangePassword",
-      "logout": "Logout"
+      "logout": "Logout",
+      "changelang": "中/En"
     }
   }
 }

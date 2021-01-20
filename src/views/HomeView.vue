@@ -182,6 +182,7 @@ export default defineComponent({
     }
   },
   ionViewWillEnter() {
+
     this.projectId = this.store.getters.getProjectId;
     this.info = this.store.getters.getProject;
     ScgApi().getBasicStatistics({projectId:this.projectId}).then(res=>{

@@ -7,7 +7,8 @@
     <ion-content>
       <div class="closemenu" @click="closeFirst">X</div>
       <ion-list class="menutoppadding">
-        <div class="menuitem">{{ $t('views.menu.changepwd') }}</div>
+        <div class="menuitem" @click="changeLag">{{ $t('views.menu.changelang') }}</div>
+        <div class="menuitem">{{ $t('views.menu.changepwd') }}</div>  
         <div class="menuitem" @click="logOut">{{ $t('views.menu.logout') }}</div>
       </ion-list>
     </ion-content>
@@ -74,6 +75,16 @@ ionViewDidEnter(){
       // }).catch(error => {
       //   console.log(error);
       // })
+    },
+
+    changeLag(){
+      if ( this.$i18n.locale == "zh-cn"){
+        this.$i18n.locale="en-us"
+      }else{
+        this.$i18n.locale = "zh-cn" 
+      }
+      this.closeFirst();
+      
     }
   }
 });
