@@ -365,15 +365,6 @@ export default defineComponent({
         },
         docreateteam(){
             // alert(this.formData.name);
-            const ind = String(this.teamListDic.length + 1) ;
-            const teamListDicItem = {
-                id: ind,
-                name: this.formData.name,
-                isChecked: false
-            };
-            this.teamListDic.push(teamListDicItem);
-            
-            console.log(this.formData);
             const data: any = { ...this.formData };
             ScgApi()
                 .saveProjectCorpTeam(data)
@@ -381,7 +372,17 @@ export default defineComponent({
                     if (res.code == "00000") {
                         ToastUtils().showSuccess(this.$t("global.success"));
                         // this.$router.replace("/team-list");
+                        
+                        const ind = String(this.teamListDic.length + 1) ;
+                        const teamListDicItem = {
+                                id: ind,
+                                name: this.formData.name,
+                                isChecked: false
+                            };
+                        this.teamListDic.push(teamListDicItem);
                         this.formData.name = "";
+                        console.log(this.formData);
+                        
                     }
                 });
 
@@ -389,22 +390,23 @@ export default defineComponent({
         },
         newteamadded(){
             if(this.formData.name !== ""){
-            const ind = String(this.teamListDic.length + 1) ;
-            const teamListDicItem = {
-                id: ind,
-                name: this.formData.name,
-                isChecked: false
-            };
-            this.teamListDic.push(teamListDicItem);
-            
-             console.log(this.formData);
             const data: any = { ...this.formData };
             ScgApi()
                 .saveProjectCorpTeam(data)
                 .then((res: any) => {
                     if (res.code == "00000") {
                         ToastUtils().showSuccess(this.$t("global.success"));
+                        
+                        const ind = String(this.teamListDic.length + 1) ;
+                        const teamListDicItem = {
+                            id: ind,
+                            name: this.formData.name,
+                            isChecked: false
+                        };
+                        this.teamListDic.push(teamListDicItem);
                         this.formData.name = "";
+                        console.log(this.formData);
+                        
                         this.$router.replace("/team-list");
                     }
                 });

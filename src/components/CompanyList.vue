@@ -155,7 +155,8 @@ ion-item {
   background-color: rgba(0,0,0,0.07);
   border-radius: 5px;
   padding-left: 10px !important;
-  height: 30px !important; 
+  height: 30px !important;
+  top:20px;
 }
 
 .cell {
