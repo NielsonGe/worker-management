@@ -103,7 +103,10 @@
       "title": "工人管理",
       "search-placeholder": "搜索人员...",
       "sort": "排序",
-      "register-only": "-"
+      "register-only": "-",
+      "company": "参建单位",
+      "team": "班组",
+      "status": "进场状态"
     },
     "register": {
       "title": "登记信息",
@@ -128,7 +131,19 @@
       "input-placeholder": "请输入",
       "area":"分区权限",
       "job":"岗位",
-      "role":"人员角色"
+      "role":"人员角色",
+      "passport-issue":"护照签发日期",
+      "passport-entry-expiry":"入境护照章有效期",
+      "visa-period-from":"签证时间开始",
+      "visa-period-to":"签证时间结束",
+      "work-permit-period-from":"工作证时间开始",
+      "work-permit-period-to":"工作证时间结束",
+      "fly-date-outward": "机票时间(往程)",
+      "fly-date-return": "机票时间(返程)",
+      "outward-return": "往返",
+      "passport-expiry":"护照有效期",
+      "extra-info":"补充信息"
+
     },
     "worker-info": {
       "title": "人员信息",

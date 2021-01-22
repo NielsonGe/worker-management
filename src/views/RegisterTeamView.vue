@@ -91,7 +91,7 @@
                     </div>
                     <div class="createnewitembtn step2 hide">
                         <input class="newteamtext" type="text" v-model="formData.name" />
-                        <ion-button expand="block" color="success" class="short suc" @click="newteamadded">{{ $t("views.register-team.add-over") }}</ion-button>
+                        <!-- <ion-button expand="block" color="success" class="short suc" @click="newteamadded">{{ $t("views.register-team.add-over") }}</ion-button> -->
                         <ion-button expand="block" class="short white" @click="docreateteam">{{ $t("views.register-team.create") }}</ion-button>                  
                     </div>
 
@@ -116,7 +116,7 @@
                 </ion-grid> -->
             </div>
             <div class="section-margin" style="margin-bottom: 20px;">
-                <!-- <ion-button expand="block" color="success" @click="onSubmitClicked">{{ $t("global.submit") }}</ion-button> -->
+                <ion-button expand="block" color="success" @click="onSubmitClicked">{{ $t("global.submit") }}</ion-button>
             </div>
             </div>
             <!-- <div class="teamrigister step2 hide">
@@ -229,6 +229,7 @@ export default defineComponent({
      
             ] as any,
             store: useStore(),
+
         };
     },
 
@@ -429,17 +430,31 @@ export default defineComponent({
            
         },
         async onSubmitClicked(){
-            // this.formData.teamList = this.teamListDic.map((e: any) => e.name).join(",");
-            console.log(this.formData);
+          if(this.formData.name !== ""){
             const data: any = { ...this.formData };
             ScgApi()
                 .saveProjectCorpTeam(data)
                 .then((res: any) => {
                     if (res.code == "00000") {
                         ToastUtils().showSuccess(this.$t("global.success"));
+                        
+                        const ind = String(this.teamListDic.length + 1) ;
+                        const teamListDicItem = {
+                            id: ind,
+                            name: this.formData.name,
+                            isChecked: false
+                        };
+                        this.teamListDic.push(teamListDicItem);
+                        this.formData.name = "";
+                        console.log(this.formData);
+                        
                         this.$router.replace("/team-list");
                     }
                 });
+
+            }else{
+                this.$router.replace("/team-list");
+            }
 
         }
     }
@@ -564,7 +579,7 @@ ion-content {
 }
 
 .newteamtext{
-    width: 40%;
+    width: 60%;
     height: 30px;
     float: left;
     margin-left:20px;

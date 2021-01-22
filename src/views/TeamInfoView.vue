@@ -66,7 +66,7 @@
    
             </div>
             <div class="section-margin" style="margin-bottom: 10px;">
-                <ion-button expand="block" class="halfbtn white" style="display:none" @click="createnewteam">{{ $t("views.team-info.delete") }}</ion-button>
+                <!-- <ion-button expand="block" class="halfbtn white" @click="createnewteam">{{ $t("views.team-info.delete") }}</ion-button> -->
                 <ion-button expand="block" color="success" class="wholebtn suc" @click="saveTeam">{{ $t("views.team-info.submit") }}</ion-button>
             </div>
             

@@ -101,7 +101,10 @@
       "title": "Worker Management",
       "search-placeholder": "Search",
       "sort": "sort",
-      "register-only": "-"
+      "register-only": "-",
+      "company": "Company",
+      "team": "Team",
+      "status": "Entry Status"
     },
     "register": {
       "title": "Register Worker",
@@ -125,7 +128,18 @@
       "telephone": "Telephone",
       "input-placeholder": "Please Input",
       "area":"Area Permission",
-      "role":"Role"
+      "role":"Role",
+      "passport-issue":"Passport Issue",
+      "passport-entry-expiry":"Passport Entry Expiry",
+      "visa-period-from":"Visa Period From",
+      "visa-period-to":"Visa Period To",
+      "work-permit-period-from":"Work Permit Period From",
+      "work-permit-period-to":"Work Permit Period To",
+      "fly-date-outward": "Fly Date Outward",
+      "fly-date-return": "Fly Date Return",
+      "outward-return": "Outward Return",
+      "passport-expiry":"Passport Expiry",
+      "extra-info":"Extra Info"
     },
     "worker-info": {
       "title": "Worker Info",
