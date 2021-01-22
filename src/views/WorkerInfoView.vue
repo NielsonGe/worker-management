@@ -282,6 +282,103 @@
                 </ion-grid>
             </div>
 
+            <div class="field-col-item section-margin extra">
+                <ion-grid>
+                    <ion-row class="openExtra" @click="openExtra">
+                        <ion-col class="left-align" size="6">
+                            {{ $t("views.register.extra-info") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="6">
+                           <i class="icon ion-chevron-down"></i>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+                
+                <ion-grid class="extraBlk">
+                    <ion-row>
+                        <ion-col class="left-align" size="6">
+                            {{ $t("views.register.passport-issue") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="6">
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm" max="2050-01-01" :value="worker.extraInfo.passportIssue" @ionChange="changPassportIssue($event)" display-format="YYYY-MM-DD"></ion-datetime>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-col class="left-align" size="6">
+                            {{ $t("views.register.passport-entry-expiry") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="6">
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" :value="worker.extraInfo.passportEntryExpiry" @ionChange="changPassportEntryExpiry($event)" display-format="YYYY-MM-DD"></ion-datetime>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-col class="left-align" size="6">
+                            {{ $t("views.register.visa-period-from") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="6">
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" :value="worker.extraInfo.visaPeriodFrom" @ionChange="changVisaPeriodFrom($event)"  display-format="YYYY-MM-DD"></ion-datetime>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-col class="left-align" size="6">
+                            {{ $t("views.register.visa-period-to") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="6">
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" :value="worker.extraInfo.visaPeriodTo" @ionChange="changVisaPeriodTo($event)" display-format="YYYY-MM-DD"></ion-datetime>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-col class="left-align" size="6">
+                            {{ $t("views.register.work-permit-period-from") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="6">
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" :value="worker.extraInfo.workpermitPeriodFrom" @ionChange="changWorkpermitPeriodFrom($event)" display-format="YYYY-MM-DD"></ion-datetime>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-col class="left-align" size="6">
+                            {{ $t("views.register.work-permit-period-to") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="6">
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" :value="worker.extraInfo.workpermitPeriodTo" @ionChange="changWorkpermitPeriodTo($event)" display-format="YYYY-MM-DD"></ion-datetime>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-col class="left-align" size="6">
+                            {{ $t("views.register.fly-date-outward") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="6">
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" :value="worker.extraInfo.flyDateOutward" @ionChange="changFlyDateOutward($event)" display-format="YYYY-MM-DD"></ion-datetime>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-col class="left-align" size="6">
+                            {{ $t("views.register.fly-date-return") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="6">
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" :value="worker.extraInfo.flyDateReturn" @ionChange="changFlyDateReturn($event)" display-format="YYYY-MM-DD"></ion-datetime>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-col class="left-align" size="6">
+                            {{ $t("views.register.passport-expiry") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="6">
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" :value="worker.extraInfo.passportExpiry" @ionChange="changPassportExpiry($event)"  display-format="YYYY-MM-DD"></ion-datetime>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+
+            </div>
+
 
             <div class="section-margin" style="margin-bottom: 10px;">
                 <ion-grid>
@@ -295,8 +392,7 @@
                         </ion-col>
                     </ion-row>
                 </ion-grid>
-                
-                
+                               
             </div>
         </ion-content>
     </ion-page>
@@ -429,8 +525,33 @@ export default defineComponent({
                 status: 0,
                 entryDate: "",
                 exitDate: "",
+                extraInfo:{
+                    passportIssue: "",
+                    passportEntryExpiry: "",
+                    visaPeriodFrom: "",
+                    visaPeriodTo: "",
+                    workpermitPeriodFrom: "",
+                    workpermitPeriodTo: "",
+                    flyDateOutward: "",
+                    flyDateReturn: "",
+                    passportExpiry: ""
+                }
             },
+            // extraInfo:{
+            //         passportIssue: "",
+            //         passportEntryExpiry: "",
+            //         visaPeriodFrom: "",
+            //         visaPeriodTo: "",
+            //         workpermitPeriodFrom: "",
+            //         workpermitPeriodTo: "",
+            //         flyDateOutward: "",
+            //         flyDateReturn: "",
+            //         passportExpiry: ""
+            //     },
             workerData: {},
+            datePickerCancel: this.$t("global.cancel"),
+            datePickerConfirm: this.$t("global.confirm"),
+            
             store: useStore()
         };
     },
@@ -457,6 +578,8 @@ export default defineComponent({
             });
         
             Promise.all([ScgApi().getProjectWorker({ id: query.id }),ScgApi().queryProjectCorpSelect({ projectId: this.store.getters.getProjectId })]).then((res: any)=>{
+                
+                console.log("workerinfo====>",res[0].data);
                 const res0 = res[0];
                 this.companyParent = res[1].data;
                 this.workerData = { ...res0.data };
@@ -484,6 +607,10 @@ export default defineComponent({
                 this.worker.entryDate = res0.data.entryDate;
                 this.worker.exitDate = res0.data.exitDate;
                 this.worker.status = res0.data.status;
+                // if(res0.data.extraInfo){
+                //     this.worker.extraInfo = res0.data.extraInfo
+                // }
+                
                 ScgApi().queryFile({relationId:res0.data.workerId,type:"worker_recent_photo"}).then((res: any)=>{
                     this.worker.recentPhotoFileId = res.data[0].fileId;
                     this.headerUrl = res.data[0].fileUrl;
@@ -555,6 +682,9 @@ export default defineComponent({
                 .map((e: any) => e.code)
                 .join(",");
             console.log("check",this.areaList);
+            // this.worker.extraInfo = this.extraInfo;
+            // console.log("extraInfo====>",this.extraInfo);
+             console.log("work====>",JSON.stringify(this.worker));
             const data: any = { ...this.worker };
             // if (data.role == 1) {
             //     delete data.jobTypeCode;
@@ -782,6 +912,47 @@ export default defineComponent({
             });
             picker.present();
         },
+
+        openExtra(){
+            document.querySelector(".extraBlk")?.classList.toggle("show");
+        },
+
+        changPassportIssue(e: any){
+            this.worker.extraInfo.passportIssue= e.detail.value
+        },
+
+        changPassportEntryExpiry(e: any){
+            this.worker.extraInfo.passportEntryExpiry= e.detail.value
+        },
+
+        changVisaPeriodFrom(e: any){
+            this.worker.extraInfo.visaPeriodFrom= e.detail.value
+        },
+
+        changVisaPeriodTo(e: any){
+            this.worker.extraInfo.visaPeriodTo= e.detail.value
+        },
+
+        changWorkpermitPeriodFrom(e: any){
+            this.worker.extraInfo.workpermitPeriodFrom= e.detail.value
+        },
+
+        changWorkpermitPeriodTo(e: any){
+            this.worker.extraInfo.workpermitPeriodTo= e.detail.value
+        },
+
+        changFlyDateOutward(e: any){
+            this.worker.extraInfo.flyDateOutward= e.detail.value
+        },
+
+        changFlyDateReturn(e: any){
+            this.worker.extraInfo.flyDateReturn= e.detail.value
+        },
+
+        changPassportExpiry(e: any){
+            this.worker.extraInfo.passportExpiry= e.detail.value
+        },
+    
     },
 });
 </script>
@@ -859,5 +1030,19 @@ ion-content {
 
 .blue-text {
     color: blue;
+}
+
+
+.openExtra{
+  font-size:18px;
+  font-weight: 500;
+}
+
+.extraBlk{
+    display: none;
+}
+
+.extraBlk.show{
+  display: block;
 }
 </style>

@@ -119,7 +119,7 @@
                             {{ $t("views.register.birthday") }}
                         </ion-col>
                         <ion-col class="right-align" size="8">
-                            <ion-datetime :value="formData.birthday" display-format="YYYY-MM-DD"></ion-datetime>
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm" max="2100-01-01" :value="formData.birthday" display-format="YYYY-MM-DD"></ion-datetime>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
@@ -157,7 +157,7 @@
                             {{ $t("views.register.startDate") }}
                         </ion-col>
                         <ion-col class="right-align" size="6">
-                            <ion-datetime :value="formData.startDate" display-format="YYYY-MM-DD"></ion-datetime>
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" :value="formData.startDate" display-format="YYYY-MM-DD"></ion-datetime>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
@@ -169,7 +169,7 @@
                             {{ $t("views.register.endDate") }}
                         </ion-col>
                         <ion-col class="right-align" size="6">
-                            <ion-datetime :value="formData.endDate" display-format="YYYY-MM-DD"></ion-datetime>
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" :value="formData.endDate" display-format="YYYY-MM-DD"></ion-datetime>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
@@ -339,6 +339,103 @@
                 </ion-grid>
             </div>
 
+            <div class="field-col-item section-margin extra">
+                <ion-grid>
+                    <ion-row class="openExtra" @click="openExtra">
+                        <ion-col class="left-align" size="6">
+                            {{ $t("views.register.extra-info") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="6">
+                           <i class="icon ion-chevron-down"></i>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+                
+                <ion-grid class="extraBlk">
+                    <ion-row>
+                        <ion-col class="left-align" size="6">
+                            {{ $t("views.register.passport-issue") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="6">
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm" max="2050-01-01" v-model="formData.extraInfo.passportIssue" display-format="YYYY-MM-DD"></ion-datetime>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-col class="left-align" size="6">
+                            {{ $t("views.register.passport-entry-expiry") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="6">
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" v-model="formData.extraInfo.passportEntryExpiry" display-format="YYYY-MM-DD"></ion-datetime>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-col class="left-align" size="6">
+                            {{ $t("views.register.visa-period-from") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="6">
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" v-model="formData.extraInfo.visaPeriodFrom" display-format="YYYY-MM-DD"></ion-datetime>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-col class="left-align" size="6">
+                            {{ $t("views.register.visa-period-to") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="6">
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" v-model="formData.extraInfo.visaPeriodTo" display-format="YYYY-MM-DD"></ion-datetime>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-col class="left-align" size="6">
+                            {{ $t("views.register.work-permit-period-from") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="6">
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" v-model="formData.extraInfo.workpermitPeriodFrom" display-format="YYYY-MM-DD"></ion-datetime>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-col class="left-align" size="6">
+                            {{ $t("views.register.work-permit-period-to") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="6">
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" v-model="formData.extraInfo.workpermitPeriodTo" display-format="YYYY-MM-DD"></ion-datetime>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-col class="left-align" size="6">
+                            {{ $t("views.register.fly-date-outward") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="6">
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" v-model="formData.extraInfo.flyDateOutward" display-format="YYYY-MM-DD"></ion-datetime>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-col class="left-align" size="6">
+                            {{ $t("views.register.fly-date-return") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="6">
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" v-model="formData.extraInfo.flyDateReturn" display-format="YYYY-MM-DD"></ion-datetime>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-col class="left-align" size="6">
+                            {{ $t("views.register.passport-expiry") }}
+                        </ion-col>
+                        <ion-col class="right-align" size="6">
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" v-model="formData.extraInfo.passportExpiry" display-format="YYYY-MM-DD"></ion-datetime>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+
+            </div>
+
             <div class="section-margin" style="margin-bottom: 10px;">
                 <ion-button expand="block" color="success" @click="onSubmitClicked">{{ $t("global.submit") }}</ion-button>
             </div>
@@ -367,6 +464,7 @@ import {
     IonRadio,
     IonLabel,
     pickerController,
+    IonDatetime
 } from "@ionic/vue";
 import { arrowBackOutline, checkmarkCircleOutline, checkmarkSharp, closeSharp, person, caretDownOutline, camera, syncOutline } from "ionicons/icons";
 import { PhotoPlugin, PhotoPluginFace } from "@/composables/UsePhotoPlugin";
@@ -396,6 +494,7 @@ export default defineComponent({
         IonRadio,
         IonLabel,
         RightMenu,
+        IonDatetime
     },
     data() {
         return {
@@ -429,6 +528,17 @@ export default defineComponent({
                 jobTypeCode: "",
                 jobTypeName: "",
                 areaCodes: "",
+                extraInfo:{
+                    passportIssue: "",
+                    passportEntryExpiry: "",
+                    visaPeriodFrom: "",
+                    visaPeriodTo: "",
+                    workpermitPeriodFrom: "",
+                    workpermitPeriodTo: "",
+                    flyDateOutward: "",
+                    flyDateReturn: "",
+                    passportExpiry: ""
+                }
             } as any,
             companyParent: [],
             companyList: [],
@@ -476,6 +586,8 @@ export default defineComponent({
                 },
             ],
             store: useStore(),
+            datePickerCancel: this.$t("global.cancel"),
+            datePickerConfirm: this.$t("global.confirm"),
             option: {
                 aspectRatio: 1 / 1,
                 viewMode: 1,
@@ -1156,6 +1268,10 @@ export default defineComponent({
 
             picker.present();
         },
+
+        openExtra(){
+            document.querySelector(".extraBlk")?.classList.toggle("show");
+        }
         // corpParentChange(value: any) {
         //     if (value) {
         //         const data: any = this.companyParent.filter((e: any) => e.id === value)[0];
@@ -1323,6 +1439,19 @@ ion-content {
     color: #fff;
     font-size: 30px;
     z-index: 999999;
+}
+
+.openExtra{
+  font-size:18px;
+  font-weight: 500;
+}
+
+.extraBlk{
+    display: none;
+}
+
+.extraBlk.show{
+  display: block;
 }
 
 </style>
