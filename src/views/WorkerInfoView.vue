@@ -607,9 +607,9 @@ export default defineComponent({
                 this.worker.entryDate = res0.data.entryDate;
                 this.worker.exitDate = res0.data.exitDate;
                 this.worker.status = res0.data.status;
-                // if(res0.data.extraInfo){
-                //     this.worker.extraInfo = res0.data.extraInfo
-                // }
+                if(res0.data.extraInfo){
+                    this.worker.extraInfo = res0.data.extraInfo
+                }
                 
                 ScgApi().queryFile({relationId:res0.data.workerId,type:"worker_recent_photo"}).then((res: any)=>{
                     this.worker.recentPhotoFileId = res.data[0].fileId;
