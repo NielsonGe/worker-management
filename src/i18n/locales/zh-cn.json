@@ -142,7 +142,8 @@
       "fly-date-return": "机票时间(返程)",
       "outward-return": "往返",
       "passport-expiry":"护照有效期",
-      "extra-info":"补充信息"
+      "extra-info":"补充信息",
+      "date-placeholder": "无"
 
     },
     "worker-info": {
@@ -173,7 +174,7 @@
     },
     "register-team": {
       "title": "班组管理",
-      "submit": "提交",
+      "submit": "完成",
       "company": "单位名",
       "parent-company": "上级公司",
       "company-type": "公司类型",

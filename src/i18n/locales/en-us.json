@@ -139,7 +139,8 @@
       "fly-date-return": "Fly Date Return",
       "outward-return": "Outward Return",
       "passport-expiry":"Passport Expiry",
-      "extra-info":"Extra Info"
+      "extra-info":"Extra Info",
+      "date-placeholder": "None"
     },
     "worker-info": {
       "title": "Worker Info",
@@ -170,7 +171,7 @@
     },
     "register-team": {
       "title": "Team Manage",
-      "submit": "submit",
+      "submit": "Finish",
       "company": "Company",
       "parent-company": "Parent Company",
       "company-type": "Company Type",

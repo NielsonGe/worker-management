@@ -116,7 +116,7 @@
                 </ion-grid> -->
             </div>
             <div class="section-margin" style="margin-bottom: 20px;">
-                <ion-button expand="block" color="success" @click="onSubmitClicked">{{ $t("global.submit") }}</ion-button>
+                <ion-button expand="block" color="success" @click="onSubmitClicked">{{ $t("views.register-team.submit") }}</ion-button>
             </div>
             </div>
             <!-- <div class="teamrigister step2 hide">
@@ -620,5 +620,10 @@ ion-content {
 
 .nowrap{
     white-space: nowrap
+}
+
+
+.extraBlk .left-align{
+    line-height: 40px;
 }
 </style>

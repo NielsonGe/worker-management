@@ -300,7 +300,7 @@
                             {{ $t("views.register.passport-issue") }}
                         </ion-col>
                         <ion-col class="right-align" size="6">
-                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm" max="2050-01-01" :value="worker.extraInfo.passportIssue" @ionChange="changPassportIssue($event)" display-format="YYYY-MM-DD"></ion-datetime>
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm" max="2050-01-01" :value="worker.extraInfo.passportIssue" @ionChange="changPassportIssue($event)" display-format="YYYY-MM-DD" :placeholder="datePlaceholder"  @click="worker.extraInfo.passportIssue = ''"></ion-datetime>
                         </ion-col>
                     </ion-row>
 
@@ -309,7 +309,7 @@
                             {{ $t("views.register.passport-entry-expiry") }}
                         </ion-col>
                         <ion-col class="right-align" size="6">
-                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" :value="worker.extraInfo.passportEntryExpiry" @ionChange="changPassportEntryExpiry($event)" display-format="YYYY-MM-DD"></ion-datetime>
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" :value="worker.extraInfo.passportEntryExpiry" @ionChange="changPassportEntryExpiry($event)" display-format="YYYY-MM-DD" :placeholder="datePlaceholder"  @click="worker.extraInfo.passportEntryExpiry = ''"></ion-datetime>
                         </ion-col>
                     </ion-row>
 
@@ -318,7 +318,7 @@
                             {{ $t("views.register.visa-period-from") }}
                         </ion-col>
                         <ion-col class="right-align" size="6">
-                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" :value="worker.extraInfo.visaPeriodFrom" @ionChange="changVisaPeriodFrom($event)"  display-format="YYYY-MM-DD"></ion-datetime>
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" :value="worker.extraInfo.visaPeriodFrom" @ionChange="changVisaPeriodFrom($event)"  display-format="YYYY-MM-DD" :placeholder="datePlaceholder"  @click="worker.extraInfo.visaPeriodFrom = ''"></ion-datetime>
                         </ion-col>
                     </ion-row>
 
@@ -327,7 +327,7 @@
                             {{ $t("views.register.visa-period-to") }}
                         </ion-col>
                         <ion-col class="right-align" size="6">
-                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" :value="worker.extraInfo.visaPeriodTo" @ionChange="changVisaPeriodTo($event)" display-format="YYYY-MM-DD"></ion-datetime>
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" :value="worker.extraInfo.visaPeriodTo" @ionChange="changVisaPeriodTo($event)" display-format="YYYY-MM-DD" :placeholder="datePlaceholder"  @click="worker.extraInfo.visaPeriodTo = ''"></ion-datetime>
                         </ion-col>
                     </ion-row>
 
@@ -336,7 +336,7 @@
                             {{ $t("views.register.work-permit-period-from") }}
                         </ion-col>
                         <ion-col class="right-align" size="6">
-                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" :value="worker.extraInfo.workpermitPeriodFrom" @ionChange="changWorkpermitPeriodFrom($event)" display-format="YYYY-MM-DD"></ion-datetime>
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" :value="worker.extraInfo.workpermitPeriodFrom" @ionChange="changWorkpermitPeriodFrom($event)" display-format="YYYY-MM-DD" :placeholder="datePlaceholder"  @click="worker.extraInfo.workpermitPeriodFrom = ''"></ion-datetime>
                         </ion-col>
                     </ion-row>
 
@@ -345,7 +345,7 @@
                             {{ $t("views.register.work-permit-period-to") }}
                         </ion-col>
                         <ion-col class="right-align" size="6">
-                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" :value="worker.extraInfo.workpermitPeriodTo" @ionChange="changWorkpermitPeriodTo($event)" display-format="YYYY-MM-DD"></ion-datetime>
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" :value="worker.extraInfo.workpermitPeriodTo" @ionChange="changWorkpermitPeriodTo($event)" display-format="YYYY-MM-DD" :placeholder="datePlaceholder"  @click="worker.extraInfo.workpermitPeriodTo = ''"></ion-datetime>
                         </ion-col>
                     </ion-row>
 
@@ -354,7 +354,7 @@
                             {{ $t("views.register.fly-date-outward") }}
                         </ion-col>
                         <ion-col class="right-align" size="6">
-                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" :value="worker.extraInfo.flyDateOutward" @ionChange="changFlyDateOutward($event)" display-format="YYYY-MM-DD"></ion-datetime>
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" :value="worker.extraInfo.flyDateOutward" @ionChange="changFlyDateOutward($event)" display-format="YYYY-MM-DD" :placeholder="datePlaceholder"  @click="worker.extraInfo.flyDateOutward = ''"></ion-datetime>
                         </ion-col>
                     </ion-row>
 
@@ -363,7 +363,7 @@
                             {{ $t("views.register.fly-date-return") }}
                         </ion-col>
                         <ion-col class="right-align" size="6">
-                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" :value="worker.extraInfo.flyDateReturn" @ionChange="changFlyDateReturn($event)" display-format="YYYY-MM-DD"></ion-datetime>
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" :value="worker.extraInfo.flyDateReturn" @ionChange="changFlyDateReturn($event)" display-format="YYYY-MM-DD" :placeholder="datePlaceholder"  @click="worker.extraInfo.flyDateReturn = ''"></ion-datetime>
                         </ion-col>
                     </ion-row>
 
@@ -372,7 +372,7 @@
                             {{ $t("views.register.passport-expiry") }}
                         </ion-col>
                         <ion-col class="right-align" size="6">
-                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" :value="worker.extraInfo.passportExpiry" @ionChange="changPassportExpiry($event)"  display-format="YYYY-MM-DD"></ion-datetime>
+                            <ion-datetime :cancel-text= "datePickerCancel" :done-text= "datePickerConfirm"  max="2050-01-01" :value="worker.extraInfo.passportExpiry" @ionChange="changPassportExpiry($event)"  display-format="YYYY-MM-DD" :placeholder="datePlaceholder"  @click="worker.extraInfo.passportExpiry = ''"></ion-datetime>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
@@ -551,6 +551,7 @@ export default defineComponent({
             workerData: {},
             datePickerCancel: this.$t("global.cancel"),
             datePickerConfirm: this.$t("global.confirm"),
+            datePlaceholder: this.$t("views.register.date-placeholder"),
             
             store: useStore()
         };
@@ -1044,5 +1045,10 @@ ion-content {
 
 .extraBlk.show{
   display: block;
+}
+
+
+.extraBlk .left-align{
+    line-height: 40px;
 }
 </style>
