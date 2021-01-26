@@ -1,6 +1,6 @@
 const config = {
   'development': {
-    // 'BASE_API': 'https://ics.scgecloud.com:28028'
+    // 'BASE_API': 'https://ics.scgecloud.com'
     'BASE_API': 'http://localhost:8001'
   },
   'production': {

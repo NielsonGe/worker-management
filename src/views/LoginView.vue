@@ -1,8 +1,8 @@
 <template>
   <ion-page>
     <ion-content :scroll-y="false">
-      <div class="title">{{ $t('views.login.title') }}</div>
-
+      <div v-if="projectenv == 'production'" class="title prod">{{ $t('views.login.title') }}</div>
+      <div v-else class="title">{{ $t('views.login.title') }}</div>
       <div class="field-col-item">
         <ion-grid>
           <ion-row>
@@ -93,14 +93,15 @@ export default defineComponent({
       store: useStore(),
       backdropCount: 0,
       showpwd: 'password',
-      switchLogoPath: 'title'
+      projectenv: process.env.NODE_ENV  
     }
   },
   ionViewWillEnter() {
+   console.log("lanuague===>",this.$i18n.locale);
 
-    if(process.env.NODE_ENV == "production"){
-      this.switchLogoPath = 'title prod'
-    }
+   
+ 
+    
     this.store.dispatch('setToken', null);
     this.store.dispatch('setAccount', null);
 
@@ -191,7 +192,7 @@ export default defineComponent({
           }
           // console.log("account====>",account);
           this.store.dispatch('setAccount', account);
-
+alert("登录成功！")
           this.$router.replace("/project-list");
         }).catch(error => {
           console.log(error);
